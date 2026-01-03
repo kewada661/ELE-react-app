@@ -116,13 +116,6 @@ export const App = () => {
     }
   }
 
-  const startGame = useCallback(() => {
-    setIsGameInProgress(true);
-    // setInitialDifficulty(difficulty);
-    console.log("premium:", premium);
-    beginPlayback(premium);
-  }, [premium]);
-
   const transferPlayback = async (device_id: string) => {
     const access_token = sessionStorage.getItem("token");
     const response = await fetch("https://api.spotify.com/v1/me/player", {
