@@ -6,7 +6,8 @@ import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
 import { Menu } from '@/components/Menu';
 import { Leaderboard } from '@/components/Leaderboard';
-import { GameOverMenu } from '@/components/GameOverMenu'
+import { GameOverMenu } from '@/components/GameOverMenu';
+import houseImage from '@/assets/Album-Art-house copy 1.png';
 
 export const App = () => {
   const [gameInProgress, setGameInProgress] = useState(true);
@@ -453,13 +454,13 @@ export const App = () => {
             )
           ) : (
             <>
-              <img className={house} src="/src/assets/Album-Art-house copy 1.png" alt="" />
+              <img className={house} src={houseImage} alt="" />
               <LoginFallback loginCallback={() => setEmail(true)} />
             </>
           )
         ) : (
           <>
-            <img className={house} src="/src/assets/Album-Art-house copy 1.png" alt="" />
+            <img className={house} src={houseImage} alt="" />
             <Login 
               onLogin={requestLogin} 
               fallBack={fallBack}

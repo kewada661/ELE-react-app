@@ -3,7 +3,8 @@ import { IconFacebook } from '@/ui/icons/IconFacebook';
 import { IconInstagram } from '@/ui/icons/IconInstagram';
 import { IconLink } from '@/ui/icons/IconLink';
 import { IconTwitter } from '@/ui/icons/IconTwitter';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import houseImage from '@/assets/Album-Art-house copy 1.png';
 
 interface GameOverMenuProps {
   score: number;
@@ -35,7 +36,7 @@ export const GameOverMenu = ({
     <div id="gameOverMenu" className={menu.gameover}>
       <h1>YOUR SCORE</h1>
       <div className={scoreContainer}>
-        <img className={house} src="/src/assets/Album-Art-house copy 1.png" alt="" />
+        <img className={house} src={houseImage} alt="" />
         <div className={houseFilter} />
         <h3 id="go_score">{score}</h3>
       </div>

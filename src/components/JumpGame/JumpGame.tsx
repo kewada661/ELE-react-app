@@ -3,6 +3,7 @@ import { button, circularButton } from '@/components/Button/Button.css'
 import { container, canvas, scoreBoard, controls, sprite } from '@/components/JumpGame/JumpGameStyle.css';
 import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
+import spriteImage from '@/assets/sprite.png'
 
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
@@ -666,7 +667,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       </div>      
       
       {/*Preloading image ;)*/}
-      <img id="sprite" className={sprite} ref={spriteRef} src="/src/assets/sprite.png"/>
+      <img id="sprite" className={sprite} ref={spriteRef} src={spriteImage}/>
 
       <div className={scoreBoard} id="scoreBoard">
         <p id="score">0</p>
