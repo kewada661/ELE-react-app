@@ -24,4 +24,4 @@ jobs:
       - name: Delete old container
         run: docker rm -f ele-react-app-container
       - name: Run Docker Container
-        run: docker run -d -p 5173:80 --name ele-react-container kewada661/ele-react-app
+        run: docker run -d -p 5173:80 --name ele-react-app-container kewada661/ele-react-app
