@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { icon } from "@/ui/primitives/Icon/icon.css"
 
 export type IconSize = "14" | "16" | "20" | "24" | "32" | "40" | "48";

@@ -19,7 +19,6 @@ export default defineConfig({
     },
   },
   server: {
-    host: true,
     proxy: {
       '^/auth/.*': {
         target: 'http://localhost:5000'

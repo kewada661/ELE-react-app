@@ -24,12 +24,12 @@
         "./src/*"
       ]
     },
-    "types": [
-      "@types/jest"
-    ]
+    // "types": [
+    //   "@types/jest"
+    // ]
   },
   "include": [
     "./src",
-    "./jest-setup.ts"
+    // "./jest-setup.ts"
   ]
 }
