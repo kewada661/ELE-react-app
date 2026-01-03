@@ -10,7 +10,7 @@ export const LoginFallback = ({ loginCallback }: LoginFallbackProps) => {
   const [username, setUsername] = useState('');
 
   const upsertUser = async (email: string, username: string) => {
-    const response = await fetch('db/users/fallback',{
+    const response = await fetch('/api/db/users/fallback',{
       method: "PUT",
       headers: {
         "Content-type": "application/json",
