@@ -67,7 +67,7 @@ export const App = () => {
     try {
       const codeVerifier = localStorage.getItem("codeVerifier");
       console.log("3.", codeVerifier);
-      const response = await fetch(`/auth/token?code=${code}&code_verifier=${codeVerifier}&state=${state}`);
+      const response = await fetch(`/api/auth/token?code=${code}&code_verifier=${codeVerifier}&state=${state}`);
 
       if (!response.ok || response.status !== 200) {
         throw new Error('Network response was not ok');
@@ -146,7 +146,7 @@ export const App = () => {
     script.src = "https://open.spotify.com/embed/iframe-api/v1";
     script.async = true;
     document.body.appendChild(script);
-    // const response = await fetch(`/audiomack/play?id=lol-0331892`, {
+    // const response = await fetch(`/api/audiomack/play?id=lol-0331892`, {
     //   method: "GET",
     // })
 
@@ -200,7 +200,7 @@ export const App = () => {
       email: email,
       score: score,
     })
-    await fetch('/db/leaderboard', {
+    await fetch('/api/db/leaderboard', {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
@@ -222,7 +222,7 @@ export const App = () => {
       const durationMs = endTimestamp - startTimestamp;
       const duration = Math.floor(durationMs / 1000);
       if (duration < 10) return;
-      await fetch(`/db/users/time`, {
+      await fetch(`/api/db/users/time`, {
         method: "PUT",
         headers: {
           'Content-type': 'application/json'
@@ -247,7 +247,7 @@ export const App = () => {
 
   const incrementUserStreams = useCallback( async () => {
     const email = sessionStorage.getItem("email");
-    await fetch(`/db/users/streams`, {
+    await fetch(`/api/db/users/streams`, {
       method: "PUT",
       headers: {
         'Content-type': 'application/json'

@@ -10,7 +10,7 @@ export const Leaderboard = ({ leaderboardClose }: LeaderboardProps) => {
   const [loading, setLoading] = useState(true);
   const getLeaderboard = async (signal: AbortSignal) => {
     try {
-      const response = await fetch('/db/leaderboard', {
+      const response = await fetch('/api/db/leaderboard', {
         method: 'GET',
         headers: {
           'content-type': 'application/json',
