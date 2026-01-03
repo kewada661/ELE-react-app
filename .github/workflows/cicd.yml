@@ -22,6 +22,6 @@ jobs:
       - name: Pull image from docker hub
         run: docker pull kewada661/ele-react-app:latest
       - name: Delete old container
-        run: docker rm -f reactjs-app-container
+        run: docker rm -f ele-react-app-container
       - name: Run Docker Container
         run: docker run -d -p 5173:80 --name ele-react-container kewada661/ele-react-app
