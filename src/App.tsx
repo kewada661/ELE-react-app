@@ -261,7 +261,7 @@ export const App = () => {
 
   const getUsersProduct = async () => {
     const access_token = sessionStorage.getItem("token");
-    const response = await fetch(`/db/users/product?access_token=${access_token}`);
+    const response = await fetch(`/api/db/users/product?access_token=${access_token}`);
     return response.json();
   }
 
