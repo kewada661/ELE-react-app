@@ -21,7 +21,7 @@ export const Login = ({ onLogin, fallBack }: LoginProps) => {
   const requestLogin = async () => {
     const state = generateRandomString(16);
     localStorage.setItem("state", state);
-    location.replace(`/auth/login?state=${state}`);
+    location.replace(`/api/auth/login?state=${state}`);
   }
   // const onClick = async () => {
   //     const result = await requestLogin();
