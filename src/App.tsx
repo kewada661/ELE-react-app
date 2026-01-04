@@ -60,7 +60,7 @@ export const App = () => {
 
   const requestLogin = useCallback( async () => {
     const loginParams = await generateLoginParams();
-    location.href = `/auth/login?code_challenge=${loginParams[0]}&code_verifier=${loginParams[1]}&state=${loginParams[2]}`;
+    location.href = `/api/auth/login?code_challenge=${loginParams[0]}&code_verifier=${loginParams[1]}&state=${loginParams[2]}`;
   }, []);
 
   const requestToken = async (code: any, state: any) => {
