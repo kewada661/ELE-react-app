@@ -163,7 +163,7 @@ export const App = () => {
         "Authorization": `Bearer ${access_token}`,
       },
       body: JSON.stringify({
-        context_uri: 'spotify:playlist:37i9dQZF1DZ06evO08vsxh'
+        context_uri: 'spotify:album:2IXmFxN6dFY8ROSKu8nfwl'
       })
     });
     if (response) console.log(response);
