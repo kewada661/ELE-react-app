@@ -21,7 +21,7 @@ export const Menu = ({ isOpen, loggedIn, leaderboardCallback, playlistCallback, 
         <button onClick={website}>Official Website</button>
         <button onClick={playlistCallback}>Add Playlist</button>
         {(loggedIn) ? (
-          <button onClick={logoutCallback}>Log out of Spotify</button>
+          <button onClick={logoutCallback}>Log Out</button>
         ) : (
           <button onClick={loginCallback}>Connect Spotify</button>
         )}

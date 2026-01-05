@@ -19,16 +19,12 @@ export default defineConfig({
     },
   },
   server: {
+    host: true,
     proxy: {
-      '^/auth/.*': {
-        target: 'http://localhost:5000'
-      },
-      '^/db/.*': {
-        target: 'http://localhost:5000'
-      },
-      '^/audiomack/.*': {
-        target:'http://localhost:5000'
-      },
+      '/api': {
+        target: 'http://localhost:5000/',
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      }
     },
   },
 });

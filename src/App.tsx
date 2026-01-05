@@ -15,7 +15,6 @@ export const App = () => {
   const [error, setError] = useState<Error>();
   const [email, setEmail] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [premium, setPremium] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(false);
@@ -134,7 +133,6 @@ export const App = () => {
   }
 
   const initializeWebPlayback = () => {
-    console.log("premium in init web pb:", premium);
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
     script.async = true;
@@ -183,14 +181,6 @@ export const App = () => {
     console.log('starting embed playback');
     if (embedControllerRef.current) embedControllerRef.current.play();
   }
-
-  const beginPlayback = useCallback( async (isPremium: boolean) => {
-    if (isPremium) {
-      startWebPlayback();
-    } else {
-      startEmbedPlayback();
-    }
-  }, [embedControllerRef, playerRef])
 
   const updateLeaderboard = useCallback( async (score: number) => {
     const email = sessionStorage.getItem("email");
@@ -301,11 +291,10 @@ export const App = () => {
 
   const logout = async () => {
     await stopWebPlayback();
-    sessionStorage.setItem('token', 'fallback');
-    setPremium(false);
+    sessionStorage.clear();
     setLoggedIn(false);
     setEmail(false);
-    initializeEmbedPlayback();
+    // initializeEmbedPlayback();
   }
 
   const gameOver = useCallback((score: number) => {
@@ -322,23 +311,22 @@ export const App = () => {
 
   useEffect(() => {
     const email = sessionStorage.getItem('email');
-    if (email !== null) {
-      setEmail(true);
-      setLoggedIn(true);
-      return;
-    }
-    // if (sessionStorage.getItem('token') != '') return
-    // if (token) return;
+    const product = sessionStorage.getItem('product');
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
-
-    if (code && state) {
+    if (email !== null) {
+      setEmail(true);
+      setLoggedIn(true);
+      if (product !== null && product === 'premium') {
+        initializeWebPlayback();
+      }
+    } else if (code && state) {
       getToken(code, state).then(getUsersProduct).then((result) => {
         console.log(result);
+        sessionStorage.setItem("product", result.product);
         if (result.product === "premium") {
           console.log("user has Spotify Premium");
-          setPremium(true);
           initializeWebPlayback();
         } else {
           console.log("user has not Spotify Premium");
@@ -419,9 +407,11 @@ export const App = () => {
         playerRef.current.removeListener('player_state_changed');
         playerRef.current.removeListener('not_ready');
         playerRef.current.removeListener('ready');
+        playerRef.current = null;
       }
       if (embedControllerRef.current) {
         embedControllerRef.current.removeListener('ready');
+        embedControllerRef.current = null;
       }
     }
   }, [])
