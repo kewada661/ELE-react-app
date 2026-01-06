@@ -361,6 +361,7 @@ export const App = () => {
       player.addListener('ready', async ({ device_id }) => {
         sessionStorage.setItem("device_id", device_id);
         console.log('Ready with Device ID', device_id);
+        player.activateElement();
         await startWebPlayback();
         setLoadingPlayer(false);
       });
