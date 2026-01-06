@@ -356,11 +356,11 @@ export const App = () => {
       });
       player.setName("Edgehill Listening Experience");
 
-      player.addListener('ready', ({ device_id }) => {
+      player.addListener('ready', async ({ device_id }) => {
         sessionStorage.setItem("device_id", device_id);
-        setLoadingPlayer(false);
         console.log('Ready with Device ID', device_id);
-        startWebPlayback();
+        await startWebPlayback();
+        setLoadingPlayer(false);
       });
 
       player.addListener('not_ready', ({ device_id }) => {
