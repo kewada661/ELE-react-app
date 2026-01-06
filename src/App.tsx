@@ -306,6 +306,8 @@ export const App = () => {
   }, [score, gameInProgress])
 
   const newGame = () => {
+    if (playerRef.current) playerRef.current.resume();
+    console.log("user actions");
     setGameInProgress(true);
   }
 
