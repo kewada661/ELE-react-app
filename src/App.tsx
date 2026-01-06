@@ -17,7 +17,7 @@ export const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
-  const [loadingPlayer, setLoadingPlayer] = useState(false);
+  const [loadingPlayer, setLoadingPlayer] = useState(true);
 
   const embedControllerRef = useRef(null);
   const playerRef = useRef(null);
