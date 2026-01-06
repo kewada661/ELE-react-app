@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
 import { JumpGame } from '@/components/JumpGame';
-import { house, mainContainer } from '@/App.css';
+import { house, mainContainer, startButtonContainer } from '@/App.css';
+import { button } from '@/components/Button/Button.css'
 import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
 import { Menu } from '@/components/Menu';
@@ -10,6 +11,7 @@ import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/Album-Art-house copy 1.png';
 
 export const App = () => {
+  const [startButton, setStartButton] = useState(true);
   const [gameInProgress, setGameInProgress] = useState(true);
   const [score, setScore] = useState(0);
   const [error, setError] = useState<Error>();
@@ -274,6 +276,12 @@ export const App = () => {
     // initializeEmbedPlayback();
   }, [])
 
+  const loginCallback = () => {
+    setEmail(true);
+    handleStartButton();
+    setLoadingPlayer(false);
+  }
+
   const toggleMenu = () => {
     setMenuOpen(prev => !prev);
   }
@@ -292,9 +300,18 @@ export const App = () => {
   const logout = async () => {
     await stopWebPlayback();
     sessionStorage.clear();
+    setMenuOpen(false);
     setLoggedIn(false);
     setEmail(false);
     // initializeEmbedPlayback();
+  }
+
+  const handleStartButton = () => {
+    setStartButton(false);
+    if (playerRef.current) {
+      playerRef.current.resume();
+      console.log('resuming web pb');
+    }
   }
 
   const gameOver = useCallback((score: number) => {
@@ -322,6 +339,8 @@ export const App = () => {
       setLoggedIn(true);
       if (product !== null && product === 'premium') {
         initializeWebPlayback();
+      } else {
+        setLoadingPlayer(false);
       }
     } else if (code && state) {
       getToken(code, state).then(getUsersProduct).then((result) => {
@@ -428,9 +447,15 @@ export const App = () => {
           (email) ? (
             (!loadingPlayer) ? (
               (gameInProgress) ? (
-                <JumpGame 
-                  gameOverCallback={gameOver}
-                />
+                (startButton) ? (
+                  <div className={startButtonContainer}>
+                    <button className={button.green} onClick={handleStartButton}>Play</button>
+                  </div>  
+                ) : (
+                  <JumpGame 
+                    gameOverCallback={gameOver}
+                  />
+                )
               ) : (
                 <GameOverMenu
                   score={score}
@@ -448,7 +473,7 @@ export const App = () => {
           ) : (
             <>
               <img className={house} src={houseImage} alt="" />
-              <LoginFallback loginCallback={() => setEmail(true)} />
+              <LoginFallback loginCallback={loginCallback} />
             </>
           )
         ) : (

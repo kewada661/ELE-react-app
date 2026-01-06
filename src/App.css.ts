@@ -14,6 +14,17 @@ export const mainContainer = style({
   zIndex: 0,
 });
 
+export const startButtonContainer = style({
+  width: '80vw',
+  maxWidth: '80vh',
+  position: 'relative',
+  top: '80vh',
+  display: 'flex',
+  alignSelf: 'center',
+  justifySelf: 'end',
+  justifyContent: 'center'
+})
+
 export const house = style ({
   width: '75vw',
   maxWidth: '60vh',
