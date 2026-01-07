@@ -1,10 +1,23 @@
-import { style, styleVariants} from "@vanilla-extract/css"
+import { style, styleVariants, fontFace } from "@vanilla-extract/css"
 import { vars } from "@/styles/theme.css"
+import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
+
+const fluoxetine = fontFace({
+  src: `url(${fluoxetineURL})`,
+})
+
+export const headerLogo = style({
+  fontFamily: fluoxetine,
+  fontSize: vars.fontSize.large,
+  position: 'fixed',
+  top: 0,
+  padding: vars.spacing.medium,
+})
 
 export const menu = styleVariants ({
   main: {
     position: 'relative',
-    top: '10%',
+    top: '12%',
     display: 'flex',
     flexDirection: 'column',
     gap: vars.spacing.xsmall,

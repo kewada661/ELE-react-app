@@ -1,10 +1,11 @@
+import { vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
 export const header = style({
   display: 'flex',
   alignSelf: 'end',
   maxWidth: '100vh',
-  margin: '1em 1em 1em 1em',
+  margin: vars.spacing.small,
   position: 'fixed',
   top: 0,
   zIndex: 2,
