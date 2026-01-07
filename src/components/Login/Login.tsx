@@ -35,7 +35,7 @@ export const Login = ({ onLogin, fallBack }: LoginProps) => {
           Connect with <img className={spotifyLogo} src={spotifyImage}></img>
         </Button>
         <Button className={button.primary} onClick={fallBack}>
-          Try Another Way
+          TRY ANOTHER WAY
         </Button>
       </div>
   );

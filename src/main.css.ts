@@ -9,11 +9,12 @@ globalStyle('*', {
 globalStyle('#root', {
   maxHeight: '100vh',
   overflow: 'hidden',
+  fontFamily: 'assistant'
 })
 
 globalStyle('body', {
   background: vars.color.dark.main,
-  color: vars.color.light.main,
+  color: vars.color.light.secondary,
   lineHeight: '170%',
   maxHeight: '100vh',
 });

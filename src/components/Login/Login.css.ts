@@ -3,7 +3,7 @@ import { style } from '@vanilla-extract/css';
 export const login = style({
   width: 300,
   position: 'relative',
-  top: '35%',
+  top: '30%',
   justifyItems: 'center',
   alignSelf: 'center',
 })

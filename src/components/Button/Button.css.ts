@@ -8,7 +8,9 @@ const base = style([
     margin: `${vars.spacing.medium} ${vars.spacing.medium}`,
     border: 'none',
     color: vars.color.light.secondary,
-    fontSize: vars.fontSize.small,
+    fontFamily: 'assistant',
+    fontSize: vars.fontSize.xxsmall,
+    fontWeight: 'bold',
     borderRadius: '0.25rem',
     display: 'flex',
     // ':hover': {
@@ -24,7 +26,8 @@ export const button = styleVariants({
     { 
       background: 'none',
       display: 'flex',
-      ':hover': { background: 'none' }
+      ':hover': { background: 'none' },
+      fontWeight: 'normal',
     }
   ],
   spotify: [
@@ -38,6 +41,7 @@ export const button = styleVariants({
       maxHeight: 60,
       alignItems: 'center',
       justifyContent: 'center',
+      fontSize: vars.fontSize.small,
     }
   ],
   gold: [
