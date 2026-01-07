@@ -90,13 +90,15 @@ export const App = () => {
 
   const getToken = async (code: any, state: any) => {
     const result = await requestToken(code, state);
-    if (result.access_token !== undefined) {
+    if (result.email !== undefined) {
       setLoggedIn(true);
-      setEmail(true);
       sessionStorage.setItem("token", result.access_token);
       sessionStorage.setItem("refresh_token", result.refresh_token);
       sessionStorage.setItem("email", result.email);
-      console.log("token:", result.access_token);
+      sessionStorage.setItem("product", result.product);
+    } else {
+      setEmail(true);
+      alert("Spotify authentication failed... please log in below.");
     }
   }
 
@@ -252,12 +254,6 @@ export const App = () => {
     });
   }, [])
 
-  const getUsersProduct = async () => {
-    const access_token = sessionStorage.getItem("token");
-    const response = await fetch(`/api/db/users/product?access_token=${access_token}`);
-    return response.json();
-  }
-
   const onVisibilityChange = async () => {
     const email = sessionStorage.getItem("email");
     if (email && document.hidden) {
@@ -335,20 +331,10 @@ export const App = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
-    // if (email !== null) {
-    //   setEmail(true);
-    //   setLoggedIn(true);
-    //   if (product !== null && product === 'premium') {
-    //     initializeWebPlayback();
-    //   } else {
-    //     setLoadingPlayer(false);
-    //   }
-    // } else
     if (code && state) {
-      getToken(code, state).then(getUsersProduct).then((result) => {
-        console.log(result);
-        sessionStorage.setItem("product", result.product);
-        if (result.product === "premium") {
+      getToken(code, state).then(() => {
+        const product = sessionStorage.getItem("product");
+        if (product !== null && product === "premium") {
           console.log("user has Spotify Premium");
           initializeWebPlayback();
         } else {
@@ -412,7 +398,7 @@ export const App = () => {
       const options = {
           width: '0%',
           height: '0%',
-          uri: 'spotify:album:5K79FLRUCSysQnVESLcTdb'
+          uri: 'spotify:album:2IXmFxN6dFY8ROSKu8nfwl'
         };
       const callback = async (EmbedController) => {
         EmbedController.addListener("ready", () => {setLoadingPlayer(false)});
