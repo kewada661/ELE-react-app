@@ -1,5 +1,6 @@
 import { fontFace, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
 
 export const mainContainer = style({
   display: 'flex',
@@ -29,7 +30,7 @@ export const startButtonContainer = style({
 })
 
 const fluoxetine = fontFace({
-  src: 'url("src/font/fluoxetine/Fluox___.ttf")',
+  src: `url(${fluoxetineURL})`,
 })
 
 export const logo = style ({
