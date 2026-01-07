@@ -317,7 +317,7 @@ export const App = () => {
   const gameOver = useCallback((score: number) => {
     console.log("GAME IS OVER");
     setScore(score);
-    setGameInProgress(prev => !prev);
+    setGameInProgress(false);
     console.log("score:", score);
     console.log("gameInProgress:", gameInProgress);
   }, [score, gameInProgress])
@@ -484,7 +484,7 @@ export const App = () => {
             )}
           </>
         )}
-        <img className={footerLogo} src={bglImage} />
+        <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={bglImage} />
       </main>
         {(leaderboardOpen) ? (<Leaderboard leaderboardClose={toggleLeaderboard}/>) : (<></>)}
         <Menu 

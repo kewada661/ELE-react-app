@@ -1,4 +1,4 @@
-import { menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions } from '@/components/GameOverMenu/GameOverMenu.css';
+import { headerLogo, menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions } from '@/components/GameOverMenu/GameOverMenu.css';
 import { IconUpload } from '@/ui/icons/IconUpload';
 import { IconRefreshCw } from '@/ui/icons/IconRefreshCw';
 import { IconFacebook } from '@/ui/icons/IconFacebook';
@@ -36,6 +36,7 @@ export const GameOverMenu = ({
 
   return (
     <div id="gameOverMenu" className={menu.main}>
+      <p onClick={() => open('https://bigloudrock.com/edgehill')}className={headerLogo}>edgehill</p>
       <div className={yourScore}>
         <h1>YOUR SCORE</h1>
         <div className={scoreContainer}>
