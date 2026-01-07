@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
 import { JumpGame } from '@/components/JumpGame';
-import { house, mainContainer, startButtonContainer } from '@/App.css';
+import { house, mainContainer, startButtonContainer, logo, subtitle, footerLogo} from '@/App.css';
 import { button } from '@/components/Button/Button.css'
 import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
@@ -9,6 +9,7 @@ import { Menu } from '@/components/Menu';
 import { Leaderboard } from '@/components/Leaderboard';
 import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/Album-Art-house copy 1.png';
+import bglImage from '@/assets/footer logos.png';
 
 export const App = () => {
   const [startButton, setStartButton] = useState(true);
@@ -270,14 +271,13 @@ export const App = () => {
   }
 
   const fallBack = useCallback(() => {
-    setLoggedIn(true);
-    setEmail(false);
+    setEmail(true);
     sessionStorage.setItem("token", "fallback");
     // initializeEmbedPlayback();
   }, [])
 
   const loginCallback = () => {
-    setEmail(true);
+    setLoggedIn(true);
     handleStartButton();
     setLoadingPlayer(false);
   }
@@ -444,47 +444,47 @@ export const App = () => {
         <Header volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
         <div id='embed-iframe'></div>
         {(loggedIn) ? (
-          (email) ? (
-            (!loadingPlayer) ? (
-              (gameInProgress) ? (
-                (startButton) ? (
-                  <div className={startButtonContainer}>
-                    <button className={button.green} onClick={handleStartButton}>Play</button>
-                  </div>  
-                ) : (
-                  <JumpGame 
-                    gameOverCallback={gameOver}
-                  />
-                )
+          (loadingPlayer) ? (
+              <p>Loading...</p>
+          ) : (
+            (gameInProgress) ? (
+              (startButton) ? (
+                <div className={startButtonContainer}>
+                  <button className={button.green} onClick={handleStartButton}>Play</button>
+                </div>  
               ) : (
-                <GameOverMenu
-                  score={score}
-                  loggedIn={loggedIn}
-                  submitScoreCallback={updateLeaderboard}
-                  newGameCallback={newGame}
-                  //TODO: shareScoreCallback={}
-                  leaderboardCallback={toggleLeaderboard}
-                  playlistCallback={savePlaylist}
+                <JumpGame 
+                  gameOverCallback={gameOver}
                 />
               )
             ) : (
-              <p>Loading...</p>
+              <GameOverMenu
+                score={score}
+                loggedIn={loggedIn}
+                submitScoreCallback={updateLeaderboard}
+                newGameCallback={newGame}
+                //TODO: shareScoreCallback={}
+                leaderboardCallback={toggleLeaderboard}
+                playlistCallback={savePlaylist}
+              />
             )
-          ) : (
-            <>
-              <img className={house} src={houseImage} alt="" />
-              <LoginFallback loginCallback={loginCallback} />
-            </>
           )
         ) : (
           <>
+            <p className={logo}>edgehill</p>
+            <p className={subtitle}>LISTENING EXPERIENCE</p>
             <img className={house} src={houseImage} alt="" />
-            <Login 
-              onLogin={requestLogin} 
-              fallBack={fallBack}
-            />
+            {(email) ? (
+              <LoginFallback loginCallback={loginCallback} />
+            ) : (
+              <Login 
+                onLogin={requestLogin} 
+                fallBack={fallBack}
+              />
+            )}
           </>
         )}
+        <img className={footerLogo} src={bglImage} />
       </main>
         {(leaderboardOpen) ? (<Leaderboard leaderboardClose={toggleLeaderboard}/>) : (<></>)}
         <Menu 

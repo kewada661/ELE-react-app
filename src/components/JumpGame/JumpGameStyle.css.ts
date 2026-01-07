@@ -31,6 +31,10 @@ export const scoreBoard = style({
   // borderColor: '#ffffff',
   borderRadius: `${vars.spacing.medium}`,
   '> p': {
+    fontFamily: 'assistant',
+    fontWeight: '800',
+    fontSize: vars.fontSize.xxlarge,
+    color: '#ffffff',
     textAlign: 'center',
     display: 'flex',
     justifySelf: 'center',

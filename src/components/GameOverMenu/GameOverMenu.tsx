@@ -1,4 +1,6 @@
-import { menu, button, circularButton, scoreContainer, houseFilter, house } from '@/components/GameOverMenu/GameOverMenu.css';
+import { menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions } from '@/components/GameOverMenu/GameOverMenu.css';
+import { IconUpload } from '@/ui/icons/IconUpload';
+import { IconRefreshCw } from '@/ui/icons/IconRefreshCw';
 import { IconFacebook } from '@/ui/icons/IconFacebook';
 import { IconInstagram } from '@/ui/icons/IconInstagram';
 import { IconLink } from '@/ui/icons/IconLink';
@@ -33,41 +35,61 @@ export const GameOverMenu = ({
   }
 
   return (
-    <div id="gameOverMenu" className={menu.gameover}>
-      <h1>YOUR SCORE</h1>
-      <div className={scoreContainer}>
-        <img className={house} src={houseImage} alt="" />
-        <div className={houseFilter} />
-        <h3 id="go_score">{score}</h3>
+    <div id="gameOverMenu" className={menu.main}>
+      <div className={yourScore}>
+        <h1>YOUR SCORE</h1>
+        <div className={scoreContainer}>
+          <div className={houseFilter} />
+          <img className={house} src={houseImage} alt="" />
+          <h3 id="go_score">{score}</h3>
+        </div>
       </div>
       {(!shareButtons) ? (
         <div className={menu.gameover}>
-          <button className={button.submit} onClick={submitScore}>Submit your score</button>
-          <button className={button.playAgain} onClick={newGameCallback}>Play Again</button>
-          <div>
-            <button className={button.share} onClick={() => setShareButtons(true)} >Share Score</button>
-            <button className={button.share} onClick={leaderboardCallback}id="leaderboard">Leaderboard</button>
+          <button className={button.submit} onClick={submitScore}>
+            <IconUpload /> Submit your score
+          </button>
+          <button className={button.playAgain} onClick={newGameCallback}>
+            <IconRefreshCw /> Play Again</button>
+          <div className={shareLeaderboard}>
+            <button className={button.share} onClick={() => setShareButtons(true)} >
+              Share Score</button>
+            <button className={button.share} onClick={leaderboardCallback}id="leaderboard">
+              Leaderboard
+            </button>
           </div>
           <button className={button.playlist} onClick={playlistCallback}>Join The Edghill Playlist</button>
         </div>
       ) : (
-        <div className={menu.gameover}>
+        <div className={menu.share}>
           <p>Share with Friends</p>
-          <div>
-            <button className={circularButton}>
-              <IconLink size={"32"}/>
-            </button>
-            <button className={circularButton}>
-              <IconFacebook size={"32"}/>
-            </button>
-            <button className={circularButton}>
-              <IconInstagram size={"32"}/>
-            </button>
-            <button className={circularButton}>
-              <IconTwitter size={"32"}/>
-            </button>
+          <div className={shareOptions}>
+            <div>
+              <button id="link" className={circularButton}>
+                <IconLink size={"32"}/>
+              </button>
+              <p>Copy Link</p>
+            </div>
+            <div>
+              <button id="facebook" className={circularButton}>
+                <IconFacebook size={"32"}/>
+              </button>
+              <p>Facebook</p>
+            </div>
+            <div>
+              <button id="instagram" className={circularButton}>
+                <IconInstagram size={"32"}/>
+              </button>
+              <p>Instagram</p>
+            </div>
+            <div>
+              <button id="x" className={circularButton}>
+                <IconTwitter size={"32"}/>
+              </button>
+              <p>X</p>
+            </div>
           </div>
-          <button onClick={() => setShareButtons(false)}>Go Back</button>
+          <button className={button.goBack} onClick={() => setShareButtons(false)}>Go Back</button>
         </div>
       )}
     </div>

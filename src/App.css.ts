@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { fontFace, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const mainContainer = style({
@@ -18,15 +18,39 @@ export const startButtonContainer = style({
   width: '80vw',
   maxWidth: '80vh',
   position: 'relative',
-  top: '80vh',
+  top: '70%',
   display: 'flex',
   alignSelf: 'center',
   justifySelf: 'end',
-  justifyContent: 'center'
+  justifyContent: 'center',
+  '> button': {
+    fontSize: vars.fontSize.small,
+  }
+})
+
+const fluoxetine = fontFace({
+  src: 'url("src/font/fluoxetine/Fluox___.ttf")',
+})
+
+export const logo = style ({
+  textAlign: 'center',
+  fontFamily: fluoxetine,
+  fontSize: '3rem',
+  color: '#ffffff',
+  position: 'relative',
+  top: '16%',
+})
+
+export const subtitle = style ({
+  textAlign: 'center',
+  fontFamily: 'assistant',
+  color: '#ffffff',
+  position: 'relative',
+  top: '18%'
 })
 
 export const house = style ({
-  width: '75vw',
+  width: '80vw',
   maxWidth: '60vh',
   position: 'relative',
   top: '25%',
@@ -34,8 +58,9 @@ export const house = style ({
   alignSelf: 'center',
 })
 
-export const screenDisclaimer = style({
-  textAlign: 'center',
-  fontSize: vars.fontSize.xlarge,
-  marginTop: vars.spacing.xxlarge,
-});
+export const footerLogo = style({
+  width: '20vw',
+  alignSelf: 'center',
+  position: 'fixed',
+  bottom: '2vh',
+})
