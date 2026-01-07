@@ -1,5 +1,6 @@
 import { fontFace, style } from '@vanilla-extract/css'
 import { vars } from '@/styles/theme.css';
+import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
 
 export const menu = style({
   width: '100vw',
@@ -17,7 +18,7 @@ export const menu = style({
 })
 
 const fluoxetine = fontFace({
-  src: 'url("src/font/fluoxetine/Fluox___.ttf")',
+  src: `url(${fluoxetineURL})`,
 })
 
 export const options = style({
