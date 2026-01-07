@@ -60,4 +60,7 @@ export const footerLogo = style({
   maxWidth: '15vh',
   position: 'absolute',
   bottom: vars.spacing.small,
+  WebkitUserSelect: 'none',
+  WebkitTouchCallout: 'none',
+  userSelect: 'none',
 })

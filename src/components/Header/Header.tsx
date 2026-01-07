@@ -9,11 +9,11 @@ import { IconX } from "@/ui/icons/IconX"
 interface HeaderProps {
   volumeCallback: (muted: boolean) => void;
   menuCallback: () => void;
+  menuOpen: boolean;
   leaderboardOpen: boolean;
 }
-export const Header = ({ volumeCallback, menuCallback, leaderboardOpen }: HeaderProps) => {
+export const Header = ({ volumeCallback, menuCallback, menuOpen, leaderboardOpen }: HeaderProps) => {
   const [muted, setMuted] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMute = useCallback(() => {
     volumeCallback(muted);
@@ -23,7 +23,6 @@ export const Header = ({ volumeCallback, menuCallback, leaderboardOpen }: Header
   const toggleMenu = useCallback(() => {
     if (!leaderboardOpen) {
       menuCallback();
-      setMenuOpen(prev => !prev);
     }
   }, [menuOpen, leaderboardOpen])
   return (

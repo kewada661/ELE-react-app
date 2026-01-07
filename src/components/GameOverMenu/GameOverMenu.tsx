@@ -11,7 +11,7 @@ import houseImage from '@/assets/Album-Art-house copy 1.png';
 interface GameOverMenuProps {
   score: number;
   loggedIn: boolean;
-  submitScoreCallback: (score: number) => void;
+  submitScoreCallback: (score: number) => Promise<void>;
   newGameCallback: () => void;
   shareScoreCallback?: () => void;
   leaderboardCallback: () => void;
@@ -30,7 +30,7 @@ export const GameOverMenu = ({
   const [shareButtons, setShareButtons] = useState(false);
 
   const submitScore = async () => {
-    submitScoreCallback(score);
+    await submitScoreCallback(score);
     leaderboardCallback();
   }
 

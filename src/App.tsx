@@ -300,6 +300,7 @@ export const App = () => {
   const logout = async () => {
     await stopWebPlayback();
     sessionStorage.clear();
+    setGameInProgress(true);
     setMenuOpen(false);
     setLoggedIn(false);
     setEmail(false);
@@ -442,7 +443,7 @@ export const App = () => {
   return (
     <>
       <main className={mainContainer}>
-        <Header volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
+        <Header menuOpen={menuOpen} volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
         <div id='embed-iframe'></div>
         {(loggedIn) ? (
           (loadingPlayer) ? (
@@ -486,7 +487,6 @@ export const App = () => {
           </>
         )}
         <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={bglImage} />
-      </main>
         {(leaderboardOpen) ? (<Leaderboard leaderboardClose={toggleLeaderboard}/>) : (<></>)}
         <Menu 
           isOpen={menuOpen} 
@@ -496,6 +496,7 @@ export const App = () => {
           loginCallback={requestLogin}
           logoutCallback={logout}
         />
+      </main>
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { leaderboardContainer, leaderboardHeader, leaderboard, rankName, score, thStyle } from "@/components/Leaderboard/Leaderboard.css";
+import { container, leaderboardContainer, leaderboardHeader, leaderboard, rankName, score, thStyle, tableContainer } from "@/components/Leaderboard/Leaderboard.css";
 import { IconX } from "@/ui/icons/IconX";
 
 interface LeaderboardProps {
@@ -82,37 +82,39 @@ export const Leaderboard = ({ leaderboardClose }: LeaderboardProps) => {
   }, []);
 
   return (
-    <div className={leaderboardContainer}>
-      {(loading || data === undefined) ? (
-        <p>Loading data...</p>
-      ) : ( 
-        <>  
-          <div className={leaderboardHeader}>
-            <div></div>
-            <div>LEADERBOARD</div>
-            <button onClick={leaderboardClose}><IconX /></button>
-          </div>
-        <table className={leaderboard}>
-          <thead className={thStyle}>
-            <tr>
-              <th>RANK</th>
-              <th>NAME</th>
-              <th>SCORE</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, i) => (
-            <tr>
-              <td className={score}>{i + 1}.</td>
-              <td className={rankName}>{item.name}{(sessionStorage.getItem("email") === item.email)&&(' (YOU)')}</td>
-              <td className={score}>{item.score}</td> 
-            </tr>
-          ))}
-          </tbody>
-        </table>
-        </>
-      )
-    }    
+    <div className={container}>
+      <div className={leaderboardContainer}>
+        {(loading || data === undefined) ? (
+          <p>Loading data...</p>
+        ) : ( 
+          <>  
+            <div className={leaderboardHeader}>
+              <button onClick={leaderboardClose}><IconX /></button>
+            </div>
+            <div className={tableContainer}>
+              <table className={leaderboard}>
+                <thead className={thStyle}>
+                  <tr>
+                    <th>RANK</th>
+                    <th>NAME</th>
+                    <th>SCORE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((item, i) => (
+                  <tr key={i}>
+                    <td className={score}>{i + 1}.</td>
+                    <td className={rankName}>{item.name}{(sessionStorage.getItem("email") === item.email)&&(' (YOU)')}</td>
+                    <td className={score}>{item.score}</td> 
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )
+      }    
+      </div>
     </div>
   )
 }
