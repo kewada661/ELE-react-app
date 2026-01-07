@@ -329,20 +329,21 @@ export const App = () => {
   }
 
   useEffect(() => {
-    const email = sessionStorage.getItem('email');
-    const product = sessionStorage.getItem('product');
+    // const email = sessionStorage.getItem('email');
+    // const product = sessionStorage.getItem('product');
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
-    if (email !== null) {
-      setEmail(true);
-      setLoggedIn(true);
-      if (product !== null && product === 'premium') {
-        initializeWebPlayback();
-      } else {
-        setLoadingPlayer(false);
-      }
-    } else if (code && state) {
+    // if (email !== null) {
+    //   setEmail(true);
+    //   setLoggedIn(true);
+    //   if (product !== null && product === 'premium') {
+    //     initializeWebPlayback();
+    //   } else {
+    //     setLoadingPlayer(false);
+    //   }
+    // } else
+    if (code && state) {
       getToken(code, state).then(getUsersProduct).then((result) => {
         console.log(result);
         sessionStorage.setItem("product", result.product);

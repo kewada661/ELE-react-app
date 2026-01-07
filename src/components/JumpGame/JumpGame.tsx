@@ -1,6 +1,5 @@
-import { Touch, useEffect, useRef } from 'react';
-import { button, circularButton } from '@/components/Button/Button.css'
-import { container, canvas, scoreBoard, controls, sprite } from '@/components/JumpGame/JumpGameStyle.css';
+import { useEffect, useRef } from 'react';
+import { container, canvas, scoreBoard, controls, controlButton, sprite } from '@/components/JumpGame/JumpGameStyle.css';
 import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
 import spriteImage from '@/assets/sprite.png'
@@ -653,25 +652,24 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
   return (
     <div className={container}>
+      <div className={scoreBoard} id="scoreBoard">
+        <p id="score">0</p>
+      </div>
       <canvas id="canvas" className={canvas} ref={canvasRef} width={Math.min(innerHeight, innerWidth)} height={Math.floor(innerHeight * screenPortion)}>
         Aww, your browser doesn't support HTML5!
       </canvas>
 
       <div className={controls}>
-        <button ref={leftRef} className={circularButton}>
+        <button ref={leftRef} className={controlButton}>
           <IconChevronLeft size={"32"}/>
         </button>
-        <button ref={rightRef} className={circularButton}>
+        <button ref={rightRef} className={controlButton}>
           <IconChevronRight size={"32"}/>
         </button>
       </div>      
       
       {/*Preloading image ;)*/}
       <img id="sprite" className={sprite} ref={spriteRef} src={spriteImage}/>
-
-      <div className={scoreBoard} id="scoreBoard">
-        <p id="score">0</p>
-      </div>
 
     </div>
   )
