@@ -1,41 +1,62 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
-export const leaderboardContainer = style({
-  height: '80vh',
-  width: '80vw',
-  maxWidth: '80vh',
+export const container = style({
+  width: '100vw',
+  maxWidth: '100vh',
+  height: '100vh',
+  padding: vars.spacing.xxlarge,
   position: 'fixed',
-  top: '10vh',
+  top: 0,
   zIndex: 2,
+})
+export const leaderboardContainer = style({
+  width: '100%',
+  height: '90%',
+  zIndex: 2,
+  marginTop: vars.spacing.large,
   background: vars.color.green,
   display: 'flex',
   flexDirection: 'column',
-  justifyItems: 'center',
-  justifySelf: 'center',
   alignSelf: 'center',
-  overflowY: 'scroll',
+  overflowY: 'visible',
   overflowX: 'hidden',
   scrollbarColor: 'gray transparent',
-  fontFamily: 'fluoxetine, monospace',
+  fontFamily: 'assistant, monospace',
+  borderRadius: vars.spacing.medium,
 });
 
 export const leaderboardHeader = style ({
+  captionSide: 'top',
   display: 'flex',
-  justifyContent: 'space-between',
+  justifyContent: 'end',
   position: 'sticky',
   top: 0,
   background: vars.color.green,
-  padding: '1em 1em 0 1em',
+  margin: vars.spacing.small,
 })
 
+export const tableContainer = style({
+  height: "95vh",
+  width: '90vw',
+  maxWidth: '60vh',
+  overflowY: 'scroll',
+  alignSelf: 'center',
+})
 export const leaderboard = style({
+  height: "50%",
+  background: vars.color.green,
   textAlign: 'center',
 });
 
 export const thStyle = style({
   position: 'sticky',
   top: 0,
+  background: vars.color.green,
+})
+
+export const tbodyStyle = style({
+  overflowY: 'scroll',
 })
 
 const tdStyle = style({
