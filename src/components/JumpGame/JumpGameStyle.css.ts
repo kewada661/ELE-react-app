@@ -10,6 +10,9 @@ export const container = style({
   maxWidth: '100vh',
 	margin: '20px auto 0', 
 	overflow: 'hidden',
+  WebkitUserSelect: 'none',
+  WebkitTouchCallout: 'none',
+  userSelect: 'none',
 })
 
 export const canvas = style({
