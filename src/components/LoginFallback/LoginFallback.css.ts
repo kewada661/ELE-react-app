@@ -3,13 +3,16 @@ import { vars } from '@/styles/theme.css'
 import { button } from '@/components/Button/Button.css';
 
 export const loginFallback = style({
-  width: 300,
-  position: 'relative',
-  top: '30%',
-  justifyItems: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100vw',
+  maxWidth: '100vh',
   alignSelf: 'center',
   fontSize: vars.fontSize.small,
   '> input': {
+    width: '100%',
+    maxWidth: '50vh',
     padding: vars.spacing.xsmall,
     borderRadius: vars.spacing.xxsmall,
     border: 'none',
@@ -23,6 +26,7 @@ export const submitButton = style([
   button.green,
   {
     fontSize: vars.fontSize.small,
+    alignSelf: 'center',
   }
 ])
 

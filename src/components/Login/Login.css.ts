@@ -1,9 +1,13 @@
 import { style } from '@vanilla-extract/css';
 
 export const login = style({
-  width: 300,
-  position: 'relative',
-  top: '30%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100vw',
+  maxWidth: '100vh',
+  // position: 'relative',
+  // top: '30%',
   justifyItems: 'center',
   alignSelf: 'center',
 })

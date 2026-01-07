@@ -9,29 +9,28 @@ const fluoxetine = fontFace({
 export const headerLogo = style({
   fontFamily: fluoxetine,
   fontSize: vars.fontSize.large,
-  position: 'fixed',
-  top: 0,
   padding: vars.spacing.medium,
 })
 
 export const menu = styleVariants ({
   main: {
-    position: 'relative',
-    top: '12%',
+    maxWidth: '100vh',
     display: 'flex',
     flexDirection: 'column',
     gap: vars.spacing.xsmall,
     alignItems: 'center',
-    zIndex: 1, 
+    zIndex: 1,
   },
   gameover: {
     width: '80vw',
+    maxWidth: '60vh',
     display: 'flex',
     flexDirection: 'column',
     gap: vars.spacing.xsmall,
   },
   share: {
     width: '80vw',
+    maxWidth: '60vh',
     display: 'flex',
     flexDirection: 'column',
     '> p': {
@@ -48,6 +47,7 @@ export const menu = styleVariants ({
 
 export const yourScore = style({
   textAlign: 'center',
+  marginTop: vars.spacing.large,
   '> h1': {
       fontSize: vars.fontSize.xxlarge,
       color: 'white',
@@ -73,7 +73,7 @@ export const scoreContainer = style({
 
 export const houseFilter = style({
   width: '80vw',
-  maxWidth: '50vh', 
+  maxWidth: '60vh', 
   aspectRatio: '7/4',
   display: 'flex',
   justifySelf: 'center',
@@ -149,6 +149,7 @@ export const shareLeaderboard = style({
 
 export const shareOptions = style({
   width: '80vw',
+  maxWidth: '60vh',
   display: 'flex',
   justifyContent: "space-between",
 })

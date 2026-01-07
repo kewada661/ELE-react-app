@@ -59,9 +59,9 @@ export const button = styleVariants({
 });
 
 export const circularButton = style({
+  display: 'flex',
+  alignItems: 'center',
   padding: `${vars.spacing.small} ${vars.spacing.small}`,
-  aspectRatio: '1/1',
-  margin: `0 ${vars.spacing.xxsmall}`,
   borderRadius: '50%',
   background: vars.color.gold,
   '> svg': {

@@ -1,10 +1,13 @@
 import { style } from "@vanilla-extract/css"
 import { vars } from "@/styles/theme.css"
+import { circularButton } from "../Button/Button.css"
 
 export const container = style({
-	width: '100vw',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  width: '100vw',
   maxWidth: '100vh',
-	position: 'relative',
 	margin: '20px auto 0', 
 	overflow: 'hidden',
 })
@@ -13,19 +16,18 @@ export const canvas = style({
   width: '100vw',
   maxWidth: '100vh',
   background: 'transparent',
-  margin: "0 auto",	
 	display: 'block',
 })
 
 export const scoreBoard = style({
   minWidth: '20vw',
-  position: 'fixed',
-  top: '0',
+  position: 'absolute',
+  top: vars.spacing.xxsmall,
   display: 'flex',
   justifySelf: 'center',
   justifyContent: 'center',
-  margin: `${vars.spacing.medium}`,
-  padding: `${vars.spacing.xsmall}`,
+  margin: vars.spacing.medium,
+  padding: vars.spacing.xsmall,
   background: '#000000bb',
   border: "solid #ffffff 1px",
   // borderColor: '#ffffff',
@@ -42,14 +44,22 @@ export const scoreBoard = style({
 })
 
 export const controls = style({
-  width: '80vw',
-  maxWidth: '50vh',
-  position: 'relative',
+  width: '100%',
   justifySelf: 'center',
   display: 'flex',
   justifyContent: 'space-between',
-  margin: `${vars.spacing.medium}`,
 })
+
+export const controlButton = style([
+  circularButton,
+  {
+    background: '#00000086',
+    border: 'solid',
+    borderWidth: 1,
+    borderColor: '#000000',
+    margin: vars.spacing.medium,
+  }
+])
 
 export const sprite = style({
   display: "none",

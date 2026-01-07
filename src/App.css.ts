@@ -5,9 +5,10 @@ import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
 export const mainContainer = style({
   display: 'flex',
   flexDirection: 'column',
-  // justifyContent: 'end',
+  alignItems: 'center',
   maxWidth: '100vh',
   height: '100vh',
+  maxHeight: '100svh',
   margin: '0 auto',
   backgroundImage: 'url(/src/assets/9x16-edgehill 1.png)',
   backgroundSize: 'cover',
@@ -18,11 +19,9 @@ export const mainContainer = style({
 export const startButtonContainer = style({
   width: '80vw',
   maxWidth: '80vh',
-  position: 'relative',
-  top: '70%',
   display: 'flex',
-  alignSelf: 'center',
-  justifySelf: 'end',
+  position: 'absolute',
+  bottom: vars.spacing.xxlarge,
   justifyContent: 'center',
   '> button': {
     fontSize: vars.fontSize.small,
@@ -38,30 +37,27 @@ export const logo = style ({
   fontFamily: fluoxetine,
   fontSize: '3rem',
   color: '#ffffff',
-  position: 'relative',
-  top: '16%',
+  marginTop: vars.spacing.xxlarge,
 })
 
 export const subtitle = style ({
   textAlign: 'center',
   fontFamily: 'assistant',
+  fontSize: vars.fontSize.xxsmall,
   color: '#ffffff',
-  position: 'relative',
-  top: '18%'
+  marginTop: vars.spacing.large,
 })
 
 export const house = style ({
   width: '80vw',
   maxWidth: '60vh',
-  position: 'relative',
-  top: '25%',
-  zIndex: 1,
   alignSelf: 'center',
+  marginTop: vars.spacing.xxlarge
 })
 
 export const footerLogo = style({
   width: '20vw',
-  alignSelf: 'center',
-  position: 'fixed',
-  bottom: '2vh',
+  maxWidth: '15vh',
+  position: 'absolute',
+  bottom: vars.spacing.small,
 })
