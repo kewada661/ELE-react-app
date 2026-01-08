@@ -3,6 +3,8 @@ import { container, canvas, scoreBoard, controls, controlButton, sprite } from '
 import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
 import spriteImage from '@/assets/sprite.png'
+import characterURL from '@/assets/sprites/ELE character sprites.png';
+import platformURL from '@/assets/sprites/platformsprite.png'
 
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
@@ -12,6 +14,8 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
   const leftRef = useRef<HTMLButtonElement>(null);
   const rightRef = useRef<HTMLButtonElement>(null);
   const spriteRef = useRef<HTMLImageElement>(null);
+  const characterRef = useRef<HTMLImageElement>(null);
+  const platformRef = useRef<HTMLImageElement>(null);
   const screenPortion = 0.8;
   const width = Math.min(innerWidth, innerHeight),
     height = Math.floor(innerHeight * screenPortion);
@@ -20,17 +24,22 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
   //Variables for game
   var platforms: Platform[] = [],
     image: HTMLImageElement,
+    characterSprites: HTMLImageElement,
+    platformSprites: HTMLImageElement,    
     left: HTMLButtonElement,
     right: HTMLButtonElement,
     player: Player, 
+    deltaTime = 0,
     platformCount = 10,
     position = 0,
-    gravity = 0.2,
+    gravity = 800,
+    xAcceleration = 400,
+    xDeceleration = 300,
     flag = 0,
-    menuLoop: () => void, 
     broken = 0,
     dir: string, 
-    score = 0;
+    score = 0,
+    paused = false;
 
   var animationFrameId: number;
 
@@ -87,7 +96,9 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     dir: string;
     x: number;
     y: number;
-    draw: () => void;
+    animationTimer: number;
+    spriteIndex: number;
+    draw: (deltaTime: number) => void;
     jump: () => void;
     jumpHigh: () => void;
 
@@ -105,36 +116,60 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       //Sprite clipping
       this.cx = 0;
       this.cy = 0;
-      this.cwidth = 110;
-      this.cheight = 80;
+      this.cwidth = 55;
+      this.cheight = 40;
 
       this.dir = "left";
 
       this.x = width / 2 - this.width / 2;
       console.log("width:", width),
-      this.y = height-1;
+      this.y = height - 1;
+
+      this.animationTimer = 0;
+      this.spriteIndex = 0;
 
       //Function to draw it
-      this.draw = function() {
+      this.draw = function(deltaTime: number) {
         try {
-          if (this.dir == "right") this.cy = 121;
-          else if (this.dir == "left") this.cy = 201;
-          else if (this.dir == "right_land") this.cy = 289;
-          else if (this.dir == "left_land") this.cy = 371;
-          // console.log("player.draw()");
-          // console.log(this.y);
-          ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+          this.animationTimer += deltaTime;
+          
+          // Clipping logic
+          switch (Math.floor(this.animationTimer / 0.15)) {
+            case 0: {
+              this.cy = 1;
+              break;
+            }
+            case 1: {
+              this.cy = 50;
+              break;
+            }
+            case 2: {
+              this.cy = 98;
+              break;
+            }
+            case 3: {
+              this.cy = 145;
+              break;
+            }
+            default: this.cy = 72;
+          }
+          if (this.dir == "left") this.cy += 186;
+          this.cx = this.spriteIndex * 55;
+
+          if (this.animationTimer >= 0.45) this.animationTimer = 0;
+
+          ctx.drawImage(characterSprites, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
         } catch (e) {
           console.log("error");
         }
       };
 
       this.jump = function() {
-        this.vy = -8;
+        this.vy = -600;
       };
 
       this.jumpHigh = function() {
-        this.vy = -16;
+        this.vy = -1000;
       };
     }
   };
@@ -142,6 +177,13 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
   player = new Player();
 
   //Platform class
+
+  enum platformType {
+    NORMAL,
+    MOVING,
+    BREAKABLE,
+    VANISHABLE,
+  }
 
   class Platform {
     width: number;
@@ -155,7 +197,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     cwidth: number;
     cheight: number;
     draw: () => void;
-    type: number;
+    type: platformType;
     types: number[];
     moved: number;
     vx: number;
@@ -175,49 +217,49 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       //Sprite clipping
       this.cx = 0;
       this.cy = 0;
-      this.cwidth = 105;
-      this.cheight = 31;
+      this.cwidth = 55;
+      this.cheight = 14;
 
       //Function to draw it
       this.draw = function() {
         try {
 
-          if (this.type == 1) this.cy = 0;
-          else if (this.type == 2) this.cy = 61;
-          else if (this.type == 3 && this.flag === 0) this.cy = 31;
-          else if (this.type == 3 && this.flag == 1) this.cy = 1000;
-          else if (this.type == 4 && this.state === 0) this.cy = 90;
-          else if (this.type == 4 && this.state == 1) this.cy = 1000;
+          if (this.type == platformType.NORMAL) this.cy = 1;
+          else if (this.type == platformType.MOVING) this.cy = 33;
+          else if (this.type == platformType.BREAKABLE && this.flag === 0) this.cy = 17;
+          else if (this.type == platformType.BREAKABLE && this.flag == 1) this.cy = 1000;
+          else if (this.type == platformType.VANISHABLE && this.state === 0) this.cy = 90;
+          else if (this.type == platformType.VANISHABLE && this.state == 1) this.cy = 1000;
 
-          ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+          ctx.drawImage(platformSprites, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
         } catch (e) {}
       };
 
       //Platform types
-      //1: Normal
-      //2: Moving
-      //3: Breakable (Go through)
-      //4: Vanishable 
+      //0: Normal
+      //1: Moving
+      //2: Breakable (Go through)
+      //3: Vanishable 
       //Setting the probability of which type of platforms should be shown at what score
-      if (score >= 5000) this.types = [2, 3, 3, 3, 4, 4, 4, 4];
-      else if (score >= 2000 && score < 5000) this.types = [2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4];
-      else if (score >= 1000 && score < 2000) this.types = [2, 2, 2, 3, 3, 3, 3, 3];
-      else if (score >= 500 && score < 1000) this.types = [1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
-      else if (score >= 100 && score < 500) this.types = [1, 1, 1, 1, 2, 2];
-      else this.types = [1];
+      if (score >= 5000) this.types = [1, 2, 2, 2, 3, 3, 3, 3];
+      else if (score >= 2000 && score < 5000) this.types = [1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
+      else if (score >= 1000 && score < 2000) this.types = [1, 1, 1, 2, 2, 2, 2, 2];
+      else if (score >= 500 && score < 1000) this.types = [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2];
+      else if (score >= 100 && score < 500) this.types = [0, 0, 0, 0, 1, 1];
+      else this.types = [0];
 
       this.type = this.types[Math.floor(Math.random() * this.types.length)];
 
       //We can't have two consecutive breakable platforms otherwise it will be impossible to reach another platform sometimes!
-      if (this.type == 3 && broken < 1) {
+      if (this.type == platformType.BREAKABLE && broken < 1) {
         broken++;
-      } else if (this.type == 3 && broken >= 1) {
-        this.type = 1;
+      } else if (this.type == platformType.BREAKABLE && broken >= 1) {
+        this.type = platformType.NORMAL;
         broken = 0;
       }
 
       this.moved = 0;
-      this.vx = 1;
+      this.vx = 60;
     }
   }
 
@@ -363,8 +405,13 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
   function init() {
     //Variables for the game
-    var	dir = "left",
-      jumpCount = 0;
+    dir = "left";
+    var jumpCount = 0;
+    var previousTime = 0;
+
+    //Choose random character sprite
+
+    player.spriteIndex = Math.floor(Math.random() * 3);
 
     //Function for clearing canvas in each consecutive frame
 
@@ -374,61 +421,41 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
     //Player related calculations and functions
 
-    function playerCalc() {
+    function playerCalc(deltaTime: number) {
       if (dir == "left") {
         player.dir = "left";
-        if (player.vy < -7 && player.vy > -15) player.dir = "left_land";
       } else if (dir == "right") {
         player.dir = "right";
-        if (player.vy < -7 && player.vy > -15) player.dir = "right_land";
       }
-
-      //Adding keyboard controls
-      document.addEventListener("keydown", keyDown);
-      document.addEventListener("keyup", keyUp);
-
-      //Adding touch controls
-      left.addEventListener("touchstart", onLeftTouchStart);
-      left.addEventListener("touchend", onLeftTouchEnd);
-      right.addEventListener("touchstart", onRightTouchStart);
-      right.addEventListener("touchend", onRightTouchEnd);
-
-      //Adding button controls
-      left.addEventListener("mousedown", onLeftMouseDown);
-      left.addEventListener("mouseup", onLeftMouseUp);
-      right.addEventListener("mousedown", onRightMouseDown);
-      right.addEventListener("mouseup", onRightMouseUp);
 
       //Accelerations produces when the user hold the keys
       if (player.isMovingLeft === true) {
-        player.x += player.vx;
-        player.vx -= 0.15;
+        player.x += player.vx * deltaTime;
+        player.vx -= xAcceleration * deltaTime;
       } else {
-        player.x += player.vx;
-        if (player.vx < 0) player.vx += 0.1;
+        player.x += player.vx * deltaTime;
+        if (player.vx < 0) player.vx += xDeceleration * deltaTime;
       }
 
       if (player.isMovingRight === true) {
-        player.x += player.vx;
-        player.vx += 0.15;
+        player.x += player.vx * deltaTime;
+        player.vx += xAcceleration * deltaTime;
       } else {
-        player.x += player.vx;
-        if (player.vx > 0) player.vx -= 0.1;
+        player.x += player.vx * deltaTime;
+        if (player.vx > 0) player.vx -= xDeceleration * deltaTime;
       }
 
       // Speed limits!
-      if(player.vx > 8)
-        player.vx = 8;
-      else if(player.vx < -8)
-        player.vx = -8;
-
-      //console.log(player.vx);
+      if(player.vx > 480)
+        player.vx = 480;
+      else if(player.vx < -480)
+        player.vx = -480;
       
       //Jump the player when it hits the base
       if ((player.y + player.height) > base.y && base.y < height) player.jump();
 
       //Gameover if it hits the bottom 
-      if (base.y > height && (player.y + player.height) > height && player.isDead != "lol") player.isDead = true;
+      if (base.y > height && (player.y + player.height) > height && player.isDead == false) player.isDead = true;
 
       //Make the player move through walls
       if (player.x > width) player.x = 0 - player.width;
@@ -436,8 +463,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
       //Movement of player affected by gravity
       if (player.y >= (height / 2) - (player.height / 2)) {
-        player.y += player.vy;
-        player.vy += gravity;
+        player.y += player.vy * deltaTime;
       }
 
       //When the player reaches half height, move the platforms to create the illusion of scrolling and recreate the platforms that are out of viewport...
@@ -445,7 +471,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
         platforms.forEach(function(p, i) {
 
           if (player.vy < 0) {
-            p.y -= player.vy;
+            p.y -= player.vy * deltaTime;
           }
 
           if (p.y > height) {
@@ -455,21 +481,23 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
         });
 
-        base.y -= player.vy;
-        player.vy += gravity;
+        if (base.y < height) base.y -= player.vy * deltaTime;
+
 
         if (player.vy >= 0) {
-          player.y += player.vy;
-          player.vy += gravity;
+          player.y += player.vy * deltaTime;
+          player.vy += gravity * deltaTime;
         }
 
         score++;
       }
 
+      player.vy += gravity * deltaTime;
+
       //Make the player jump when it collides with platforms
       collides();
 
-      if (player.isDead === true) gameOver();
+      if (player.isDead === true) gameOver(deltaTime);
     }
 
     //Spring algorithms
@@ -478,7 +506,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       var s = Spring;
       var p = platforms[0];
 
-      if (p.type == 1 || p.type == 2) {
+      if (p.type == platformType.NORMAL || p.type == platformType.MOVING) {
         s.x = p.x + p.width / 2 - s.width / 2;
         s.y = p.y - p.height - 10;
 
@@ -493,14 +521,14 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
     //Platform's horizontal movement (and falling) algo
 
-    function platformCalc() {
+    function platformCalc(deltaTime: number) {
       var subs = platform_broken_substitute;
 
       platforms.forEach(function(p, i) {
-        if (p.type == 2) {
+        if (p.type == platformType.MOVING) {
           if (p.x < 0 || p.x + p.width > width) p.vx *= -1;
 
-          p.x += p.vx;
+          p.x += p.vx * deltaTime;
         }
 
         if (p.flag == 1 && subs.appearance === false && jumpCount === 0) {
@@ -516,7 +544,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
       if (subs.appearance === true) {
         subs.draw();
-        subs.y += 8;
+        subs.y += 480 * deltaTime;
       }
 
       if (subs.y > height) subs.appearance = false;
@@ -531,11 +559,11 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
           (player.y + player.height > p.y) && 
           (player.y + player.height < p.y + p.height)) {
 
-          if (p.type == 3 && p.flag === 0) {
+          if (p.type == platformType.BREAKABLE && p.flag === 0) {
             p.flag = 1;
             jumpCount = 0;
             return;
-          } else if (p.type == 4 && p.state === 0) {
+          } else if (p.type == platformType.VANISHABLE && p.state === 0) {
             player.jump();
             p.state = 1;
           } else if (p.flag == 1) return;
@@ -558,18 +586,18 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
     }
 
-    function updateScore() {
+    function updateScore(deltaTime: number) {
       var scoreText = document.getElementById("score");
       if (scoreText !== null) scoreText.innerHTML = score.toString();
     }
 
-    function gameOver() {
+    function gameOver(deltaTime: number) {
       platforms.forEach(function(p, i) {
-        p.y -= 12;
+        p.y -= 600 * deltaTime;
       });
 
       if(player.y > height/2 && flag === 0) {
-        player.y -= 8;
+        player.y -= 500 * deltaTime;
         player.vy = 0;
       } 
       else if(player.y < height / 2) flag = 1;
@@ -589,26 +617,28 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
 
     //Function to update everything
 
-    function update() {
+    function update(deltaTime: number) {
       paintCanvas();
-      platformCalc();
+      platformCalc(deltaTime);
 
       springCalc();
 
-      playerCalc();
-      player.draw();
+      playerCalc(deltaTime);
+      player.draw(deltaTime);
 
       base.draw();
 
-      updateScore();
+      updateScore(deltaTime);
     }
 
-    const animloop = function() {
-      update();
+    const animloop = function(currentTime: DOMHighResTimeStamp) {
+      if (previousTime === 0) previousTime = currentTime;
+      deltaTime = (currentTime - previousTime) / 1000;
+      previousTime = currentTime;
+      update(deltaTime);
       animationFrameId = requestAnimationFrame(animloop);
     };
-
-    animloop();
+    requestAnimationFrame(animloop);
   }
 
   useEffect(() => {
@@ -621,6 +651,8 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     if (
       !canvasRef.current || 
       !spriteRef.current ||
+      !characterRef.current ||
+      !platformRef.current ||
       !leftRef.current ||
       !rightRef.current
     ) {
@@ -628,24 +660,42 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       return;
     }
     ctx = canvasRef.current.getContext('2d'); 
-    console.log("canvasRef.current.width", canvasRef.current.width);
     image = spriteRef.current;
+    characterSprites = characterRef.current;
+    platformSprites= platformRef.current;
     left = leftRef.current;
     right = rightRef.current;
-    animationFrameId = requestAnimationFrame(init);
+    //Adding keyboard controls
+    document.addEventListener("keydown", keyDown);
+    document.addEventListener("keyup", keyUp);
+
+    //Adding touch controls
+    left.addEventListener("touchstart", onLeftTouchStart);
+    left.addEventListener("touchend", onLeftTouchEnd);
+    right.addEventListener("touchstart", onRightTouchStart);
+    right.addEventListener("touchend", onRightTouchEnd);
+
+    //Adding button controls
+    left.addEventListener("mousedown", onLeftMouseDown);
+    left.addEventListener("mouseup", onLeftMouseUp);
+    right.addEventListener("mousedown", onRightMouseDown);
+    right.addEventListener("mouseup", onRightMouseUp);
+    
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    init();
     return () => {
       cancelAnimationFrame(animationFrameId);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       document.removeEventListener("keydown", keyDown);
       document.removeEventListener("keyup", keyUp);
       left.removeEventListener("touchstart", onLeftTouchStart);
       left.removeEventListener("touchend", onLeftTouchEnd);
       right.removeEventListener("touchstart", onRightTouchStart);
       right.removeEventListener("touchend", onRightTouchEnd);
-      left.addEventListener("mousedown", onLeftMouseDown);
-      left.addEventListener("mouseup", onLeftMouseUp);
-      right.addEventListener("mousedown", onRightMouseDown);
-      right.addEventListener("mouseup", onRightMouseDown);
-      console.log("keyup and keydown listeners removed!!");
+      left.removeEventListener("mousedown", onLeftMouseDown);
+      left.removeEventListener("mouseup", onLeftMouseUp);
+      right.removeEventListener("mousedown", onRightMouseDown);
+      right.removeEventListener("mouseup", onRightMouseUp);
       removeEventListener('resize', updateCtx);
     }
   }, []);
@@ -670,6 +720,8 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       
       {/*Preloading image ;)*/}
       <img id="sprite" className={sprite} ref={spriteRef} src={spriteImage}/>
+      <img id="char1" className={sprite} ref={characterRef} src={characterURL} /> 
+      <img id="charGif" className={sprite} ref={platformRef} src={platformURL} /> 
 
     </div>
   )
