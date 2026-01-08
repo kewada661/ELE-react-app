@@ -30,7 +30,7 @@ export const Header = ({ volumeCallback, menuCallback, menuOpen, leaderboardOpen
       <button onClick={toggleMute} className={headerButton}>
         {(muted) ? (<IconVolumeX size={'32'}/>) : (<IconVolume2 size={'32'}/>)}
       </button>
-      <button onClick={toggleMenu} className={headerButton}>
+      <button id="menu" onClick={toggleMenu} className={headerButton}>
         {(menuOpen) ? (<IconX size={'32'}/>) : (<IconMenu size={'32'}/>)}
       </button>
     </div>
