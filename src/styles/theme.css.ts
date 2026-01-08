@@ -61,6 +61,15 @@ export const vars = createGlobalTheme(':root', {
     xlarge: '1.75rem',
     xxlarge: '2rem',
   },
+  margins: {
+    xxsmall: '1svh',
+    xsmall: '3svh',
+    small: '5svh',
+    medium: '10svh',
+    large: '15svh',
+    xlarge: '20svh',
+    xxlarge: '25svh',
+  }
 });
 
 export const focus = style({

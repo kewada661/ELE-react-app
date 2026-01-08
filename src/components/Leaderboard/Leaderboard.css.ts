@@ -21,7 +21,7 @@ export const leaderboardContainer = style({
   alignSelf: 'center',
   overflowY: 'visible',
   overflowX: 'hidden',
-  scrollbarColor: 'gray transparent',
+  scrollbarColor: 'transparent transparent',
   fontFamily: 'assistant, monospace',
   borderRadius: vars.spacing.medium,
 });
@@ -38,10 +38,12 @@ export const leaderboardHeader = style ({
 
 export const tableContainer = style({
   height: "95vh",
-  width: '90vw',
+  width: '100%',
   maxWidth: '60vh',
   overflowY: 'scroll',
   alignSelf: 'center',
+  paddingRight: vars.spacing.small,
+  paddingLeft: vars.spacing.small,
 })
 export const leaderboard = style({
   height: "50%",

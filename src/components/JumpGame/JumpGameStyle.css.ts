@@ -7,7 +7,7 @@ export const container = style({
   flexDirection: 'column',
   alignItems: 'center',
   width: '100vw',
-  maxWidth: '100vh',
+  maxWidth: '100svh',
 	margin: '20px auto 0', 
 	overflow: 'hidden',
   WebkitUserSelect: 'none',
@@ -17,9 +17,9 @@ export const container = style({
 
 export const canvas = style({
   width: '100vw',
-  maxWidth: '100vh',
+  maxWidth: '100svh',
   background: 'transparent',
-	display: 'block',
+	// display: 'block',
 })
 
 export const scoreBoard = style({
@@ -61,8 +61,19 @@ export const controlButton = style([
     borderWidth: 1,
     borderColor: '#000000',
     margin: vars.spacing.medium,
+    touchAction: 'manipulation',
   }
 ])
+
+export const footerLogo = style({
+  width: '20vw',
+  maxWidth: '15vh',
+  position: "absolute",
+  bottom: vars.margins.xsmall,
+  WebkitUserSelect: 'none',
+  WebkitTouchCallout: 'none',
+  userSelect: 'none',
+})
 
 export const sprite = style({
   display: "none",

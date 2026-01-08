@@ -6,7 +6,7 @@ export const mainContainer = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  maxWidth: '100vh',
+  maxWidth: '100svh',
   height: '100vh',
   maxHeight: '100svh',
   margin: '0 auto',
@@ -37,7 +37,7 @@ export const logo = style ({
   fontFamily: fluoxetine,
   fontSize: '3rem',
   color: '#ffffff',
-  marginTop: vars.spacing.xxlarge,
+  marginTop: vars.margins.medium,
 })
 
 export const subtitle = style ({
@@ -45,22 +45,25 @@ export const subtitle = style ({
   fontFamily: 'assistant',
   fontSize: vars.fontSize.xxsmall,
   color: '#ffffff',
-  marginTop: vars.spacing.large,
+  marginTop: vars.margins.xsmall,
+})
+
+export const houseContainer = style ({
+  height: '33svh',
+  alignSelf: 'center',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: vars.margins.small,
 })
 
 export const house = style ({
   width: '80vw',
   maxWidth: '60vh',
-  alignSelf: 'center',
-  marginTop: vars.spacing.xxlarge
 })
 
 export const footerLogo = style({
   width: '20vw',
   maxWidth: '15vh',
-  position: 'absolute',
-  bottom: vars.spacing.small,
-  WebkitUserSelect: 'none',
-  WebkitTouchCallout: 'none',
-  userSelect: 'none',
+  marginBottom: vars.margins.xxsmall,
 })

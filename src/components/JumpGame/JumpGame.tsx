@@ -1,10 +1,11 @@
-import { useEffect, useRef } from 'react';
-import { container, canvas, scoreBoard, controls, controlButton, sprite } from '@/components/JumpGame/JumpGameStyle.css';
+import { useEffect, useRef, useState } from 'react';
+import { container, canvas, scoreBoard, controls, controlButton, sprite, footerLogo } from '@/components/JumpGame/JumpGameStyle.css';
 import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
 import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
-import platformURL from '@/assets/sprites/platformsprite.png'
+import platformURL from '@/assets/sprites/platformsprite.png';
+import blrURL from '@/assets/footer logos.png';
 
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
@@ -18,8 +19,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   const characterRef = useRef<HTMLImageElement>(null);
   const platformRef = useRef<HTMLImageElement>(null);
   const screenPortion = 0.8;
-  const width = Math.min(innerWidth, innerHeight),
-    height = Math.floor(innerHeight * screenPortion);
+  const [width, setWidth] = useState(Math.min(innerWidth, innerHeight));
+  const [height, setHeight] = useState(Math.floor(innerHeight * screenPortion));
   let ctx: any;
 
   //Variables for game
@@ -406,6 +407,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
 
   class Game {
+    height: number;
+    width: number;
     jumpCount: number;
     previousTime: number;
     paintCanvas: () => void;
@@ -421,10 +424,12 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     pause: () => void;
     resume: () => void;
     constructor() {
+      this.height = height;
+      this.width = width;
       this.jumpCount = 0;
       this.previousTime = 0;
       this. paintCanvas = () => {
-        ctx.clearRect(0, 0, width, height);
+        ctx.clearRect(0, 0, this.width, this.height);
       }
       this.playerCalc = () => {
         if (dir == "left") {
@@ -457,36 +462,36 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           player.vx = -480;
         
         //Jump the player when it hits the base
-        if ((player.y + player.height) > base.y && base.y < height) player.jump();
+        if ((player.y + player.height) > base.y && base.y < this.height) player.jump();
 
         //Gameover if it hits the bottom 
-        if (base.y > height && (player.y + player.height) > height && player.isDead == false) player.isDead = true;
+        if (base.y > this.height && (player.y + player.height) > this.height && player.isDead == false) player.isDead = true;
 
         //Make the player move through walls
-        if (player.x > width) player.x = 0 - player.width;
-        else if (player.x < 0 - player.width) player.x = width;
+        if (player.x > this.width) player.x = 0 - player.width;
+        else if (player.x < 0 - player.width) player.x = this.width;
 
         //Movement of player affected by gravity
-        if (player.y >= (height / 2) - (player.height / 2)) {
+        if (player.y >= (this.height / 2) - (player.height / 2)) {
           player.y += player.vy * deltaTime;
         }
 
         //When the player reaches half height, move the platforms to create the illusion of scrolling and recreate the platforms that are out of viewport...
         else {
-          platforms.forEach(function(p, i) {
+          platforms.forEach( (p, i) => {
 
             if (player.vy < 0) {
               p.y -= player.vy * deltaTime;
             }
 
-            if (p.y > height) {
+            if (p.y > this.height) {
               platforms[i] = new Platform();
-              platforms[i].y = p.y - height;
+              platforms[i].y = p.y - this.height;
             }
 
           });
 
-          if (base.y < height) base.y -= player.vy * deltaTime;
+          if (base.y < this.height) base.y -= player.vy * deltaTime;
 
 
           if (player.vy >= 0) {
@@ -513,7 +518,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           s.x = p.x + p.width / 2 - s.width / 2;
           s.y = p.y - p.height - 10;
 
-          if (s.y > height / 1.1) s.state = 0;
+          if (s.y > this.height / 1.1) s.state = 0;
 
           s.draw();
         } else {
@@ -527,7 +532,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
         platforms.forEach( (p, i) => {
           if (p.type == platformType.MOVING) {
-            if (p.x < 0 || p.x + p.width > width) p.vx *= -1;
+            if (p.x < 0 || p.x + p.width > this.width) p.vx *= -1;
 
             p.x += p.vx * deltaTime;
           }
@@ -548,7 +553,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           subs.y += 480 * deltaTime;
         }
 
-        if (subs.y > height) subs.appearance = false;
+        if (subs.y > this.height) subs.appearance = false;
       }
 
       this.collides = () => {
@@ -588,7 +593,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.updateScore = () => {
         var scoreText = document.getElementById("score");
-        if (scoreText !== null) scoreText.innerHTML = score.toString();
+        // if (scoreText !== null) scoreText.innerHTML = score.toString();
+        if (scoreText !== null) scoreText.innerHTML = player.y.toString();
       }
 
       this.gameOver = () => {
@@ -596,12 +602,12 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           p.y -= 600 * deltaTime;
         });
 
-        if(player.y > height/2 && flag === 0) {
+        if(player.y > this.height/2 && flag === 0) {
           player.y -= 500 * deltaTime;
           player.vy = 0;
         } 
-        else if(player.y < height / 2) flag = 1;
-        else if(player.y + player.height > height) {
+        else if(player.y < this.height / 2) flag = 1;
+        else if(player.y + player.height > this.height) {
           // showGoMenu();
           player.isDead = true;
           cancelAnimationFrame(animationFrameId);
@@ -679,6 +685,14 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     const updateCtx = () => {
       if (canvasRef.current) {
         ctx = canvasRef.current.getContext('2d');
+        const newWidth = Math.min(innerWidth, innerHeight);
+        const newHeight = Math.floor(innerHeight * screenPortion);
+        setWidth(newWidth);
+        setHeight(newHeight);
+        game.width = newWidth;
+        game.height = newHeight;
+        // base.width = newWidth;
+        // base.y = newHeight;
       }
     }
     addEventListener('resize', updateCtx)
@@ -747,7 +761,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       <div className={scoreBoard} id="scoreBoard">
         <p id="score">0</p>
       </div>
-      <canvas id="canvas" className={canvas} ref={canvasRef} width={Math.min(innerHeight, innerWidth)} height={Math.floor(innerHeight * screenPortion)}>
+      <canvas id="canvas" className={canvas} ref={canvasRef} width={width} height={height}>
         Aww, your browser doesn't support HTML5!
       </canvas>
 
@@ -758,7 +772,9 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
         <button ref={rightRef} className={controlButton}>
           <IconChevronRight size={"32"}/>
         </button>
-      </div>      
+      </div>
+      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={blrURL} />
+
       
       {/*Preloading image ;)*/}
       <img id="sprite" className={sprite} ref={spriteRef} src={spriteImage}/>

@@ -1,4 +1,4 @@
-import { headerLogo, menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions } from '@/components/GameOverMenu/GameOverMenu.css';
+import { headerLogo, menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions, footerLogo } from '@/components/GameOverMenu/GameOverMenu.css';
 import { IconUpload } from '@/ui/icons/IconUpload';
 import { IconRefreshCw } from '@/ui/icons/IconRefreshCw';
 import { IconFacebook } from '@/ui/icons/IconFacebook';
@@ -7,6 +7,7 @@ import { IconLink } from '@/ui/icons/IconLink';
 import { IconTwitter } from '@/ui/icons/IconTwitter';
 import { useState } from 'react';
 import houseImage from '@/assets/Album-Art-house copy 1.png';
+import blrURL from '@/assets/footer logos.png';
 
 interface GameOverMenuProps {
   score: number;
@@ -93,6 +94,7 @@ export const GameOverMenu = ({
           <button className={button.goBack} onClick={() => setShareButtons(false)}>Go Back</button>
         </div>
       )}
+      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={blrURL} />
     </div>
   )
 }

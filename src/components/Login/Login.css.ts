@@ -6,9 +6,9 @@ export const login = style({
   alignItems: 'center',
   width: '100vw',
   maxWidth: '100vh',
+  height: '40svh',
   // position: 'relative',
   // top: '30%',
-  justifyItems: 'center',
   alignSelf: 'center',
 })
 

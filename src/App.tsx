@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
 import { JumpGame } from '@/components/JumpGame';
-import { house, mainContainer, startButtonContainer, logo, subtitle, footerLogo} from '@/App.css';
+import { house, mainContainer, houseContainer, startButtonContainer, logo, subtitle, footerLogo} from '@/App.css';
 import { button } from '@/components/Button/Button.css'
 import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
@@ -274,7 +274,7 @@ export const App = () => {
 
   const loginCallback = () => {
     setLoggedIn(true);
-    handleStartButton();
+    // handleStartButton();
     setLoadingPlayer(false);
   }
 
@@ -466,7 +466,9 @@ export const App = () => {
           <>
             <p className={logo}>edgehill</p>
             <p className={subtitle}>LISTENING EXPERIENCE</p>
-            <img className={house} src={houseImage} alt="" />
+            <div className={houseContainer}>
+              <img className={house} src={houseImage} alt="" />
+            </div>
             {(email) ? (
               <LoginFallback loginCallback={loginCallback} />
             ) : (
@@ -475,9 +477,9 @@ export const App = () => {
                 fallBack={fallBack}
               />
             )}
+            <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={bglImage} />
           </>
         )}
-        <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={bglImage} />
         {(leaderboardOpen) ? (<Leaderboard leaderboardClose={toggleLeaderboard}/>) : (<></>)}
         <Menu 
           isOpen={menuOpen} 

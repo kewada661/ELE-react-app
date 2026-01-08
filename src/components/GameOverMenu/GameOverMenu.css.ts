@@ -14,7 +14,8 @@ export const headerLogo = style({
 
 export const menu = styleVariants ({
   main: {
-    maxWidth: '100vh',
+    height: '100svh',
+    maxWidth: '100svh',
     display: 'flex',
     flexDirection: 'column',
     gap: vars.spacing.xsmall,
@@ -23,21 +24,23 @@ export const menu = styleVariants ({
   },
   gameover: {
     width: '80vw',
-    maxWidth: '60vh',
+    maxWidth: '60svh',
+    height: '100svh',
     display: 'flex',
     flexDirection: 'column',
     gap: vars.spacing.xsmall,
   },
   share: {
     width: '80vw',
-    maxWidth: '60vh',
+    maxWidth: '60svh',
+    height: '100svh',
     display: 'flex',
     flexDirection: 'column',
     '> p': {
       textAlign: 'center',
       fontSize: vars.fontSize.small,
       fontWeight: 'bold',
-      margin: `${vars.spacing.large} 0`
+      margin: vars.spacing.medium
     },
     '> div': {
       textAlign: 'center',
@@ -56,7 +59,7 @@ export const yourScore = style({
 
 export const scoreContainer = style({
   width: '80vw',
-  maxWidth: '60vh', 
+  maxWidth: '60svh', 
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -73,7 +76,7 @@ export const scoreContainer = style({
 
 export const houseFilter = style({
   width: '80vw',
-  maxWidth: '60vh', 
+  maxWidth: '60svh', 
   aspectRatio: '7/4',
   display: 'flex',
   justifySelf: 'center',
@@ -136,8 +139,6 @@ export const button = styleVariants({
     buttonBase,
     {
       background: 'none',
-      position: "relative",
-      top: '15%',
     }
   ]
 })
@@ -155,6 +156,7 @@ export const shareOptions = style({
 })
 
 export const circularButton = style({
+  display: 'flex',
   padding: `${vars.spacing.medium} ${vars.spacing.medium}`,
   // margin: `0 ${vars.spacing.xxsmall}`,
   borderRadius: '50%',
@@ -169,4 +171,10 @@ export const circularButton = style({
       },
     },
   },
+})
+
+export const footerLogo = style({
+  width: '20vw',
+  maxWidth: '15vh',
+  marginBottom: vars.margins.xxsmall,
 })
