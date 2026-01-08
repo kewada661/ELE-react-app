@@ -593,8 +593,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.updateScore = () => {
         var scoreText = document.getElementById("score");
-        // if (scoreText !== null) scoreText.innerHTML = score.toString();
-        if (scoreText !== null) scoreText.innerHTML = player.y.toString();
+        if (scoreText !== null) scoreText.innerHTML = score.toString();
       }
 
       this.gameOver = () => {
