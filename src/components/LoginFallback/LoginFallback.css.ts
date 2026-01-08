@@ -8,6 +8,7 @@ export const loginFallback = style({
   alignItems: 'center',
   width: '100vw',
   maxWidth: '100vh',
+  height: '40svh',
   alignSelf: 'center',
   fontSize: vars.fontSize.small,
   '> input': {

@@ -4,8 +4,8 @@ import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
 
 export const menu = style({
   width: '100vw',
-  maxWidth: '100vh',
-  height: '100vh',
+  maxWidth: '100svh',
+  height: '100svh',
   alignSelf: 'center',
   display: 'flex',
   alignItems: 'center',

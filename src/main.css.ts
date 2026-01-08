@@ -9,7 +9,8 @@ globalStyle('*', {
 globalStyle('#root', {
   maxHeight: '100vh',
   overflow: 'hidden',
-  fontFamily: 'assistant'
+  fontFamily: 'assistant',
+  fontSize: '2vh',
 })
 
 globalStyle('body', {
