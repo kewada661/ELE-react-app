@@ -90,7 +90,7 @@ export const App = () => {
 
   const getToken = async (code: any, state: any) => {
     const result = await requestToken(code, state);
-    if (result.email !== undefined) {
+    if (result !== null) {
       setLoggedIn(true);
       sessionStorage.setItem("token", result.access_token);
       sessionStorage.setItem("refresh_token", result.refresh_token);
