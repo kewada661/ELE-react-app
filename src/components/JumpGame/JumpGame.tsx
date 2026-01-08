@@ -8,8 +8,9 @@ import platformURL from '@/assets/sprites/platformsprite.png'
 
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
+  menuCallback: () => void;
 }
-export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
+export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const leftRef = useRef<HTMLButtonElement>(null);
   const rightRef = useRef<HTMLButtonElement>(null);
@@ -29,6 +30,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     left: HTMLButtonElement,
     right: HTMLButtonElement,
     player: Player, 
+    game: Game,
     deltaTime = 0,
     platformCount = 10,
     position = 0,
@@ -98,7 +100,7 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     y: number;
     animationTimer: number;
     spriteIndex: number;
-    draw: (deltaTime: number) => void;
+    draw: () => void;
     jump: () => void;
     jumpHigh: () => void;
 
@@ -122,14 +124,13 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       this.dir = "left";
 
       this.x = width / 2 - this.width / 2;
-      console.log("width:", width),
       this.y = height - 1;
 
       this.animationTimer = 0;
       this.spriteIndex = 0;
 
       //Function to draw it
-      this.draw = function(deltaTime: number) {
+      this.draw = function() {
         try {
           this.animationTimer += deltaTime;
           
@@ -403,242 +404,275 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     player.isMovingRight = false;
   }
 
-  function init() {
-    //Variables for the game
-    dir = "left";
-    var jumpCount = 0;
-    var previousTime = 0;
 
-    //Choose random character sprite
-
-    player.spriteIndex = Math.floor(Math.random() * 3);
-
-    //Function for clearing canvas in each consecutive frame
-
-    function paintCanvas() {
-      ctx.clearRect(0, 0, width, height);
-    }
-
-    //Player related calculations and functions
-
-    function playerCalc(deltaTime: number) {
-      if (dir == "left") {
-        player.dir = "left";
-      } else if (dir == "right") {
-        player.dir = "right";
+  class Game {
+    jumpCount: number;
+    previousTime: number;
+    paintCanvas: () => void;
+    playerCalc: () => void;
+    springCalc: () => void;
+    platformCalc: () => void;
+    collides: () => void;
+    updateScore: () => void;
+    gameOver: () => void;
+    update: () => void;
+    animLoop: (currentTime: DOMHighResTimeStamp) => void;
+    init: () => void;
+    pause: () => void;
+    resume: () => void;
+    constructor() {
+      this.jumpCount = 0;
+      this.previousTime = 0;
+      this. paintCanvas = () => {
+        ctx.clearRect(0, 0, width, height);
       }
+      this.playerCalc = () => {
+        if (dir == "left") {
+          player.dir = "left";
+        } else if (dir == "right") {
+          player.dir = "right";
+        }
 
-      //Accelerations produces when the user hold the keys
-      if (player.isMovingLeft === true) {
-        player.x += player.vx * deltaTime;
-        player.vx -= xAcceleration * deltaTime;
-      } else {
-        player.x += player.vx * deltaTime;
-        if (player.vx < 0) player.vx += xDeceleration * deltaTime;
+        //Accelerations produces when the user hold the keys
+        if (player.isMovingLeft === true) {
+          player.x += player.vx * deltaTime;
+          player.vx -= xAcceleration * deltaTime;
+        } else {
+          player.x += player.vx * deltaTime;
+          if (player.vx < 0) player.vx += xDeceleration * deltaTime;
+        }
+
+        if (player.isMovingRight === true) {
+          player.x += player.vx * deltaTime;
+          player.vx += xAcceleration * deltaTime;
+        } else {
+          player.x += player.vx * deltaTime;
+          if (player.vx > 0) player.vx -= xDeceleration * deltaTime;
+        }
+
+        // Speed limits!
+        if(player.vx > 480)
+          player.vx = 480;
+        else if(player.vx < -480)
+          player.vx = -480;
+        
+        //Jump the player when it hits the base
+        if ((player.y + player.height) > base.y && base.y < height) player.jump();
+
+        //Gameover if it hits the bottom 
+        if (base.y > height && (player.y + player.height) > height && player.isDead == false) player.isDead = true;
+
+        //Make the player move through walls
+        if (player.x > width) player.x = 0 - player.width;
+        else if (player.x < 0 - player.width) player.x = width;
+
+        //Movement of player affected by gravity
+        if (player.y >= (height / 2) - (player.height / 2)) {
+          player.y += player.vy * deltaTime;
+        }
+
+        //When the player reaches half height, move the platforms to create the illusion of scrolling and recreate the platforms that are out of viewport...
+        else {
+          platforms.forEach(function(p, i) {
+
+            if (player.vy < 0) {
+              p.y -= player.vy * deltaTime;
+            }
+
+            if (p.y > height) {
+              platforms[i] = new Platform();
+              platforms[i].y = p.y - height;
+            }
+
+          });
+
+          if (base.y < height) base.y -= player.vy * deltaTime;
+
+
+          if (player.vy >= 0) {
+            player.y += player.vy * deltaTime;
+            player.vy += gravity * deltaTime;
+          }
+
+          score++;
+        }
+
+        player.vy += gravity * deltaTime;
+
+        //Make the player jump when it collides with platforms
+        this.collides();
+
+        if (player.isDead === true) this.gameOver();
       }
-
-      if (player.isMovingRight === true) {
-        player.x += player.vx * deltaTime;
-        player.vx += xAcceleration * deltaTime;
-      } else {
-        player.x += player.vx * deltaTime;
-        if (player.vx > 0) player.vx -= xDeceleration * deltaTime;
-      }
-
-      // Speed limits!
-      if(player.vx > 480)
-        player.vx = 480;
-      else if(player.vx < -480)
-        player.vx = -480;
       
-      //Jump the player when it hits the base
-      if ((player.y + player.height) > base.y && base.y < height) player.jump();
+      this.springCalc = () => {
+        var s = Spring;
+        var p = platforms[0];
 
-      //Gameover if it hits the bottom 
-      if (base.y > height && (player.y + player.height) > height && player.isDead == false) player.isDead = true;
+        if (p.type == platformType.NORMAL || p.type == platformType.MOVING) {
+          s.x = p.x + p.width / 2 - s.width / 2;
+          s.y = p.y - p.height - 10;
 
-      //Make the player move through walls
-      if (player.x > width) player.x = 0 - player.width;
-      else if (player.x < 0 - player.width) player.x = width;
+          if (s.y > height / 1.1) s.state = 0;
 
-      //Movement of player affected by gravity
-      if (player.y >= (height / 2) - (player.height / 2)) {
-        player.y += player.vy * deltaTime;
+          s.draw();
+        } else {
+          s.x = 0 - s.width;
+          s.y = 0 - s.height;
+        }
       }
 
-      //When the player reaches half height, move the platforms to create the illusion of scrolling and recreate the platforms that are out of viewport...
-      else {
-        platforms.forEach(function(p, i) {
+      this.platformCalc = () => {
+        var subs = platform_broken_substitute;
 
-          if (player.vy < 0) {
-            p.y -= player.vy * deltaTime;
+        platforms.forEach( (p, i) => {
+          if (p.type == platformType.MOVING) {
+            if (p.x < 0 || p.x + p.width > width) p.vx *= -1;
+
+            p.x += p.vx * deltaTime;
           }
 
-          if (p.y > height) {
-            platforms[i] = new Platform();
-            platforms[i].y = p.y - height;
+          if (p.flag == 1 && subs.appearance === false && this.jumpCount === 0) {
+            subs.x = p.x;
+            subs.y = p.y;
+            subs.appearance = true;
+
+            this.jumpCount++;
           }
 
+          p.draw();
         });
 
-        if (base.y < height) base.y -= player.vy * deltaTime;
-
-
-        if (player.vy >= 0) {
-          player.y += player.vy * deltaTime;
-          player.vy += gravity * deltaTime;
+        if (subs.appearance === true) {
+          subs.draw();
+          subs.y += 480 * deltaTime;
         }
 
-        score++;
+        if (subs.y > height) subs.appearance = false;
       }
 
-      player.vy += gravity * deltaTime;
+      this.collides = () => {
+        //Platforms
+        platforms.forEach((p, i) => {
+          if (player.vy > 0 && p.state === 0 && 
+            (player.x + 15 < p.x + p.width) && 
+            (player.x + player.width - 15 > p.x) && 
+            (player.y + player.height > p.y) && 
+            (player.y + player.height < p.y + p.height)) {
 
-      //Make the player jump when it collides with platforms
-      collides();
-
-      if (player.isDead === true) gameOver(deltaTime);
-    }
-
-    //Spring algorithms
-
-    function springCalc() {
-      var s = Spring;
-      var p = platforms[0];
-
-      if (p.type == platformType.NORMAL || p.type == platformType.MOVING) {
-        s.x = p.x + p.width / 2 - s.width / 2;
-        s.y = p.y - p.height - 10;
-
-        if (s.y > height / 1.1) s.state = 0;
-
-        s.draw();
-      } else {
-        s.x = 0 - s.width;
-        s.y = 0 - s.height;
-      }
-    }
-
-    //Platform's horizontal movement (and falling) algo
-
-    function platformCalc(deltaTime: number) {
-      var subs = platform_broken_substitute;
-
-      platforms.forEach(function(p, i) {
-        if (p.type == platformType.MOVING) {
-          if (p.x < 0 || p.x + p.width > width) p.vx *= -1;
-
-          p.x += p.vx * deltaTime;
-        }
-
-        if (p.flag == 1 && subs.appearance === false && jumpCount === 0) {
-          subs.x = p.x;
-          subs.y = p.y;
-          subs.appearance = true;
-
-          jumpCount++;
-        }
-
-        p.draw();
-      });
-
-      if (subs.appearance === true) {
-        subs.draw();
-        subs.y += 480 * deltaTime;
-      }
-
-      if (subs.y > height) subs.appearance = false;
-    }
-
-    function collides() {
-      //Platforms
-      platforms.forEach(function(p, i) {
-        if (player.vy > 0 && p.state === 0 && 
-          (player.x + 15 < p.x + p.width) && 
-          (player.x + player.width - 15 > p.x) && 
-          (player.y + player.height > p.y) && 
-          (player.y + player.height < p.y + p.height)) {
-
-          if (p.type == platformType.BREAKABLE && p.flag === 0) {
-            p.flag = 1;
-            jumpCount = 0;
-            return;
-          } else if (p.type == platformType.VANISHABLE && p.state === 0) {
-            player.jump();
-            p.state = 1;
-          } else if (p.flag == 1) return;
-          else {
-            player.jump();
+            if (p.type == platformType.BREAKABLE && p.flag === 0) {
+              p.flag = 1;
+              this.jumpCount = 0;
+              return;
+            } else if (p.type == platformType.VANISHABLE && p.state === 0) {
+              player.jump();
+              p.state = 1;
+            } else if (p.flag == 1) return;
+            else {
+              player.jump();
+            }
           }
+        });
+
+        //Springs
+        var s = Spring;
+        if (player.vy > 0 && (s.state === 0) && 
+          (player.x + 15 < s.x + s.width) && 
+            (player.x + player.width - 15 > s.x) && 
+              (player.y + player.height > s.y) && 
+                (player.y + player.height < s.y + s.height)) {
+          s.state = 1;
+          player.jumpHigh();
         }
-      });
-
-      //Springs
-      var s = Spring;
-      if (player.vy > 0 && (s.state === 0) && 
-        (player.x + 15 < s.x + s.width) && 
-          (player.x + player.width - 15 > s.x) && 
-            (player.y + player.height > s.y) && 
-              (player.y + player.height < s.y + s.height)) {
-        s.state = 1;
-        player.jumpHigh();
       }
 
-    }
+      this.updateScore = () => {
+        var scoreText = document.getElementById("score");
+        if (scoreText !== null) scoreText.innerHTML = score.toString();
+      }
 
-    function updateScore(deltaTime: number) {
-      var scoreText = document.getElementById("score");
-      if (scoreText !== null) scoreText.innerHTML = score.toString();
-    }
+      this.gameOver = () => {
+        platforms.forEach(function(p, i) {
+          p.y -= 600 * deltaTime;
+        });
 
-    function gameOver(deltaTime: number) {
-      platforms.forEach(function(p, i) {
-        p.y -= 600 * deltaTime;
-      });
+        if(player.y > height/2 && flag === 0) {
+          player.y -= 500 * deltaTime;
+          player.vy = 0;
+        } 
+        else if(player.y < height / 2) flag = 1;
+        else if(player.y + player.height > height) {
+          // showGoMenu();
+          player.isDead = true;
+          cancelAnimationFrame(animationFrameId);
+          gameOverCallback(score);
 
-      if(player.y > height/2 && flag === 0) {
-        player.y -= 500 * deltaTime;
-        player.vy = 0;
-      } 
-      else if(player.y < height / 2) flag = 1;
-      else if(player.y + player.height > height) {
-        // showGoMenu();
-        player.isDead = true;
+          // var tweet = document.getElementById("tweetBtn");
+          // tweet.href='https://twitter.com/share?url=http://is.gd/PnFFzu&text=I just scored ' +score+ ' points in the HTML5 Doodle Jump game!&count=horiztonal&via=cssdeck&related=solitarydesigns';
+        
+          // var facebook = document.getElementById("fbBtn");
+          // facebook.href='https://facebook.com/sharer.php?s=100&p[url]=http://cssdeck.com/labs/html5-doodle-jump/8&p[title]=I just scored ' +score+ ' points in the HTML5 Doodle Jump game!&p[summary]=Can you beat me in this awesome recreation of Doodle Jump created in HTML5?';
+        }
+      }
+
+      this.update = () => {
+        this.paintCanvas();
+        this.platformCalc();
+
+        this.springCalc();
+
+        this.playerCalc();
+        player.draw();
+
+        base.draw();
+
+        this.updateScore();
+      }
+
+      this.animLoop = (currentTime: DOMHighResTimeStamp) => {
+        if (this.previousTime === 0) this.previousTime = currentTime;
+        deltaTime = (currentTime - this.previousTime) / 1000;
+        this.previousTime = currentTime;
+        this.update();
+        animationFrameId = requestAnimationFrame(this.animLoop);
+      }
+
+      this.init = () => {
+        dir = "left;"
+        player.spriteIndex = Math.floor(Math.random() * 3);
+        requestAnimationFrame(this.animLoop);
+      }
+
+      this.pause = () => {
         cancelAnimationFrame(animationFrameId);
-        gameOverCallback(score);
+      }
 
-        // var tweet = document.getElementById("tweetBtn");
-        // tweet.href='https://twitter.com/share?url=http://is.gd/PnFFzu&text=I just scored ' +score+ ' points in the HTML5 Doodle Jump game!&count=horiztonal&via=cssdeck&related=solitarydesigns';
-      
-        // var facebook = document.getElementById("fbBtn");
-        // facebook.href='https://facebook.com/sharer.php?s=100&p[url]=http://cssdeck.com/labs/html5-doodle-jump/8&p[title]=I just scored ' +score+ ' points in the HTML5 Doodle Jump game!&p[summary]=Can you beat me in this awesome recreation of Doodle Jump created in HTML5?';
+      this.resume = () => {
+        this.previousTime = 0;
+        requestAnimationFrame(this.animLoop);
       }
     }
+  }
 
-    //Function to update everything
+  game = new Game();
 
-    function update(deltaTime: number) {
-      paintCanvas();
-      platformCalc(deltaTime);
-
-      springCalc();
-
-      playerCalc(deltaTime);
-      player.draw(deltaTime);
-
-      base.draw();
-
-      updateScore(deltaTime);
+  const handleMenu = () => {
+    console.log("click!");
+    if (paused) {
+      game.resume();
+      paused = false;
+    } else {
+      game.pause();
+      paused = true;
     }
+  }
 
-    const animloop = function(currentTime: DOMHighResTimeStamp) {
-      if (previousTime === 0) previousTime = currentTime;
-      deltaTime = (currentTime - previousTime) / 1000;
-      previousTime = currentTime;
-      update(deltaTime);
-      animationFrameId = requestAnimationFrame(animloop);
-    };
-    requestAnimationFrame(animloop);
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      game.pause();
+      paused = true;
+      menuCallback();
+    } 
   }
 
   useEffect(() => {
@@ -648,13 +682,15 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       }
     }
     addEventListener('resize', updateCtx)
+    const menu = document.getElementById("menu");
     if (
       !canvasRef.current || 
       !spriteRef.current ||
       !characterRef.current ||
       !platformRef.current ||
       !leftRef.current ||
-      !rightRef.current
+      !rightRef.current ||
+      !menu
     ) {
       console.log('reference error');
       return;
@@ -665,6 +701,10 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     platformSprites= platformRef.current;
     left = leftRef.current;
     right = rightRef.current;
+
+    //Adding pause functionality
+    menu.addEventListener("click", handleMenu);
+    document.addEventListener("visibilitychange", handleVisibilityChange)
     //Adding keyboard controls
     document.addEventListener("keydown", keyDown);
     document.addEventListener("keyup", keyUp);
@@ -681,11 +721,11 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
     right.addEventListener("mousedown", onRightMouseDown);
     right.addEventListener("mouseup", onRightMouseUp);
     
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    init();
+    // document.addEventListener("visibilitychange", onVisibilityChange);
+    game.init();
     return () => {
       cancelAnimationFrame(animationFrameId);
-      document.removeEventListener("visibilitychange", onVisibilityChange);
+      // document.removeEventListener("visibilitychange", onVisibilityChange);
       document.removeEventListener("keydown", keyDown);
       document.removeEventListener("keyup", keyUp);
       left.removeEventListener("touchstart", onLeftTouchStart);
@@ -696,6 +736,8 @@ export const JumpGame = ({ gameOverCallback }: JumpGameProps) => {
       left.removeEventListener("mouseup", onLeftMouseUp);
       right.removeEventListener("mousedown", onRightMouseDown);
       right.removeEventListener("mouseup", onRightMouseUp);
+      menu.removeEventListener("click", handleMenu);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       removeEventListener('resize', updateCtx);
     }
   }, []);

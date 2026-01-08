@@ -282,6 +282,10 @@ export const App = () => {
     setMenuOpen(prev => !prev);
   }
 
+  const openMenu = () => {
+    setMenuOpen(true);
+  }
+
   const toggleLeaderboard = () => {
     setLeaderboardOpen(prev => !prev);
   }
@@ -443,6 +447,7 @@ export const App = () => {
               ) : (
                 <JumpGame 
                   gameOverCallback={gameOver}
+                  menuCallback={openMenu}
                 />
               )
             ) : (
