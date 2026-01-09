@@ -205,7 +205,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     vx: number;
 
     constructor() {
-      this.width = 70;
+      this.width = 75;
       this.height = 17;
 
       this.x = Math.random() * (width - this.width);
