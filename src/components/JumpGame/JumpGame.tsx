@@ -230,7 +230,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           else if (this.type == platformType.MOVING) this.cy = 33;
           else if (this.type == platformType.BREAKABLE && this.flag === 0) this.cy = 17;
           else if (this.type == platformType.BREAKABLE && this.flag == 1) this.cy = 1000;
-          else if (this.type == platformType.VANISHABLE && this.state === 0) this.cy = 90;
+          else if (this.type == platformType.VANISHABLE && this.state === 0) this.cy = 49;
           else if (this.type == platformType.VANISHABLE && this.state == 1) this.cy = 1000;
 
           ctx.drawImage(platformSprites, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
