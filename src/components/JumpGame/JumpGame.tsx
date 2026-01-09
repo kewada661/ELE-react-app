@@ -4,7 +4,7 @@ import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
 import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
-import platformURL from '@/assets/sprites/platformsprite.png';
+import platformURL from '@/assets/sprites/platformsprites1.png';
 import blrURL from '@/assets/footer logos.png';
 
 interface JumpGameProps {
@@ -206,7 +206,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
     constructor() {
       this.width = 75;
-      this.height = 17;
+      this.height = 14;
 
       this.x = Math.random() * (width - this.width);
       this.y = position;
@@ -219,7 +219,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       //Sprite clipping
       this.cx = 0;
       this.cy = 0;
-      this.cwidth = 55;
+      this.cwidth = 75;
       this.cheight = 14;
 
       //Function to draw it
@@ -231,7 +231,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           else if (this.type == platformType.BREAKABLE && this.flag === 0) this.cy = 17;
           else if (this.type == platformType.BREAKABLE && this.flag == 1) this.cy = 1000;
           else if (this.type == platformType.VANISHABLE && this.state === 0) this.cy = 49;
-          else if (this.type == platformType.VANISHABLE && this.state == 1) this.cy = 1000;
+          else if (this.type == platformType.VANISHABLE && this.state == 1) this.cy = 89;
 
           ctx.drawImage(platformSprites, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
         } catch (e) {}
@@ -282,23 +282,23 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     appearance: boolean;
     draw: () => void;
     constructor() {
-      this.height = 30;
+      this.height = 23;
       this.width = 70;
 
       this.x = 0;
       this.y = 0;
 
       //Sprite clipping
-      this.cx = 0;
-      this.cy = 554;
-      this.cwidth = 105;
-      this.cheight = 60;
+      this.cx = 3;
+      this.cy = 65;
+      this.cwidth = 48;
+      this.cheight = 23;
 
       this.appearance = false;
 
       this.draw = function() {
         try {
-          if (this.appearance === true) ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+          if (this.appearance === true) ctx.drawImage(platformSprites, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
           else return;
         } catch (e) {}
       };
