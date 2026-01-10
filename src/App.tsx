@@ -22,12 +22,8 @@ export const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(true);
-
   const embedControllerRef = useRef(null);
   const playerRef = useRef(null);
-
-  const gameWidth = Math.min(innerWidth, innerHeight);
-  const gameHeight = Math.floor(innerHeight * 0.8);
 
   // var codeVerifier = localStorage.getItem("codeVerifier");
 
@@ -454,8 +450,6 @@ export const App = () => {
                 </div>  
               ) : (
                 <JumpGame 
-                  gameWidth={gameWidth}
-                  gameHeight={gameHeight}
                   gameOverCallback={gameOver}
                   menuCallback={openMenu}
                 />

@@ -16,8 +16,8 @@ export const container = style({
 })
 
 export const canvas = style({
-  width: '100vw',
-  maxWidth: '100svh',
+  // width: '100vw',
+  // maxWidth: '100svh',
   background: 'transparent',
 	// display: 'block',
 })
