@@ -1,6 +1,18 @@
 import { fontFace, style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
-import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
+import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf';
+
+export const background = style({
+  width: '100vw',
+  maxWidth: '100svh',
+  height: '100svh',
+  objectFit: 'cover',
+  overflow: 'hidden',
+  position: 'fixed',
+  top: 0,
+  alignSelf: 'center',
+  zIndex: -1,
+})
 
 export const mainContainer = style({
   display: 'flex',
@@ -10,7 +22,7 @@ export const mainContainer = style({
   height: '100vh',
   maxHeight: '100svh',
   margin: '0 auto',
-  backgroundImage: 'url(/src/assets/9x16-edgehill 1.png)',
+  // backgroundImage: 'url(/src/assets/9x16-edgehill 1.png)',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   zIndex: 0,
