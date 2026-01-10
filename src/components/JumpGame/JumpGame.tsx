@@ -8,10 +8,12 @@ import platformURL from '@/assets/sprites/platformsprites1.png';
 import blrURL from '@/assets/footer logos.png';
 
 interface JumpGameProps {
+  gameWidth: number;
+  gameHeight: number;
   gameOverCallback: (score: number) => void;
   menuCallback: () => void;
 }
-export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
+export const JumpGame = ({ gameWidth, gameHeight, gameOverCallback, menuCallback }: JumpGameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const leftRef = useRef<HTMLButtonElement>(null);
   const rightRef = useRef<HTMLButtonElement>(null);
@@ -19,8 +21,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   const characterRef = useRef<HTMLImageElement>(null);
   const platformRef = useRef<HTMLImageElement>(null);
   const screenPortion = 0.8;
-  const [width, setWidth] = useState(Math.min(innerWidth, innerHeight));
-  const [height, setHeight] = useState(Math.floor(innerHeight * screenPortion));
+  const [width, setWidth] = useState(gameWidth);
+  const [height, setHeight] = useState(gameHeight);
   let ctx: any;
 
   //Variables for game

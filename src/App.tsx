@@ -25,6 +25,9 @@ export const App = () => {
   const embedControllerRef = useRef(null);
   const playerRef = useRef(null);
 
+  const gameWidth = Math.min(innerWidth, innerHeight);
+  const gameHeight = Math.floor(innerHeight * 0.8);
+
   // var codeVerifier = localStorage.getItem("codeVerifier");
 
   // spotify auth helper functions
@@ -274,7 +277,7 @@ export const App = () => {
 
   const loginCallback = () => {
     setLoggedIn(true);
-    // handleStartButton();
+    handleStartButton();
     setLoadingPlayer(false);
   }
 
@@ -446,6 +449,8 @@ export const App = () => {
                 </div>  
               ) : (
                 <JumpGame 
+                  gameWidth={gameWidth}
+                  gameHeight={gameHeight}
                   gameOverCallback={gameOver}
                   menuCallback={openMenu}
                 />
