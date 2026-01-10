@@ -21,12 +21,8 @@ export const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(true);
-
   const embedControllerRef = useRef(null);
   const playerRef = useRef(null);
-
-  const gameWidth = Math.min(innerWidth, innerHeight);
-  const gameHeight = Math.floor(innerHeight * 0.8);
 
   // var codeVerifier = localStorage.getItem("codeVerifier");
 
@@ -435,7 +431,7 @@ export const App = () => {
 
   return (
     <>
-      <main className={mainContainer}>
+      <main id='main' className={mainContainer}>
         <Header menuOpen={menuOpen} volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
         <div id='embed-iframe'></div>
         {(loggedIn) ? (
@@ -449,8 +445,6 @@ export const App = () => {
                 </div>  
               ) : (
                 <JumpGame 
-                  gameWidth={gameWidth}
-                  gameHeight={gameHeight}
                   gameOverCallback={gameOver}
                   menuCallback={openMenu}
                 />

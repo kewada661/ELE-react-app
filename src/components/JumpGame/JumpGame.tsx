@@ -8,12 +8,10 @@ import platformURL from '@/assets/sprites/platformsprites1.png';
 import blrURL from '@/assets/footer logos.png';
 
 interface JumpGameProps {
-  gameWidth: number;
-  gameHeight: number;
   gameOverCallback: (score: number) => void;
   menuCallback: () => void;
 }
-export const JumpGame = ({ gameWidth, gameHeight, gameOverCallback, menuCallback }: JumpGameProps) => {
+export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const leftRef = useRef<HTMLButtonElement>(null);
   const rightRef = useRef<HTMLButtonElement>(null);
@@ -21,8 +19,8 @@ export const JumpGame = ({ gameWidth, gameHeight, gameOverCallback, menuCallback
   const characterRef = useRef<HTMLImageElement>(null);
   const platformRef = useRef<HTMLImageElement>(null);
   const screenPortion = 0.8;
-  const [width, setWidth] = useState(gameWidth);
-  const [height, setHeight] = useState(gameHeight);
+  const [width, setWidth] = useState(document.getElementById('main')!.offsetWidth);
+  const [height, setHeight] = useState(Math.floor((document.getElementById('main')!.offsetHeight) * 0.8));
   let ctx: any;
 
   //Variables for game
@@ -595,7 +593,7 @@ export const JumpGame = ({ gameWidth, gameHeight, gameOverCallback, menuCallback
 
       this.updateScore = () => {
         var scoreText = document.getElementById("score");
-        if (scoreText !== null) scoreText.innerHTML = score.toString();
+        if (scoreText !== null) scoreText.innerHTML = `${score}`;
       }
 
       this.gameOver = () => {
