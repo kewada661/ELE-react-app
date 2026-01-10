@@ -7,8 +7,8 @@ globalStyle('*', {
 });
 
 globalStyle('#root', {
-  maxHeight: '100vh',
-  overflow: 'hidden',
+  maxHeight: '100svh',
+  // overflow: 'hidden',
   fontFamily: 'assistant',
   fontSize: '2vh',
 })

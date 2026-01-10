@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
 import { JumpGame } from '@/components/JumpGame';
-import { house, mainContainer, houseContainer, startButtonContainer, logo, subtitle, footerLogo} from '@/App.css';
+import { background, mainContainer, houseContainer, house, startButtonContainer, logo, subtitle, footerLogo} from '@/App.css';
 import { button } from '@/components/Button/Button.css'
 import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
@@ -10,6 +10,7 @@ import { Leaderboard } from '@/components/Leaderboard';
 import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/Album-Art-house copy 1.png';
 import bglImage from '@/assets/footer logos.png';
+import backgroundURL from '@/assets/bg-vert.mp4';
 
 export const App = () => {
   const [startButton, setStartButton] = useState(true);
@@ -432,6 +433,10 @@ export const App = () => {
   return (
     <>
       <main id='main' className={mainContainer}>
+        <video className={background} autoPlay muted loop>
+          <source src={backgroundURL} type='video/mp4' />
+          Unable to play video
+        </video>
         <Header menuOpen={menuOpen} volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
         <div id='embed-iframe'></div>
         {(loggedIn) ? (
