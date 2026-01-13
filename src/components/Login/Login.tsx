@@ -9,26 +9,6 @@ interface LoginProps {
     fallBack: () => void,
 }
 export const Login = ({ onLogin, fallBack }: LoginProps) => {
-  const generateRandomString = (length: number) => {
-    var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (var i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-  };
-  const requestLogin = async () => {
-    const state = generateRandomString(16);
-    localStorage.setItem("state", state);
-    location.replace(`/api/auth/login?state=${state}`);
-  }
-  // const onClick = async () => {
-  //     const result = await requestLogin();
-  //     if (result) {
-  //         console.log("state:", result.state);
-  //     }
-  // }
   return (
       <div className={login}>
         <Button className={button.spotify} onClick={onLogin}>

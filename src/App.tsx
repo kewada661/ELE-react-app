@@ -17,7 +17,7 @@ export const App = () => {
   const [gameInProgress, setGameInProgress] = useState(true);
   const [score, setScore] = useState(0);
   const [error, setError] = useState<Error>();
-  const [email, setEmail] = useState(false);
+  const [altLogin, setAltLogin] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
@@ -52,7 +52,6 @@ export const App = () => {
   const generateLoginParams = async () => {
     const code_verifier = generateRandomString(64);
     localStorage.setItem("codeVerifier", code_verifier);
-    localStorage.setItem("codeVerifier2", code_verifier);
     const state = generateRandomString(16);
     const hashed = await sha256(code_verifier);
     const codeChallenge = base64encode(hashed);
@@ -67,16 +66,43 @@ export const App = () => {
 
   const requestToken = async (code: any, state: any) => {
     try {
-      const codeVerifier = localStorage.getItem("codeVerifier");
-      console.log("3.", codeVerifier);
-      const response = await fetch(`/api/auth/token?code=${code}&code_verifier=${codeVerifier}&state=${state}`);
+      const response = await fetch(`/api/auth/token?code=${code}&state=${state}`);
+      if (!response.ok || response.status !== 200) {
+        throw new Error(response.status.toString());
+      }
+
+      const body = await response.json();
+      sessionStorage.setItem("email", body.email);
+      sessionStorage.setItem("product", body.product);
+      
+      setLoggedIn(true);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error);
+        console.error('Fetch error:', error);
+        if (error.message === '401') {
+          setAltLogin(true);
+          alert("Spotify authentication failed... please log in below.");
+        }
+      }
+      else {
+        console.error('Unknown Error occurred');
+      }
+    }
+  }
+
+  const getToken = async () => {
+    try {
+      const email = sessionStorage.getItem("email");
+      const response = await fetch(`/api/db/users/token?email=${email}`);
 
       if (!response.ok || response.status !== 200) {
         throw new Error('Network response was not ok');
       }
-      
-      return response.json();
-    } catch (error: unknown) {
+
+      const body = await response.json();
+      return body.token;
+    } catch (e: unknown) {
       if (error instanceof Error) {
         setError(error);
         console.error('Fetch error:', error);
@@ -84,39 +110,25 @@ export const App = () => {
       else {
         console.error('Unknown Error occurred');
       }
-      return null;
-    }
-  }
-
-  const getToken = async (code: any, state: any) => {
-    const result = await requestToken(code, state);
-    if (result !== null) {
-      setLoggedIn(true);
-      sessionStorage.setItem("token", result.access_token);
-      sessionStorage.setItem("refresh_token", result.refresh_token);
-      sessionStorage.setItem("email", result.email);
-      sessionStorage.setItem("product", result.product);
-    } else {
-      setEmail(true);
-      alert("Spotify authentication failed... please log in below.");
     }
   }
 
   const savePlaylist = async () => {
-    const access_token = sessionStorage.getItem('token');
-    if (access_token === "fallback") {
+    if (altLogin) {
       open('https://open.spotify.com/playlist/37i9dQZF1DZ06evO08vsxh?si=334e45e76dbc4d94&nd=1&dlsi=21e7486297eb4c50');
     } else {
-      const response = await fetch("https://api.spotify.com/v1/playlists/37i9dQZF1DZ06evO08vsxh/followers", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${access_token}`,
-        },
-        body: JSON.stringify({
-          public: false,
-        })
-      });
+      const email = sessionStorage.getItem("email")
+      const response = await fetch(`/api/spotify/playlist?email=${email}`);
+      // const response = await fetch("https://api.spotify.com/v1/playlists/37i9dQZF1DZ06evO08vsxh/followers", {
+      //   method: "PUT",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Authorization": `Bearer ${access_token}`,
+      //   },
+      //   body: JSON.stringify({
+      //     public: false,
+      //   })
+      // });
       if (response) console.log(response);      
     }
   }
@@ -160,7 +172,7 @@ export const App = () => {
   const startWebPlayback = async () => {
     console.log('starting web playback');
     const device_id = sessionStorage.getItem("device_id");
-    const access_token = sessionStorage.getItem("token");
+    const access_token = await getToken();
     const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
       method: "PUT",
       headers: {
@@ -189,19 +201,12 @@ export const App = () => {
 
   const updateLeaderboard = useCallback( async (score: number) => {
     const email = sessionStorage.getItem("email");
-    const access_token = sessionStorage.getItem("token");
-    console.log("clientside body:", {
-      token: access_token,
-      email: email,
-      score: score,
-    })
     await fetch('/api/db/leaderboard', {
       method: 'PUT',
       headers: {
         'Content-type': 'application/json'
       },
       body: JSON.stringify({
-        'token': access_token,
         'email': email,
         'score': score,
       }),
@@ -267,7 +272,7 @@ export const App = () => {
   }
 
   const fallBack = useCallback(() => {
-    setEmail(true);
+    setAltLogin(true);
     sessionStorage.setItem("token", "fallback");
     // initializeEmbedPlayback();
   }, [])
@@ -303,7 +308,7 @@ export const App = () => {
     setGameInProgress(true);
     setMenuOpen(false);
     setLoggedIn(false);
-    setEmail(false);
+    setAltLogin(false);
     // initializeEmbedPlayback();
   }
 
@@ -336,7 +341,7 @@ export const App = () => {
     const code = urlParams.get('code');
     const state = urlParams.get('state');
     if (code && state) {
-      getToken(code, state).then(() => {
+      requestToken(code, state).then(() => {
         const product = sessionStorage.getItem("product");
         if (product !== null && product === "premium") {
           console.log("user has Spotify Premium");
@@ -360,14 +365,13 @@ export const App = () => {
   }, [])
 
   useEffect(() => {
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const access_token = sessionStorage.getItem("token")
+    window.onSpotifyWebPlaybackSDKReady = async () => {
+      const access_token = await getToken();
       const player = new window.Spotify.Player({
-        name: 'Web Playback SDK',
+        name: 'Edgehill Listening Experience',
         getOAuthToken: (cb: any) => { cb(access_token); },
         volume: 0.5
       });
-      player.setName("Edgehill Listening Experience");
 
       player.addListener('ready', async ({ device_id }) => {
         sessionStorage.setItem("device_id", device_id);
@@ -473,7 +477,7 @@ export const App = () => {
             <div className={houseContainer}>
               <img className={house} src={houseImage} alt="" />
             </div>
-            {(email) ? (
+            {(altLogin) ? (
               <LoginFallback loginCallback={loginCallback} />
             ) : (
               <Login 
