@@ -11,6 +11,7 @@ import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/Album-Art-house copy 1.png';
 import bglImage from '@/assets/footer logos.png';
 import backgroundURL from '@/assets/bg-vert.mp4';
+import audioURl from '@/assets/file_example_MP3_700KB.mp3';
 
 export const App = () => {
   const [startButton, setStartButton] = useState(true);
@@ -22,10 +23,8 @@ export const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(true);
-  const embedControllerRef = useRef(null);
   const playerRef = useRef(null);
-
-  // var codeVerifier = localStorage.getItem("codeVerifier");
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   // spotify auth helper functions
   const generateRandomString = (length: number) => {
@@ -134,7 +133,6 @@ export const App = () => {
   }
 
   const transferPlayback = async (device_id: string) => {
-    const access_token = sessionStorage.getItem("token");
     const response = await fetch("https://api.spotify.com/v1/me/player", {
       method: "PUT",
       headers: {
@@ -154,19 +152,6 @@ export const App = () => {
     script.src = "https://sdk.scdn.co/spotify-player.js";
     script.async = true;
     document.body.appendChild(script);
-  }
-
-  const initializeEmbedPlayback = async () => {
-    const script = document.createElement("script");
-    script.src = "https://open.spotify.com/embed/iframe-api/v1";
-    script.async = true;
-    document.body.appendChild(script);
-    // const response = await fetch(`/api/audiomack/play?id=lol-0331892`, {
-    //   method: "GET",
-    // })
-
-    // if (!response.ok) console.log("Audiomack fetch error:", response);
-    // else console.log("Audiomack successful fetch:", response);
   }
 
   const startWebPlayback = async () => {
@@ -192,11 +177,6 @@ export const App = () => {
       await playerRef.current.disconnect();
     }
     playerRef.current = null;
-  }
-
-  const startEmbedPlayback = async() => {
-    console.log('starting embed playback');
-    if (embedControllerRef.current) embedControllerRef.current.play();
   }
 
   const updateLeaderboard = useCallback( async (score: number) => {
@@ -273,8 +253,6 @@ export const App = () => {
 
   const fallBack = useCallback(() => {
     setAltLogin(true);
-    sessionStorage.setItem("token", "fallback");
-    // initializeEmbedPlayback();
   }, [])
 
   const loginCallback = () => {
@@ -304,6 +282,7 @@ export const App = () => {
 
   const logout = async () => {
     await stopWebPlayback();
+    if (audioRef.current) audioRef.current.pause();
     sessionStorage.clear();
     setGameInProgress(true);
     setMenuOpen(false);
@@ -317,6 +296,9 @@ export const App = () => {
     if (playerRef.current) {
       playerRef.current.resume();
       console.log('resuming web pb');
+    } else if (audioRef.current) {
+      audioRef.current.play();
+      console.log('starting audio pb');
     }
   }
 
@@ -329,7 +311,7 @@ export const App = () => {
   }, [score, gameInProgress])
 
   const newGame = () => {
-    if (playerRef.current) playerRef.current.resume();
+    // if (playerRef.current) playerRef.current.resume();
     console.log("user actions");
     setGameInProgress(true);
   }
@@ -348,7 +330,7 @@ export const App = () => {
           initializeWebPlayback();
         } else {
           console.log("user has not Spotify Premium");
-          initializeEmbedPlayback();
+          setLoadingPlayer(false);
         }
       });
     }
@@ -400,23 +382,6 @@ export const App = () => {
       player.connect();
       playerRef.current = player;
     }
-
-    window.onSpotifyIframeApiReady = (IFrameAPI) => {
-      const element = document.getElementById('embed-iframe');
-      const options = {
-          width: '0%',
-          height: '0%',
-          uri: 'spotify:album:2IXmFxN6dFY8ROSKu8nfwl'
-        };
-      const callback = async (EmbedController) => {
-        EmbedController.addListener("ready", () => {setLoadingPlayer(false)});
-        embedControllerRef.current = EmbedController;
-        console.log("Embed Playback ready!:", embedControllerRef);
-        startEmbedPlayback();
-      };
-      IFrameAPI.createController(element, options, callback);
-    };
-    
     sessionStorage.setItem('current_track', '');
 
     return () => {
@@ -426,10 +391,6 @@ export const App = () => {
         playerRef.current.removeListener('not_ready');
         playerRef.current.removeListener('ready');
         playerRef.current = null;
-      }
-      if (embedControllerRef.current) {
-        embedControllerRef.current.removeListener('ready');
-        embedControllerRef.current = null;
       }
     }
   }, [])
@@ -442,7 +403,7 @@ export const App = () => {
           Unable to play video
         </video>
         <Header menuOpen={menuOpen} volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
-        <div id='embed-iframe'></div>
+        <audio ref={audioRef} src={audioURl} loop/>
         {(loggedIn) ? (
           (loadingPlayer) ? (
               <p>Loading...</p>
