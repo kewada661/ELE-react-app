@@ -25,6 +25,7 @@ export const App = () => {
   const [loadingPlayer, setLoadingPlayer] = useState(true);
   const playerRef = useRef(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const houseRef = useRef<HTMLImageElement>(null);
 
   // spotify auth helper functions
   const generateRandomString = (length: number) => {
@@ -251,6 +252,12 @@ export const App = () => {
     }
   }
 
+  const onMouseMove = (event: MouseEvent) => {
+    const posX = event.clientX - window.innerWidth/2;
+    const posY = event.clientY - window.innerHeight/2;
+    if (houseRef.current) houseRef.current.style.transform = `translate(${posX*0.01}%, ${posY*0.01}%)`;
+  }
+
   const fallBack = useCallback(() => {
     setAltLogin(true);
   }, [])
@@ -340,9 +347,11 @@ export const App = () => {
   useEffect(() => {
     addEventListener("visibilitychange", onVisibilityChange);
     sessionStorage.setItem("startTime", Date.now().toString());
+    addEventListener("mousemove", onMouseMove);
 
     return () => {
       removeEventListener("visibilitychange", onVisibilityChange);
+      removeEventListener("mousemove", onMouseMove)
     }
   }, [])
 
@@ -436,7 +445,7 @@ export const App = () => {
             <p className={logo}>edgehill</p>
             <p className={subtitle}>LISTENING EXPERIENCE</p>
             <div className={houseContainer}>
-              <img className={house} src={houseImage} alt="" />
+              <img className={house} ref={houseRef} src={houseImage} alt="" />
             </div>
             {(altLogin) ? (
               <LoginFallback loginCallback={loginCallback} />
