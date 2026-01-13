@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Pull image from docker hub
         run: docker pull kewada661/ele-react-app:latest
+      - name: Prune old docker images
+        run: docker image prune -f
       - name: Delete old container
         run: docker rm -f ele-react-app-container
       - name: Run Docker Container
