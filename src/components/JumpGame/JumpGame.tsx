@@ -5,6 +5,7 @@ import { IconChevronRight } from '@/ui/icons/IconChevronRight';
 import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
 import platformURL from '@/assets/sprites/platformsprites1.png';
+import houseURL from '@/assets/Album-Art-house copy 1.png';
 import blrURL from '@/assets/footer logos.png';
 
 interface JumpGameProps {
@@ -18,6 +19,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   const spriteRef = useRef<HTMLImageElement>(null);
   const characterRef = useRef<HTMLImageElement>(null);
   const platformRef = useRef<HTMLImageElement>(null);
+  const houseRef = useRef<HTMLImageElement>(null);
   const screenPortion = 0.8;
   const [width, setWidth] = useState(document.getElementById('main')!.offsetWidth);
   const [height, setHeight] = useState(Math.floor((document.getElementById('main')!.offsetHeight) * 0.8));
@@ -27,7 +29,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   var platforms: Platform[] = [],
     image: HTMLImageElement,
     characterSprites: HTMLImageElement,
-    platformSprites: HTMLImageElement,    
+    platformSprites: HTMLImageElement,
+    houseSprite: HTMLImageElement,    
     left: HTMLButtonElement,
     right: HTMLButtonElement,
     player: Player, 
@@ -177,6 +180,38 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   };
 
   player = new Player();
+
+  //House class
+  class House {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+    cx: number;
+    cy: number;
+    draw: () => void;
+    cwidth: number;
+    cheight: number;
+    constructor() {
+      this.width = Math.min(350, width * 0.75);
+      this.height = this.width * 0.56;
+      this.x = width/2 - this.width/2;
+      this.y = height;
+      this.cwidth = 813;
+      this.cheight = 459;
+      this.cx = 11;
+      this.cy = 27;
+      this.draw = function() {
+        try {
+          ctx.drawImage(houseSprite, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height)
+        } catch (e) {
+          console.log("error");
+        }
+      }
+    }
+  }
+
+  var house = new House();
 
   //Platform class
 
@@ -423,6 +458,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     init: () => void;
     pause: () => void;
     resume: () => void;
+    houseCalc: () => void;
     constructor() {
       this.height = height;
       this.width = width;
@@ -591,6 +627,14 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
         }
       }
 
+      this.houseCalc = () => {
+        if (score >= 1000) {
+          house.x += ((player.x + player.width / 2) - (house.x + house.width / 2)) / 35;
+          house.y += ((player.y + player.height / 2) - (house.y + house. height / 2)) / 35;
+        }
+        house.draw();
+      }
+
       this.updateScore = () => {
         var scoreText = document.getElementById("score");
         if (scoreText !== null) scoreText.innerHTML = `${score}`;
@@ -622,6 +666,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.update = () => {
         this.paintCanvas();
+        this.houseCalc();
+
         this.platformCalc();
 
         this.springCalc();
@@ -701,6 +747,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       !spriteRef.current ||
       !characterRef.current ||
       !platformRef.current ||
+      !houseRef.current ||
       !leftRef.current ||
       !rightRef.current ||
       !menu
@@ -712,6 +759,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     image = spriteRef.current;
     characterSprites = characterRef.current;
     platformSprites= platformRef.current;
+    houseSprite = houseRef.current;
     left = leftRef.current;
     right = rightRef.current;
 
@@ -779,7 +827,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       <img id="sprite" className={sprite} ref={spriteRef} src={spriteImage}/>
       <img id="char1" className={sprite} ref={characterRef} src={characterURL} /> 
       <img id="charGif" className={sprite} ref={platformRef} src={platformURL} /> 
-
+      <img id="house" className={sprite} ref={houseRef} src={houseURL} /> 
     </div>
   )
 }
