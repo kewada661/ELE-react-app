@@ -252,10 +252,12 @@ export const App = () => {
     }
   }
 
-  const onMouseMove = (event: MouseEvent) => {
-    const posX = event.clientX - window.innerWidth/2;
-    const posY = event.clientY - window.innerHeight/2;
-    if (houseRef.current) houseRef.current.style.transform = `translate(${posX*0.01}%, ${posY*0.01}%)`;
+  const onMouseMove = (event: PointerEvent) => {
+    if (event.pointerType === 'mouse') {
+      const posX = event.clientX - window.innerWidth/2;
+      const posY = event.clientY - window.innerHeight/2;
+      if (houseRef.current) houseRef.current.style.transform = `translate(${posX*0.01}%, ${posY*0.01}%)`;
+    }
   }
 
   const fallBack = useCallback(() => {
@@ -347,11 +349,10 @@ export const App = () => {
   useEffect(() => {
     addEventListener("visibilitychange", onVisibilityChange);
     sessionStorage.setItem("startTime", Date.now().toString());
-    addEventListener("mousemove", onMouseMove);
-
+    addEventListener("pointermove", onMouseMove);
     return () => {
       removeEventListener("visibilitychange", onVisibilityChange);
-      removeEventListener("mousemove", onMouseMove)
+      removeEventListener("pointermove", onMouseMove)
     }
   }, [])
 
