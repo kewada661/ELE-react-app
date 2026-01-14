@@ -11,6 +11,7 @@ import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/Album-Art-house copy 1.png';
 import bglImage from '@/assets/footer logos.png';
 import backgroundURL from '@/assets/bg-vert.mp4';
+import backgroundPosterURL from '@/assets/9x16-edgehill 1.png';
 import audioURl from '@/assets/file_example_MP3_700KB.mp3';
 
 export const App = () => {
@@ -26,7 +27,6 @@ export const App = () => {
   const playerRef = useRef(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
-
   // spotify auth helper functions
   const generateRandomString = (length: number) => {
     var text = '';
@@ -408,9 +408,8 @@ export const App = () => {
   return (
     <>
       <main id='main' className={mainContainer}>
-        <video className={background} autoPlay muted loop>
+        <video className={background} poster={backgroundPosterURL} autoPlay muted loop>
           <source src={backgroundURL} type='video/mp4' />
-          Unable to play video
         </video>
         <Header menuOpen={menuOpen} volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
         <audio ref={audioRef} src={audioURl} loop/>
