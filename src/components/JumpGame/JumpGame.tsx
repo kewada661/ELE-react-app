@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { container, canvas, scoreBoard, controls, controlButton, sprite, footerLogo } from '@/components/JumpGame/JumpGameStyle.css';
+import { container, canvas, scoreBoard, controls, controlButton, sprite } from '@/components/JumpGame/JumpGameStyle.css';
 import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
+import { footerLogo } from '@/App.css';
 import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
 import platformURL from '@/assets/sprites/platformsprites1.png';
 import houseURL from '@/assets/Album-Art-house copy 1.png';
-import blrURL from '@/assets/footer logos.png';
+import footerLogoURL from '@/assets/GamingLabelFooter.png';
 
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
@@ -820,7 +821,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           <IconChevronRight size={"32"}/>
         </button>
       </div>
-      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={blrURL} />
+      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
 
       
       {/*Preloading image ;)*/}
