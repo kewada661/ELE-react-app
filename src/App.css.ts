@@ -75,7 +75,7 @@ export const house = style ({
 })
 
 export const footerLogo = style({
-  width: '20vw',
-  maxWidth: '15vh',
+  width: '40vw',
+  maxWidth: '30vh',
   marginBottom: vars.margins.xxsmall,
 })

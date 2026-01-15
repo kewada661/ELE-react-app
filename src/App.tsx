@@ -9,7 +9,7 @@ import { Menu } from '@/components/Menu';
 import { Leaderboard } from '@/components/Leaderboard';
 import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/Album-Art-house copy 1.png';
-import bglImage from '@/assets/footer logos.png';
+import footerLogoURL from '@/assets/GamingLabelFooter.png';
 import backgroundURL from '@/assets/bg-vert.mp4';
 import backgroundPosterURL from '@/assets/9x16-edgehill 1.png';
 import audioURl from '@/assets/file_example_MP3_700KB.mp3';
@@ -455,7 +455,7 @@ export const App = () => {
                 fallBack={fallBack}
               />
             )}
-            <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={bglImage} />
+            <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
           </>
         )}
         {(leaderboardOpen) ? (<Leaderboard leaderboardClose={toggleLeaderboard}/>) : (<></>)}
