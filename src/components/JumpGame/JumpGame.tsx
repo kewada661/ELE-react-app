@@ -65,14 +65,14 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     y: number;
     draw: () => void;
     constructor() {
-      this.height = 5;
+      this.height = 128;
       this.width = width;
 
       //Sprite clipping
       this.cx = 0;
-      this.cy = 614;
-      this.cwidth = 100;
-      this.cheight = 5;
+      this.cy = 0;
+      this.cwidth = 128;
+      this.cheight = 87;
 
       this.moved = 0;
 
@@ -81,7 +81,11 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.draw = function() {
         try {
-          ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+          let tx = 0;
+          while ((tx) < this.width) {
+            ctx.drawImage(groundSprite, this.cx, this.cy, this.cwidth, this.cheight, tx, this.y, this.cwidth, this.cheight);
+            tx += this.cwidth;
+          }
         } catch (e) {}
       };
     }
