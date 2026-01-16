@@ -5,8 +5,9 @@ import { IconChevronRight } from '@/ui/icons/IconChevronRight';
 import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
 import platformURL from '@/assets/sprites/platformsprites1.png';
-import houseURL from '@/assets/Album-Art-house copy 1.png';
-import blrURL from '@/assets/footer logos.png';
+import houseURL from '@/assets/house-sprite.png';
+import groundURL from '@/assets/ground-sprite.png';
+import footerLogoURL from '@/assets/GamingLabelFooter.png';
 
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
@@ -20,9 +21,10 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   const characterRef = useRef<HTMLImageElement>(null);
   const platformRef = useRef<HTMLImageElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
+  const groundRef = useRef<HTMLImageElement>(null);
   const screenPortion = 0.8;
   const [width, setWidth] = useState(document.getElementById('main')!.offsetWidth);
-  const [height, setHeight] = useState(Math.floor((document.getElementById('main')!.offsetHeight) * 0.8));
+  const [height, setHeight] = useState(Math.floor((document.getElementById('main')!.offsetHeight)));
   let ctx: any;
 
   //Variables for game
@@ -30,7 +32,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     image: HTMLImageElement,
     characterSprites: HTMLImageElement,
     platformSprites: HTMLImageElement,
-    houseSprite: HTMLImageElement,    
+    houseSprite: HTMLImageElement,   
+    groundSprite: HTMLImageElement, 
     left: HTMLButtonElement,
     right: HTMLButtonElement,
     player: Player, 
@@ -53,6 +56,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   class Base {
     height: number;
     width: number;
+    grassHeight: number;
     cx: number;
     cy: number;
     cwidth: number;
@@ -62,14 +66,15 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     y: number;
     draw: () => void;
     constructor() {
-      this.height = 5;
+      this.height = 87;
       this.width = width;
+      this.grassHeight = 16;
 
       //Sprite clipping
       this.cx = 0;
-      this.cy = 614;
-      this.cwidth = 100;
-      this.cheight = 5;
+      this.cy = 0;
+      this.cwidth = 128;
+      this.cheight = 87;
 
       this.moved = 0;
 
@@ -78,7 +83,11 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.draw = function() {
         try {
-          ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+          let tx = 0;
+          while ((tx) < this.width) {
+            ctx.drawImage(groundSprite, this.cx, this.cy, this.cwidth, this.cheight, tx, this.y, this.cwidth, this.cheight);
+            tx += this.cwidth;
+          }
         } catch (e) {}
       };
     }
@@ -193,14 +202,14 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     cwidth: number;
     cheight: number;
     constructor() {
-      this.width = Math.min(350, width * 0.75);
-      this.height = this.width * 0.56;
+      this.width = 246;
+      this.height = 138;
       this.x = width/2 - this.width/2;
-      this.y = height;
-      this.cwidth = 813;
-      this.cheight = 459;
-      this.cx = 11;
-      this.cy = 27;
+      this.y = 0 - this.height;
+      this.cwidth = 123;
+      this.cheight = 69;
+      this.cx = 0;
+      this.cy = 0;
       this.draw = function() {
         try {
           ctx.drawImage(houseSprite, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height)
@@ -498,7 +507,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           player.vx = -480;
         
         //Jump the player when it hits the base
-        if ((player.y + player.height) > base.y && base.y < this.height) player.jump();
+        if ((player.y + player.height) > (base.y + base.grassHeight) && (base.y + base.grassHeight) < this.height) player.jump();
 
         //Gameover if it hits the bottom 
         if (base.y > this.height && (player.y + player.height) > this.height && player.isDead == false) player.isDead = true;
@@ -528,6 +537,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           });
 
           if (base.y < this.height) base.y -= player.vy * deltaTime;
+          if (player.vy < 0) house.y -= player.vy * deltaTime;
 
 
           if (player.vy >= 0) {
@@ -628,7 +638,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       }
 
       this.houseCalc = () => {
-        if (score >= 1000) {
+        if (score >= 2000) {
           house.x += ((player.x + player.width / 2) - (house.x + house.width / 2)) / 35;
           house.y += ((player.y + player.height / 2) - (house.y + house. height / 2)) / 35;
         }
@@ -748,6 +758,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       !characterRef.current ||
       !platformRef.current ||
       !houseRef.current ||
+      !groundRef.current ||
       !leftRef.current ||
       !rightRef.current ||
       !menu
@@ -760,6 +771,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     characterSprites = characterRef.current;
     platformSprites= platformRef.current;
     houseSprite = houseRef.current;
+    groundSprite = groundRef.current;
     left = leftRef.current;
     right = rightRef.current;
 
@@ -820,7 +832,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           <IconChevronRight size={"32"}/>
         </button>
       </div>
-      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={blrURL} />
+      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
 
       
       {/*Preloading image ;)*/}
@@ -828,6 +840,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       <img id="char1" className={sprite} ref={characterRef} src={characterURL} /> 
       <img id="charGif" className={sprite} ref={platformRef} src={platformURL} /> 
       <img id="house" className={sprite} ref={houseRef} src={houseURL} /> 
+      <img id="ground" className={sprite} ref={groundRef} src={groundURL} />
     </div>
   )
 }

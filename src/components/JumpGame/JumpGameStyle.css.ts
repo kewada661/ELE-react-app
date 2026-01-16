@@ -1,6 +1,7 @@
 import { style } from "@vanilla-extract/css"
 import { vars } from "@/styles/theme.css"
 import { circularButton } from "../Button/Button.css"
+import {footerLogo as appFooterLogo} from '@/App.css';
 
 export const container = style({
   display: 'flex',
@@ -13,18 +14,19 @@ export const container = style({
   WebkitUserSelect: 'none',
   WebkitTouchCallout: 'none',
   userSelect: 'none',
+  overflowX: 'hidden',
+  // overflowY: 'hidden',
 })
 
 export const canvas = style({
-  // width: '100vw',
-  // maxWidth: '100svh',
+  position: 'fixed',
+  top: 0,
   background: 'transparent',
-	// display: 'block',
+  imageRendering: 'pixelated',
 })
 
 export const scoreBoard = style({
   minWidth: '20vw',
-  position: 'absolute',
   top: vars.spacing.xxsmall,
   display: 'flex',
   justifySelf: 'center',
@@ -35,8 +37,8 @@ export const scoreBoard = style({
   border: "solid #ffffff 1px",
   // borderColor: '#ffffff',
   borderRadius: `${vars.spacing.medium}`,
+  zIndex: 1,
   '> p': {
-    fontFamily: 'assistant',
     fontWeight: '800',
     fontSize: vars.fontSize.xxlarge,
     color: '#ffffff',
@@ -47,7 +49,10 @@ export const scoreBoard = style({
 })
 
 export const controls = style({
-  width: '100%',
+  position: 'fixed',
+  bottom: vars.spacing.medium,
+  width: '100vw',
+  maxWidth: '100vh',
   justifySelf: 'center',
   display: 'flex',
   justifyContent: 'space-between',
@@ -65,16 +70,20 @@ export const controlButton = style([
   }
 ])
 
-export const footerLogo = style({
-  width: '20vw',
-  maxWidth: '15vh',
-  position: "absolute",
-  bottom: vars.margins.xsmall,
-  WebkitUserSelect: 'none',
-  WebkitTouchCallout: 'none',
-  userSelect: 'none',
-})
+export const footerLogo = style([
+  appFooterLogo,
+  {
+    position: "fixed",
+    marginBottom: 0,
+    bottom: vars.margins.xxsmall,
+    WebkitUserSelect: 'none',
+    WebkitTouchCallout: 'none',
+    userSelect: 'none',
+    zIndex: 1,
+  }
+])
 
 export const sprite = style({
+  imageRendering: 'pixelated',
   display: "none",
 })

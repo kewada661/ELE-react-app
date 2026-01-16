@@ -1,15 +1,15 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 import { focus, vars } from '@/styles/theme.css';
 
-const base = style([
+export const base = style([
   focus,
   {
     padding: `${vars.spacing.small} ${vars.spacing.small}`,
     margin: `${vars.spacing.medium} ${vars.spacing.medium}`,
     border: 'none',
     color: vars.color.light.secondary,
-    fontFamily: 'assistant',
     fontSize: vars.fontSize.xxsmall,
+    letterSpacing: '0.1em',
     fontWeight: 'bold',
     borderRadius: '0.25rem',
     display: 'flex',

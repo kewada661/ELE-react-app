@@ -1,13 +1,14 @@
-import { headerLogo, menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions, footerLogo } from '@/components/GameOverMenu/GameOverMenu.css';
+import { headerLogo, menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions } from '@/components/GameOverMenu/GameOverMenu.css';
 import { IconUpload } from '@/ui/icons/IconUpload';
 import { IconRefreshCw } from '@/ui/icons/IconRefreshCw';
 import { IconFacebook } from '@/ui/icons/IconFacebook';
 import { IconInstagram } from '@/ui/icons/IconInstagram';
 import { IconLink } from '@/ui/icons/IconLink';
 import { IconTwitter } from '@/ui/icons/IconTwitter';
+import { footerLogo } from '@/App.css';
 import { useState } from 'react';
-import houseImage from '@/assets/Album-Art-house copy 1.png';
-import blrURL from '@/assets/footer logos.png';
+import houseImage from '@/assets/house-sprite.png';
+import footerLogoURL from '@/assets/GamingLabelFooter.png';
 
 interface GameOverMenuProps {
   score: number;
@@ -52,10 +53,12 @@ export const GameOverMenu = ({
             <IconUpload /> Submit your score
           </button>
           <button className={button.playAgain} onClick={newGameCallback}>
-            <IconRefreshCw /> Play Again</button>
+            <IconRefreshCw />  Play Again
+          </button>
           <div className={shareLeaderboard}>
             <button className={button.share} onClick={() => setShareButtons(true)} >
-              Share Score</button>
+              Share Score
+            </button>
             <button className={button.share} onClick={leaderboardCallback}id="leaderboard">
               Leaderboard
             </button>
@@ -94,7 +97,7 @@ export const GameOverMenu = ({
           <button className={button.goBack} onClick={() => setShareButtons(false)}>Go Back</button>
         </div>
       )}
-      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={blrURL} />
+      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
     </div>
   )
 }

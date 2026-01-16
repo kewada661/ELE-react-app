@@ -54,7 +54,6 @@ export const logo = style ({
 
 export const subtitle = style ({
   textAlign: 'center',
-  fontFamily: 'assistant',
   fontSize: vars.fontSize.xxsmall,
   color: '#ffffff',
   marginTop: vars.margins.xsmall,
@@ -72,10 +71,12 @@ export const houseContainer = style ({
 export const house = style ({
   width: '80vw',
   maxWidth: '60vh',
+  zIndex: 0,
+  imageRendering: 'pixelated',
 })
 
 export const footerLogo = style({
-  width: '20vw',
-  maxWidth: '15vh',
+  width: '40vw',
+  maxWidth: '30vh',
   marginBottom: vars.margins.xxsmall,
 })
