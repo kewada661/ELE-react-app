@@ -202,10 +202,10 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     cwidth: number;
     cheight: number;
     constructor() {
-      this.width = Math.min(350, width * 0.75);
-      this.height = this.width * 0.56;
+      this.width = 246;
+      this.height = 138;
       this.x = width/2 - this.width/2;
-      this.y = height;
+      this.y = 0 - this.height;
       this.cwidth = 123;
       this.cheight = 69;
       this.cx = 0;
@@ -638,7 +638,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       }
 
       this.houseCalc = () => {
-        if (score >= 1000) {
+        if (score >= 0) {
           house.x += ((player.x + player.width / 2) - (house.x + house.width / 2)) / 35;
           house.y += ((player.y + player.height / 2) - (house.y + house. height / 2)) / 35;
         }
