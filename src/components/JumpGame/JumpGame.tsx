@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { container, canvas, scoreBoard, controls, controlButton, sprite } from '@/components/JumpGame/JumpGameStyle.css';
+import { container, canvas, scoreBoard, controls, controlButton, sprite, footerLogo } from '@/components/JumpGame/JumpGameStyle.css';
 import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
-import { footerLogo } from '@/App.css';
 import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
 import platformURL from '@/assets/sprites/platformsprites1.png';
