@@ -7,6 +7,7 @@ import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
 import platformURL from '@/assets/sprites/platformsprites1.png';
 import houseURL from '@/assets/house-sprite.png';
+import groundURL from '@/assets/ground-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
 
 interface JumpGameProps {
@@ -21,9 +22,10 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   const characterRef = useRef<HTMLImageElement>(null);
   const platformRef = useRef<HTMLImageElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
+  const groundRef = useRef<HTMLImageElement>(null);
   const screenPortion = 0.8;
   const [width, setWidth] = useState(document.getElementById('main')!.offsetWidth);
-  const [height, setHeight] = useState(Math.floor((document.getElementById('main')!.offsetHeight) * 0.8));
+  const [height, setHeight] = useState(Math.floor((document.getElementById('main')!.offsetHeight)));
   let ctx: any;
 
   //Variables for game
@@ -31,7 +33,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     image: HTMLImageElement,
     characterSprites: HTMLImageElement,
     platformSprites: HTMLImageElement,
-    houseSprite: HTMLImageElement,    
+    houseSprite: HTMLImageElement,   
+    groundSprite: HTMLImageElement, 
     left: HTMLButtonElement,
     right: HTMLButtonElement,
     player: Player, 
@@ -750,6 +753,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       !characterRef.current ||
       !platformRef.current ||
       !houseRef.current ||
+      !groundRef.current ||
       !leftRef.current ||
       !rightRef.current ||
       !menu
@@ -762,6 +766,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     characterSprites = characterRef.current;
     platformSprites= platformRef.current;
     houseSprite = houseRef.current;
+    groundSprite = groundRef.current;
     left = leftRef.current;
     right = rightRef.current;
 
@@ -830,6 +835,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       <img id="char1" className={sprite} ref={characterRef} src={characterURL} /> 
       <img id="charGif" className={sprite} ref={platformRef} src={platformURL} /> 
       <img id="house" className={sprite} ref={houseRef} src={houseURL} /> 
+      <img id="ground" className={sprite} ref={groundRef} src={groundURL} />
     </div>
   )
 }
