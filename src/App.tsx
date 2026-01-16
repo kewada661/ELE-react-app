@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
 import { JumpGame } from '@/components/JumpGame';
-import { background, mainContainer, houseContainer, house, startButtonContainer, logo, subtitle, footerLogo} from '@/App.css';
+import { background, mainContainer, houseContainer, house, startButtonContainer, playButton, logo, subtitle, footerLogo} from '@/App.css';
 import { button } from '@/components/Button/Button.css'
 import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
@@ -420,7 +420,7 @@ export const App = () => {
             (gameInProgress) ? (
               (startButton) ? (
                 <div className={startButtonContainer}>
-                  <button className={button.green} onClick={handleStartButton}>Play</button>
+                  <button className={playButton} onClick={handleStartButton}>Play</button>
                 </div>  
               ) : (
                 <JumpGame 
