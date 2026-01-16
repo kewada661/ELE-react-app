@@ -56,6 +56,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   class Base {
     height: number;
     width: number;
+    grassHeight: number;
     cx: number;
     cy: number;
     cwidth: number;
@@ -65,14 +66,15 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     y: number;
     draw: () => void;
     constructor() {
-      this.height = 5;
+      this.height = 87;
       this.width = width;
+      this.grassHeight = 16;
 
       //Sprite clipping
       this.cx = 0;
-      this.cy = 614;
-      this.cwidth = 100;
-      this.cheight = 5;
+      this.cy = 0;
+      this.cwidth = 128;
+      this.cheight = 87;
 
       this.moved = 0;
 
@@ -81,7 +83,11 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.draw = function() {
         try {
-          ctx.drawImage(image, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height);
+          let tx = 0;
+          while ((tx) < this.width) {
+            ctx.drawImage(groundSprite, this.cx, this.cy, this.cwidth, this.cheight, tx, this.y, this.cwidth, this.cheight);
+            tx += this.cwidth;
+          }
         } catch (e) {}
       };
     }
@@ -501,7 +507,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           player.vx = -480;
         
         //Jump the player when it hits the base
-        if ((player.y + player.height) > base.y && base.y < this.height) player.jump();
+        if ((player.y + player.height) > (base.y + base.grassHeight) && (base.y + base.grassHeight) < this.height) player.jump();
 
         //Gameover if it hits the bottom 
         if (base.y > this.height && (player.y + player.height) > this.height && player.isDead == false) player.isDead = true;
