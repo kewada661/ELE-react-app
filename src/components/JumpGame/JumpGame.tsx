@@ -638,7 +638,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       }
 
       this.houseCalc = () => {
-        if (score >= 0) {
+        if (score >= 2000) {
           house.x += ((player.x + player.width / 2) - (house.x + house.width / 2)) / 35;
           house.y += ((player.y + player.height / 2) - (house.y + house. height / 2)) / 35;
         }
