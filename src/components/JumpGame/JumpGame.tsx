@@ -537,7 +537,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           });
 
           if (base.y < this.height) base.y -= player.vy * deltaTime;
-          if (player.vy < 0) house.y -= player.vy * deltaTime;
+          if (player.vy < 0 && score >= 2000) house.y -= player.vy * deltaTime;
 
 
           if (player.vy >= 0) {
@@ -647,7 +647,10 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.updateScore = () => {
         var scoreText = document.getElementById("score");
-        if (scoreText !== null) scoreText.innerHTML = `${score}`;
+        if (scoreText !== null) {
+          scoreText.innerHTML = `${score}`;
+          if (score >= 2000) scoreText.style.color = "#1ed760";
+        }
       }
 
       this.gameOver = () => {
