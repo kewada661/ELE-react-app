@@ -51,7 +51,8 @@ export const scoreBoard = style({
 export const controls = style({
   position: 'fixed',
   bottom: vars.spacing.medium,
-  width: '100%',
+  width: '100vw',
+  maxWidth: '100vh',
   justifySelf: 'center',
   display: 'flex',
   justifyContent: 'space-between',
@@ -72,11 +73,9 @@ export const controlButton = style([
 export const footerLogo = style([
   appFooterLogo,
   {
-    width: '20vw',
-    maxWidth: '15vh',
     position: "fixed",
-    justifySelf: 'end',
-    bottom: vars.margins.xsmall,
+    marginBottom: 0,
+    bottom: vars.margins.xxsmall,
     WebkitUserSelect: 'none',
     WebkitTouchCallout: 'none',
     userSelect: 'none',
