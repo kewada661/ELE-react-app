@@ -56,6 +56,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
   class Base {
     height: number;
     width: number;
+    grassHeight: number;
     cx: number;
     cy: number;
     cwidth: number;
@@ -65,8 +66,9 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     y: number;
     draw: () => void;
     constructor() {
-      this.height = 128;
+      this.height = 87;
       this.width = width;
+      this.grassHeight = 16;
 
       //Sprite clipping
       this.cx = 0;
@@ -505,7 +507,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           player.vx = -480;
         
         //Jump the player when it hits the base
-        if ((player.y + player.height) > base.y && base.y < this.height) player.jump();
+        if ((player.y + player.height) > (base.y + base.grassHeight) && (base.y + base.grassHeight) < this.height) player.jump();
 
         //Gameover if it hits the bottom 
         if (base.y > this.height && (player.y + player.height) > this.height && player.isDead == false) player.isDead = true;
