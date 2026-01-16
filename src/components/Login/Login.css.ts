@@ -10,6 +10,7 @@ export const login = style({
   // position: 'relative',
   // top: '30%',
   alignSelf: 'center',
+  zIndex: 1,
 })
 
 export const spotifyLogo = style({

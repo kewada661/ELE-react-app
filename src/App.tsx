@@ -8,7 +8,7 @@ import { LoginFallback } from '@/components/LoginFallback'
 import { Menu } from '@/components/Menu';
 import { Leaderboard } from '@/components/Leaderboard';
 import { GameOverMenu } from '@/components/GameOverMenu';
-import houseImage from '@/assets/Album-Art-house copy 1.png';
+import houseImage from '@/assets/house-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
 import backgroundURL from '@/assets/bg-vert.mp4';
 import backgroundPosterURL from '@/assets/9x16-edgehill 1.png';

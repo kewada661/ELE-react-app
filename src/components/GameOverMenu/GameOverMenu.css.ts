@@ -101,10 +101,14 @@ const buttonBase = style({
   margin: `0 ${vars.spacing.xxsmall}`,
   border: 'none',
   color: vars.color.light.secondary,
-  fontFamily: 'assistant',
   fontWeight: 'bold',
   fontSize: vars.fontSize.small,
+  letterSpacing: '0.1em',
   borderRadius: '0.25rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: vars.spacing.xsmall,
 })
 export const button = styleVariants({
   submit: [

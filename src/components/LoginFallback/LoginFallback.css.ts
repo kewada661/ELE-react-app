@@ -20,7 +20,8 @@ export const loginFallback = style({
     margin: `${vars.spacing.xxsmall} 0`,
     display: 'flex',
     justifySelf: 'center',
-  }
+  },
+  zIndex: 1,
 })
 
 export const submitButton = style([
