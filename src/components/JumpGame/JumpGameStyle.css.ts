@@ -19,6 +19,7 @@ export const canvas = style({
   // width: '100vw',
   // maxWidth: '100svh',
   background: 'transparent',
+  imageRendering: 'pixelated',
 	// display: 'block',
 })
 
@@ -36,7 +37,6 @@ export const scoreBoard = style({
   // borderColor: '#ffffff',
   borderRadius: `${vars.spacing.medium}`,
   '> p': {
-    fontFamily: 'assistant',
     fontWeight: '800',
     fontSize: vars.fontSize.xxlarge,
     color: '#ffffff',
@@ -76,5 +76,6 @@ export const footerLogo = style({
 })
 
 export const sprite = style({
+  imageRendering: 'pixelated',
   display: "none",
 })

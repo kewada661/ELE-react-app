@@ -9,7 +9,8 @@ globalStyle('*', {
 globalStyle('#root', {
   maxHeight: '100svh',
   // overflow: 'hidden',
-  fontFamily: 'assistant',
+  fontFamily: '\"Jersey 10\", sans-serif',
+  letterSpacing: '0.1em',
   fontSize: '2vh',
 })
 

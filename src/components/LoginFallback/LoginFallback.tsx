@@ -44,7 +44,7 @@ export const LoginFallback = ({ loginCallback }: LoginFallbackProps) => {
         onChange={(e)=> setUsername(e.target.value)}
         placeholder='Enter Username...'
       ></input>
-      <button type='submit' className={submitButton}>submit </button>
+      <button type='submit' className={submitButton}>Submit</button>
     </form>
   )
 }

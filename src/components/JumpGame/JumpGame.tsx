@@ -6,7 +6,7 @@ import { footerLogo } from '@/App.css';
 import spriteImage from '@/assets/sprite.png'
 import characterURL from '@/assets/sprites/ELE character sprites.png';
 import platformURL from '@/assets/sprites/platformsprites1.png';
-import houseURL from '@/assets/Album-Art-house copy 1.png';
+import houseURL from '@/assets/house-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
 
 interface JumpGameProps {
@@ -198,10 +198,10 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       this.height = this.width * 0.56;
       this.x = width/2 - this.width/2;
       this.y = height;
-      this.cwidth = 813;
-      this.cheight = 459;
-      this.cx = 11;
-      this.cy = 27;
+      this.cwidth = 123;
+      this.cheight = 69;
+      this.cx = 0;
+      this.cy = 0;
       this.draw = function() {
         try {
           ctx.drawImage(houseSprite, this.cx, this.cy, this.cwidth, this.cheight, this.x, this.y, this.width, this.height)
@@ -529,6 +529,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           });
 
           if (base.y < this.height) base.y -= player.vy * deltaTime;
+          if (player.vy < 0) house.y -= player.vy * deltaTime;
 
 
           if (player.vy >= 0) {
