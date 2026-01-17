@@ -1,4 +1,5 @@
 import { fontFace, style } from '@vanilla-extract/css';
+import { button } from '@/components/Button/Button.css'
 import { vars } from '@/styles/theme.css';
 import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf';
 
@@ -35,10 +36,14 @@ export const startButtonContainer = style({
   position: 'absolute',
   bottom: vars.spacing.xxlarge,
   justifyContent: 'center',
-  '> button': {
-    fontSize: vars.fontSize.small,
-  }
 })
+
+export const playButton = style([
+    button.green,
+    {
+      fontSize: vars.fontSize.small,
+    },
+])
 
 const fluoxetine = fontFace({
   src: `url(${fluoxetineURL})`,
