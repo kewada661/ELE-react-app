@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
+import { Story } from '@/components/Story';
 import { JumpGame } from '@/components/JumpGame';
 import { background, mainContainer, houseContainer, house, startButtonContainer, playButton, logo, subtitle, footerLogo} from '@/App.css';
 import { button } from '@/components/Button/Button.css'
@@ -8,14 +9,13 @@ import { LoginFallback } from '@/components/LoginFallback'
 import { Menu } from '@/components/Menu';
 import { Leaderboard } from '@/components/Leaderboard';
 import { GameOverMenu } from '@/components/GameOverMenu';
-import houseImage from '@/assets/Album-Art-house copy 1.png';
+import houseImage from '@/assets/house-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
 import backgroundURL from '@/assets/bg-vert.mp4';
 import backgroundPosterURL from '@/assets/9x16-edgehill 1.png';
 import audioURl from '@/assets/file_example_MP3_700KB.mp3';
 
 export const App = () => {
-  const [startButton, setStartButton] = useState(true);
   const [gameInProgress, setGameInProgress] = useState(true);
   const [score, setScore] = useState(0);
   const [error, setError] = useState<Error>();
@@ -23,6 +23,7 @@ export const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
+  const [story, setStory] = useState(true);
   const [loadingPlayer, setLoadingPlayer] = useState(true);
   const playerRef = useRef(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -260,22 +261,10 @@ export const App = () => {
     }
   }
 
-  const fallBack = useCallback(() => {
-    setAltLogin(true);
-  }, [])
 
   const loginCallback = () => {
-    setLoggedIn(true);
-    handleStartButton();
     setLoadingPlayer(false);
-  }
-
-  const toggleMenu = () => {
-    setMenuOpen(prev => !prev);
-  }
-
-  const openMenu = () => {
-    setMenuOpen(true);
+    setLoggedIn(true);
   }
 
   const toggleLeaderboard = () => {
@@ -300,8 +289,8 @@ export const App = () => {
     // initializeEmbedPlayback();
   }
 
-  const handleStartButton = () => {
-    setStartButton(false);
+  const handleStart = () => {
+    setStory(false);
     if (playerRef.current) {
       playerRef.current.resume();
       console.log('resuming web pb');
@@ -320,8 +309,6 @@ export const App = () => {
   }, [score, gameInProgress])
 
   const newGame = () => {
-    // if (playerRef.current) playerRef.current.resume();
-    console.log("user actions");
     setGameInProgress(true);
   }
 
@@ -411,29 +398,31 @@ export const App = () => {
         <video className={background} poster={backgroundPosterURL} autoPlay muted loop>
           <source src={backgroundURL} type='video/mp4' />
         </video>
-        <Header menuOpen={menuOpen} volumeCallback={toggleMuted} menuCallback={toggleMenu} leaderboardOpen={leaderboardOpen}/>
+        <Header 
+          menuOpen={menuOpen} 
+          volumeCallback={toggleMuted} 
+          menuCallback={() => setMenuOpen(prev => !prev)} 
+          leaderboardOpen={leaderboardOpen}
+        />
         <audio ref={audioRef} src={audioURl} loop/>
         {(loggedIn) ? (
-          (loadingPlayer) ? (
-              <p>Loading...</p>
+          (story) ? (
+            <Story
+              loadingPlayer={loadingPlayer}
+              onContinue={handleStart}
+            />
           ) : (
             (gameInProgress) ? (
-              (startButton) ? (
-                <div className={startButtonContainer}>
-                  <button className={playButton} onClick={handleStartButton}>Play</button>
-                </div>  
-              ) : (
                 <JumpGame 
                   gameOverCallback={gameOver}
-                  menuCallback={openMenu}
+                  menuCallback={() => setMenuOpen(true)}
                 />
-              )
             ) : (
               <GameOverMenu
                 score={score}
                 loggedIn={loggedIn}
                 submitScoreCallback={updateLeaderboard}
-                newGameCallback={newGame}
+                newGameCallback={() => setGameInProgress(true)}
                 //TODO: shareScoreCallback={}
                 leaderboardCallback={toggleLeaderboard}
                 playlistCallback={savePlaylist}
@@ -448,21 +437,23 @@ export const App = () => {
               <img className={house} ref={houseRef} src={houseImage} alt="" />
             </div>
             {(altLogin) ? (
-              <LoginFallback loginCallback={loginCallback} />
+              <LoginFallback 
+                loginCallback={loginCallback} 
+              />
             ) : (
               <Login 
                 onLogin={requestLogin} 
-                fallBack={fallBack}
+                fallBack={() => setAltLogin(true)}
               />
             )}
             <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
           </>
         )}
-        {(leaderboardOpen) ? (<Leaderboard leaderboardClose={toggleLeaderboard}/>) : (<></>)}
+        {(leaderboardOpen) ? (<Leaderboard leaderboardClose={() => setLeaderboardOpen(false)}/>) : (<></>)}
         <Menu 
           isOpen={menuOpen} 
           loggedIn={loggedIn}
-          leaderboardCallback={toggleLeaderboard}
+          leaderboardCallback={() => setLeaderboardOpen(true)}
           playlistCallback={savePlaylist}
           loginCallback={requestLogin}
           logoutCallback={logout}

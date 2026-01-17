@@ -7,7 +7,7 @@ import { IconLink } from '@/ui/icons/IconLink';
 import { IconTwitter } from '@/ui/icons/IconTwitter';
 import { footerLogo } from '@/App.css';
 import { useState } from 'react';
-import houseImage from '@/assets/Album-Art-house copy 1.png';
+import houseImage from '@/assets/house-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
 
 interface GameOverMenuProps {
@@ -53,10 +53,12 @@ export const GameOverMenu = ({
             <IconUpload /> Submit your score
           </button>
           <button className={button.playAgain} onClick={newGameCallback}>
-            <IconRefreshCw /> Play Again</button>
+            <IconRefreshCw />  Play Again
+          </button>
           <div className={shareLeaderboard}>
             <button className={button.share} onClick={() => setShareButtons(true)} >
-              Share Score</button>
+              Share Score
+            </button>
             <button className={button.share} onClick={leaderboardCallback}id="leaderboard">
               Leaderboard
             </button>
