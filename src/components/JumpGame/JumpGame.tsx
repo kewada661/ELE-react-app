@@ -415,40 +415,22 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     }
   }
 
-  function onLeftTouchStart(e: TouchEvent) {
+  function onLeftStart() {
     dir = "left";
     player.isMovingLeft = true;
   }
-  function onLeftTouchEnd(e: TouchEvent) {
+  function onLeftEnd() {
     dir = "left";
     player.isMovingLeft = false;
   }
-  function onRightTouchStart(e: TouchEvent) {
+  function onRightStart() {
     dir = "right";
     player.isMovingRight = true;
   }
-  function onRightTouchEnd(e: TouchEvent) {
+  function onRightEnd() {
     dir = "right";
     player.isMovingRight = false;
   }
-
-  function onLeftMouseDown(e: MouseEvent) {
-    dir = "left";
-    player.isMovingLeft = true;
-  }
-  function onLeftMouseUp(e: MouseEvent) {
-    dir = "left";
-    player.isMovingLeft = false;
-  }
-  function onRightMouseDown(e: MouseEvent) {
-    dir = "right";
-    player.isMovingRight = true;
-  }
-  function onRightMouseUp(e: MouseEvent) {
-    dir = "right";
-    player.isMovingRight = false;
-  }
-
 
   class Game {
     height: number;
@@ -786,16 +768,16 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
     document.addEventListener("keyup", keyUp);
 
     //Adding touch controls
-    left.addEventListener("touchstart", onLeftTouchStart);
-    left.addEventListener("touchend", onLeftTouchEnd);
-    right.addEventListener("touchstart", onRightTouchStart);
-    right.addEventListener("touchend", onRightTouchEnd);
+    left.addEventListener("touchstart", onLeftStart);
+    left.addEventListener("touchend", onLeftEnd);
+    right.addEventListener("touchstart", onRightStart);
+    right.addEventListener("touchend", onRightEnd);
 
     //Adding button controls
-    left.addEventListener("mousedown", onLeftMouseDown);
-    left.addEventListener("mouseup", onLeftMouseUp);
-    right.addEventListener("mousedown", onRightMouseDown);
-    right.addEventListener("mouseup", onRightMouseUp);
+    left.addEventListener("mousedown", onLeftStart);
+    left.addEventListener("mouseup", onLeftEnd);
+    right.addEventListener("mousedown", onRightStart);
+    right.addEventListener("mouseup", onRightEnd);
     
     // document.addEventListener("visibilitychange", onVisibilityChange);
     game.init();
@@ -804,14 +786,14 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       // document.removeEventListener("visibilitychange", onVisibilityChange);
       document.removeEventListener("keydown", keyDown);
       document.removeEventListener("keyup", keyUp);
-      left.removeEventListener("touchstart", onLeftTouchStart);
-      left.removeEventListener("touchend", onLeftTouchEnd);
-      right.removeEventListener("touchstart", onRightTouchStart);
-      right.removeEventListener("touchend", onRightTouchEnd);
-      left.removeEventListener("mousedown", onLeftMouseDown);
-      left.removeEventListener("mouseup", onLeftMouseUp);
-      right.removeEventListener("mousedown", onRightMouseDown);
-      right.removeEventListener("mouseup", onRightMouseUp);
+      left.removeEventListener("touchstart", onLeftStart);
+      left.removeEventListener("touchend", onLeftEnd);
+      right.removeEventListener("touchstart", onRightStart);
+      right.removeEventListener("touchend", onRightEnd);
+      left.removeEventListener("mousedown", onLeftStart);
+      left.removeEventListener("mouseup", onLeftEnd);
+      right.removeEventListener("mousedown", onRightStart);
+      right.removeEventListener("mouseup", onRightEnd);
       menu.removeEventListener("click", handleMenu);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       removeEventListener('resize', updateCtx);

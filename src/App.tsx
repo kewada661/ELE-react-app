@@ -2,8 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Header } from '@/components/Header';
 import { Story } from '@/components/Story';
 import { JumpGame } from '@/components/JumpGame';
-import { background, mainContainer, houseContainer, house, startButtonContainer, playButton, logo, subtitle, footerLogo} from '@/App.css';
-import { button } from '@/components/Button/Button.css'
+import { background, mainContainer, houseContainer, house, logo, subtitle, footerLogo} from '@/App.css';
 import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
 import { Menu } from '@/components/Menu';
@@ -283,6 +282,7 @@ export const App = () => {
     if (audioRef.current) audioRef.current.pause();
     sessionStorage.clear();
     setGameInProgress(true);
+    setStory(true);
     setMenuOpen(false);
     setLoggedIn(false);
     setAltLogin(false);

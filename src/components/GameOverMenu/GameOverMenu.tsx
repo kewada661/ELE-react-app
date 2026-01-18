@@ -1,4 +1,4 @@
-import { headerLogo, menu, button, circularButton, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions } from '@/components/GameOverMenu/GameOverMenu.css';
+import { headerLogo, menu, button, yourScore, scoreContainer, houseFilter, shareLeaderboard, house, shareOptions, shareButtonContainer, circularButton } from '@/components/GameOverMenu/GameOverMenu.css';
 import { IconUpload } from '@/ui/icons/IconUpload';
 import { IconRefreshCw } from '@/ui/icons/IconRefreshCw';
 import { IconFacebook } from '@/ui/icons/IconFacebook';
@@ -69,25 +69,25 @@ export const GameOverMenu = ({
         <div className={menu.share}>
           <p>Share with Friends</p>
           <div className={shareOptions}>
-            <div>
+            <div className={shareButtonContainer}>
               <button id="link" className={circularButton}>
                 <IconLink size={"32"}/>
               </button>
               <p>Copy Link</p>
             </div>
-            <div>
+            <div className={shareButtonContainer}>
               <button id="facebook" className={circularButton}>
                 <IconFacebook size={"32"}/>
               </button>
               <p>Facebook</p>
             </div>
-            <div>
+            <div className={shareButtonContainer}>
               <button id="instagram" className={circularButton}>
                 <IconInstagram size={"32"}/>
               </button>
               <p>Instagram</p>
             </div>
-            <div>
+            <div className={shareButtonContainer}>
               <button id="x" className={circularButton}>
                 <IconTwitter size={"32"}/>
               </button>

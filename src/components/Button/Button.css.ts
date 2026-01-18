@@ -1,23 +1,29 @@
 import { style, styleVariants } from '@vanilla-extract/css';
-import { focus, vars } from '@/styles/theme.css';
+import { focus, active, hover, vars } from '@/styles/theme.css';
 
 export const base = style([
   focus,
+  hover,
+  active,
   {
     padding: `${vars.spacing.small} ${vars.spacing.small}`,
     margin: `${vars.spacing.medium} ${vars.spacing.medium}`,
     border: 'none',
     color: vars.color.light.secondary,
-    fontSize: vars.fontSize.xxsmall,
+    fontSize: vars.fontSize.xsmall,
     letterSpacing: '0.1em',
     fontWeight: 'bold',
     borderRadius: '0.25rem',
     display: 'flex',
-    // ':hover': {
-    //   background: vars.color.light.secondary,
-    //   color: vars.color.dark.main,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: vars.spacing.xsmall,
+    // ':active': {
+    //   transform: 'scale(0.95)',
     // },
-  }
+    transition: 'transform 0.1s linear',
+    cursor: 'pointer',
+  } 
 ]);
 
 export const button = styleVariants({
@@ -28,6 +34,7 @@ export const button = styleVariants({
       display: 'flex',
       ':hover': { background: 'none' },
       fontWeight: 'normal',
+      fontSize: vars.fontSize.xxsmall,
     }
   ],
   spotify: [
@@ -37,7 +44,7 @@ export const button = styleVariants({
       background: vars.color.accent.cold.main,
       width: '80vw',
       height: '15vw',
-      maxWidth: 280,
+      maxWidth: 290,
       maxHeight: 60,
       alignItems: 'center',
       justifyContent: 'center',
@@ -58,20 +65,25 @@ export const button = styleVariants({
   ],
 });
 
-export const circularButton = style({
-  display: 'flex',
-  alignItems: 'center',
-  padding: `${vars.spacing.small} ${vars.spacing.small}`,
-  borderRadius: '50%',
-  background: vars.color.gold,
-  '> svg': {
-    '> path': {
-      strokeWidth: "1",
-    },
-    '> g': {
+export const circularButton = style([
+  hover,
+  active,
+  {
+    display: 'flex',
+    alignItems: 'center',
+    padding: `${vars.spacing.small} ${vars.spacing.small}`,
+    borderRadius: '50%',
+    background: vars.color.gold,
+    transition: 'transform 0.1s linear',
+    '> svg': {
       '> path': {
         strokeWidth: "1",
       },
+      '> g': {
+        '> path': {
+          strokeWidth: "1",
+        },
+      },
     },
-  },
-})
+  }
+])

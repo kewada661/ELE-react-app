@@ -1,8 +1,9 @@
-import { vars } from '@/styles/theme.css';
+import { hover, active, vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
 export const header = style({
   display: 'flex',
+  gap: vars.spacing.xsmall,
   alignSelf: 'end',
   maxWidth: '100vh',
   margin: vars.spacing.small,
@@ -11,10 +12,17 @@ export const header = style({
   zIndex: 2,
 })
 
-export const headerButton = style({
-  color: 'transparent',
-  background: 'none',
-  border: 'none',
-  padding: '.25em'
-})
+export const headerButton = style([
+  hover,
+  active,
+  {
+    display: 'flex',
+    alignItems: 'center',
+    color: 'transparent',
+    background: 'none',
+    border: 'none',
+    transition: 'transform 0.1s linear',
+    cursor: 'pointer',
+  }
+])
 

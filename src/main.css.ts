@@ -4,14 +4,13 @@ import { globalStyle } from '@vanilla-extract/css';
 globalStyle('*', {
   margin: 0,
   padding: 0,
-});
+  fontFamily: '\"Jersey 10\", sans-serif',
+  letterSpacing: '0.1em',
+  fontSize: '2vh',});
 
 globalStyle('#root', {
   maxHeight: '100svh',
   // overflow: 'hidden',
-  fontFamily: '\"Jersey 10\", sans-serif',
-  letterSpacing: '0.1em',
-  fontSize: '2vh',
 })
 
 globalStyle('body', {

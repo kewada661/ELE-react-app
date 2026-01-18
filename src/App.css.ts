@@ -29,22 +29,6 @@ export const mainContainer = style({
   zIndex: 0,
 });
 
-export const startButtonContainer = style({
-  width: '80vw',
-  maxWidth: '80vh',
-  display: 'flex',
-  position: 'absolute',
-  bottom: vars.spacing.xxlarge,
-  justifyContent: 'center',
-})
-
-export const playButton = style([
-    button.green,
-    {
-      fontSize: vars.fontSize.small,
-    },
-])
-
 const fluoxetine = fontFace({
   src: `url(${fluoxetineURL})`,
 })

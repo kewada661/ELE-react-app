@@ -1,4 +1,5 @@
-import { vars } from '@/styles/theme.css'
+import { hover, active, vars } from '@/styles/theme.css'
+import { base } from '@/components/Button/Button.css'
 import { style, keyframes } from '@vanilla-extract/css'
 
 export const storyContainer = style({
@@ -43,6 +44,9 @@ export const continueContainer = style({
 
 })
 
-export const continueText = style({
-  animation: `${pulse} 1.5s linear infinite`,
-})
+export const continueText = style([
+  base,
+  {
+    animation: `${pulse} 1.5s linear infinite`,
+  }
+])
