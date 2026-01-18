@@ -271,6 +271,9 @@ export const App = () => {
   }
 
   const toggleMuted = (muted: boolean) => {
+    if (audioRef.current) {
+      audioRef.current.muted = !muted;
+    }
     if (playerRef.current) {
       playerRef.current.setVolume(muted ? 0.5 : 0.0);
       console.log("volume change");
