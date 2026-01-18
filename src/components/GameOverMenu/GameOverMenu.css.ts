@@ -1,5 +1,6 @@
 import { style, styleVariants, fontFace } from "@vanilla-extract/css"
 import { vars } from "@/styles/theme.css"
+import { base, circularButton as circularButtonBase } from "@/components/Button/Button.css"
 import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
 
 const fluoxetine = fontFace({
@@ -94,22 +95,15 @@ export const house = style({
   justifySelf: 'center',
   margin: 'auto 0',
   opacity: 0.5,
+  imageRendering: 'pixelated',
 })
 
-const buttonBase = style({
-  padding: `${vars.spacing.small} ${vars.spacing.small}`,
-  margin: `0 ${vars.spacing.xxsmall}`,
-  border: 'none',
-  color: vars.color.light.secondary,
-  fontWeight: 'bold',
-  fontSize: vars.fontSize.small,
-  letterSpacing: '0.1em',
-  borderRadius: '0.25rem',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: vars.spacing.xsmall,
-})
+const buttonBase = style([
+  base,
+  {
+    margin: `0 ${vars.spacing.xxsmall}`,
+  }
+])
 export const button = styleVariants({
   submit: [
     buttonBase,
@@ -159,23 +153,18 @@ export const shareOptions = style({
   justifyContent: "space-between",
 })
 
-export const circularButton = style({
+export const shareButtonContainer = style({
   display: 'flex',
-  padding: `${vars.spacing.medium} ${vars.spacing.medium}`,
-  // margin: `0 ${vars.spacing.xxsmall}`,
-  borderRadius: '50%',
-  background: vars.color.green,
-  '> svg': {
-    '> path': {
-      strokeWidth: "1",
-    },
-    '> g': {
-      '> path': {
-        strokeWidth: "1",
-      },
-    },
-  },
+  flexDirection: 'column',
+  alignItems: 'center',
 })
+
+export const circularButton = style([
+  circularButtonBase,
+  {
+    background: vars.color.green,
+  }
+])
 
 export const footerLogo = style({
   width: '20vw',
