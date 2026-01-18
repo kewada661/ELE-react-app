@@ -1,6 +1,5 @@
 import { fontFace, style } from '@vanilla-extract/css';
-import { button } from '@/components/Button/Button.css'
-import { vars } from '@/styles/theme.css';
+import { hover, active, vars } from '@/styles/theme.css';
 import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf';
 
 export const background = style({
@@ -33,13 +32,19 @@ const fluoxetine = fontFace({
   src: `url(${fluoxetineURL})`,
 })
 
-export const logo = style ({
-  textAlign: 'center',
-  fontFamily: fluoxetine,
-  fontSize: '3rem',
-  color: '#ffffff',
-  marginTop: vars.margins.medium,
-})
+export const logo = style ([
+  hover,
+  active,
+  {
+    textAlign: 'center',
+    fontFamily: fluoxetine,
+    fontSize: '3rem',
+    color: '#ffffff',
+    marginTop: vars.margins.medium,
+    transition: 'transform 0.1s linear',
+    cursor: 'pointer',
+  }
+])
 
 export const subtitle = style ({
   textAlign: 'center',
@@ -64,8 +69,14 @@ export const house = style ({
   imageRendering: 'pixelated',
 })
 
-export const footerLogo = style({
-  width: '40vw',
-  maxWidth: '30vh',
-  marginBottom: vars.margins.xxsmall,
-})
+export const footerLogo = style([
+  hover,
+  active,
+  {
+    width: '40vw',
+    maxWidth: '30vh',
+    marginBottom: vars.margins.xxsmall,
+    transition: 'transform 0.1s linear',
+    cursor: 'pointer',
+  }
+])
