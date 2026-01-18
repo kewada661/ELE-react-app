@@ -1,5 +1,5 @@
 import { style, styleVariants, fontFace } from "@vanilla-extract/css"
-import { vars } from "@/styles/theme.css"
+import { hover, active, vars } from "@/styles/theme.css"
 import { base, circularButton as circularButtonBase } from "@/components/Button/Button.css"
 import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
 
@@ -7,11 +7,16 @@ const fluoxetine = fontFace({
   src: `url(${fluoxetineURL})`,
 })
 
-export const headerLogo = style({
-  fontFamily: fluoxetine,
-  fontSize: vars.fontSize.large,
-  padding: vars.spacing.medium,
-})
+export const headerLogo = style([
+  hover,
+  active,
+  {
+    fontFamily: fluoxetine,
+    fontSize: vars.fontSize.large,
+    padding: vars.spacing.medium,
+    transition: 'transform 0.1s linear',
+  }
+])
 
 export const menu = styleVariants ({
   main: {
@@ -165,9 +170,3 @@ export const circularButton = style([
     background: vars.color.green,
   }
 ])
-
-export const footerLogo = style({
-  width: '20vw',
-  maxWidth: '15vh',
-  marginBottom: vars.margins.xxsmall,
-})

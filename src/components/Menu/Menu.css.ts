@@ -1,5 +1,5 @@
 import { fontFace, style } from '@vanilla-extract/css'
-import { vars } from '@/styles/theme.css';
+import { hover, active, vars } from '@/styles/theme.css';
 import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
 
 export const menu = style({
@@ -24,7 +24,12 @@ export const options = style({
   display: 'flex',
   flexDirection: 'column',
   margin: "0 auto",
-  '> button': {
+})
+
+export const option = style([
+  hover,
+  active,
+  {
     padding: '.75em',
     background: 'none',
     border: 'none',
@@ -32,5 +37,7 @@ export const options = style({
     fontFamily: `${fluoxetine}, monospace`,
     letterSpacing: '.25rem',
     fontSize: vars.fontSize.xlarge,
+    transition: 'transform 0.1s linear',
+    cursor: 'pointer',
   }
-})
+])

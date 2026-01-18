@@ -1,4 +1,4 @@
-import { menu, options } from '@/components/Menu/Menu.css'
+import { menu, options, option } from '@/components/Menu/Menu.css'
 interface MenuProps {
   isOpen: boolean;
   loggedIn: boolean;
@@ -17,13 +17,13 @@ export const Menu = ({ isOpen, loggedIn, leaderboardCallback, playlistCallback, 
   return (
     <div className={menu}>
       <div className={options}>
-        <button onClick={leaderboardCallback}>Leaderboard</button>
-        <button onClick={website}>Official Website</button>
-        <button onClick={playlistCallback}>Add Playlist</button>
+        <button className={option} onClick={leaderboardCallback}>Leaderboard</button>
+        <button className={option} onClick={website}>Official Website</button>
+        <button className={option} onClick={playlistCallback}>Add Playlist</button>
         {(loggedIn) ? (
-          <button onClick={logoutCallback}>Log Out</button>
+          <button className={option} onClick={logoutCallback}>Log Out</button>
         ) : (
-          <button onClick={loginCallback}>Connect Spotify</button>
+          <button className={option} onClick={loginCallback}>Connect Spotify</button>
         )}
       </div>
     </div>
