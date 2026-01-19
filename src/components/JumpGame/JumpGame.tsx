@@ -817,8 +817,6 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
           <IconChevronRight size={"32"}/>
         </button>
       </div>
-      <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
-
       
       {/*Preloading image ;)*/}
       <img id="sprite" className={sprite} ref={spriteRef} src={spriteImage}/>
