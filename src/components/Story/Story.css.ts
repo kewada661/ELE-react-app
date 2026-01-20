@@ -41,7 +41,6 @@ export const continueContainer = style({
   opacity: 0,
   transition: 'visibility 0.5s linear, opacity 0.5s linear',
   cursor: 'pointer',
-
 })
 
 export const continueText = style([

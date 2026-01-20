@@ -37,7 +37,5 @@ export const option = style([
     fontFamily: `${fluoxetine}, monospace`,
     letterSpacing: '.25rem',
     fontSize: vars.fontSize.xlarge,
-    transition: 'transform 0.1s linear',
-    cursor: 'pointer',
   }
 ])

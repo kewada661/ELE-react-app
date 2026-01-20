@@ -84,6 +84,8 @@ export const hover = style({
 ':hover': {
     transform: 'scale(1.05)',
   },
+  transition: 'transform 0.1s linear',
+  cursor: 'pointer',
 })
 
 export const active = style({

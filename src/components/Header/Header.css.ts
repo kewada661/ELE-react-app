@@ -21,8 +21,6 @@ export const headerButton = style([
     color: 'transparent',
     background: 'none',
     border: 'none',
-    transition: 'transform 0.1s linear',
-    cursor: 'pointer',
   }
 ])
 

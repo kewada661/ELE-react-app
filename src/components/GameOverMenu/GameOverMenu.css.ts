@@ -14,7 +14,6 @@ export const headerLogo = style([
     fontFamily: fluoxetine,
     fontSize: vars.fontSize.large,
     padding: vars.spacing.medium,
-    transition: 'transform 0.1s linear',
   }
 ])
 
