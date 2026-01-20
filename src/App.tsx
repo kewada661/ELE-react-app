@@ -398,7 +398,7 @@ export const App = () => {
   return (
     <>
       <main id='main' className={mainContainer}>
-        <video className={background} poster={backgroundPosterURL} autoPlay muted loop>
+        <video className={background} poster={backgroundPosterURL} autoPlay playsInline muted loop controls={false}>
           <source src={backgroundURL} type='video/mp4' />
         </video>
         <Header 

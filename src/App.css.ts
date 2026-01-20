@@ -12,6 +12,13 @@ export const background = style({
   top: 0,
   alignSelf: 'center',
   zIndex: -1,
+  selectors: {
+    ['&::-webkit-media-controls']: {
+      display: 'none !important',
+      WebkitAppearance: 'none',
+      opacity: 0,
+    }
+  }
 })
 
 export const mainContainer = style({
