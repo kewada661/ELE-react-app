@@ -10,8 +10,9 @@ import { Leaderboard } from '@/components/Leaderboard';
 import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/house-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
-import backgroundURL from '@/assets/bg-vert.mp4';
-import backgroundPosterURL from '@/assets/9x16-edgehill 1.png';
+// import backgroundURL from '@/assets/bg-vert.mp4';
+import backgroundGifURL from '@/assets/bg-vert-cloud.gif';
+// import backgroundPosterURL from '@/assets/9x16-edgehill 1.png';
 import audioURl from '@/assets/file_example_MP3_700KB.mp3';
 
 export const App = () => {
@@ -398,9 +399,10 @@ export const App = () => {
   return (
     <>
       <main id='main' className={mainContainer}>
-        <video className={background} poster={backgroundPosterURL} autoPlay playsInline muted loop controls={false}>
+        {/* <video className={background} poster={backgroundPosterURL} autoPlay playsInline muted loop controls={false}>
           <source src={backgroundURL} type='video/mp4' />
-        </video>
+        </video> */}
+        <img className={background} src={backgroundGifURL} />
         <Header 
           menuOpen={menuOpen} 
           volumeCallback={toggleMuted} 
