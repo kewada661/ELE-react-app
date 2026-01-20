@@ -76,7 +76,5 @@ export const footerLogo = style([
     width: '40vw',
     maxWidth: '30vh',
     marginBottom: vars.margins.xxsmall,
-    transition: 'transform 0.1s linear',
-    cursor: 'pointer',
   }
 ])

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { container, leaderboardContainer, leaderboardHeader, leaderboard, rankName, score, thStyle, tableContainer } from "@/components/Leaderboard/Leaderboard.css";
+import { container, leaderboardContainer, leaderboardHeader, leaderboard, name, score, hName, hScore, tbodyStyle, trStyle, xButton } from "@/components/Leaderboard/Leaderboard.css";
 import { IconX } from "@/ui/icons/IconX";
 
 interface LeaderboardProps {
@@ -89,28 +89,26 @@ export const Leaderboard = ({ leaderboardClose }: LeaderboardProps) => {
         ) : ( 
           <>  
             <div className={leaderboardHeader}>
-              <button onClick={leaderboardClose}><IconX /></button>
+              <button className={xButton} onClick={leaderboardClose}><IconX /></button>
             </div>
-            <div className={tableContainer}>
               <table className={leaderboard}>
-                <thead className={thStyle}>
+                <thead className={tbodyStyle}>
                   <tr>
-                    <th>RANK</th>
-                    <th>NAME</th>
-                    <th>SCORE</th>
+                    <th className={hScore}>RANK</th>
+                    <th className={hName}>NAME</th>
+                    <th className={hScore}>SCORE</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className={tbodyStyle}>
                   {data.map((item, i) => (
-                  <tr key={i}>
+                  <tr className={trStyle} key={i}>
                     <td className={score}>{i + 1}.</td>
-                    <td className={rankName}>{item.name}{(sessionStorage.getItem("email") === item.email)&&(' (YOU)')}</td>
+                    <td className={name}>{item.name}{(sessionStorage.getItem("email") === item.email)&&(' (YOU)')}</td>
                     <td className={score}>{item.score}</td> 
                   </tr>
                 ))}
                 </tbody>
               </table>
-            </div>
           </>
         )
       }    

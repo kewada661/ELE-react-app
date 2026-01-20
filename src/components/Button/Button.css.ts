@@ -21,8 +21,6 @@ export const base = style([
     // ':active': {
     //   transform: 'scale(0.95)',
     // },
-    transition: 'transform 0.1s linear',
-    cursor: 'pointer',
   } 
 ]);
 
@@ -74,7 +72,6 @@ export const circularButton = style([
     padding: `${vars.spacing.small} ${vars.spacing.small}`,
     borderRadius: '50%',
     background: vars.color.gold,
-    transition: 'transform 0.1s linear',
     '> svg': {
       '> path': {
         strokeWidth: "1",
