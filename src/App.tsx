@@ -10,10 +10,8 @@ import { Leaderboard } from '@/components/Leaderboard';
 import { GameOverMenu } from '@/components/GameOverMenu';
 import houseImage from '@/assets/house-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
-// import backgroundURL from '@/assets/bg-vert.mp4';
 import backgroundGifURL from '@/assets/bg-vert-cloud.gif';
-// import backgroundPosterURL from '@/assets/9x16-edgehill 1.png';
-import audioURl from '@/assets/file_example_MP3_700KB.mp3';
+import Hls from 'hls.js';
 
 export const App = () => {
   const [gameInProgress, setGameInProgress] = useState(true);
@@ -156,6 +154,16 @@ export const App = () => {
     document.body.appendChild(script);
   }
 
+  const initializeSCPlayback = () => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest"
+    document.body.appendChild(script);
+    const hls = new Hls();
+    hls.loadSource('api/soundcloud/stream');
+    hls.attachMedia(audioRef.current!);
+    setLoadingPlayer(false);
+  }
+
   const startWebPlayback = async () => {
     console.log('starting web playback');
     const device_id = sessionStorage.getItem("device_id");
@@ -263,8 +271,8 @@ export const App = () => {
 
 
   const loginCallback = () => {
-    setLoadingPlayer(false);
     setLoggedIn(true);
+    initializeSCPlayback();
   }
 
   const toggleLeaderboard = () => {
@@ -286,6 +294,7 @@ export const App = () => {
     if (audioRef.current) audioRef.current.pause();
     sessionStorage.clear();
     setGameInProgress(true);
+    setLoadingPlayer(true);
     setStory(true);
     setMenuOpen(false);
     setLoggedIn(false);
@@ -312,10 +321,6 @@ export const App = () => {
     console.log("gameInProgress:", gameInProgress);
   }, [score, gameInProgress])
 
-  const newGame = () => {
-    setGameInProgress(true);
-  }
-
   useEffect(() => {
     // const email = sessionStorage.getItem('email');
     // const product = sessionStorage.getItem('product');
@@ -330,7 +335,7 @@ export const App = () => {
           initializeWebPlayback();
         } else {
           console.log("user has not Spotify Premium");
-          setLoadingPlayer(false);
+          initializeSCPlayback();
         }
       });
     }
@@ -409,7 +414,8 @@ export const App = () => {
           menuCallback={() => setMenuOpen(prev => !prev)} 
           leaderboardOpen={leaderboardOpen}
         />
-        <audio ref={audioRef} src={audioURl} loop/>
+        <audio id="audio" ref={audioRef} loop/>
+        {/* <iframe id="sc-widget" src="" */}
         {(loggedIn) ? (
           (story) ? (
             <Story
