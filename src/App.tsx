@@ -23,6 +23,7 @@ export const App = () => {
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [story, setStory] = useState(true);
   const [loadingPlayer, setLoadingPlayer] = useState(true);
+  const [spriteIndex, setSpriteIndex] = useState(0);
   const playerRef = useRef(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
@@ -302,8 +303,9 @@ export const App = () => {
     // initializeEmbedPlayback();
   }
 
-  const handleStart = () => {
+  const handleStart = (index: number) => {
     setStory(false);
+    setSpriteIndex(index);
     if (playerRef.current) {
       playerRef.current.resume();
       console.log('resuming web pb');
@@ -335,7 +337,8 @@ export const App = () => {
           initializeWebPlayback();
         } else {
           console.log("user has not Spotify Premium");
-          initializeSCPlayback();
+          // initializeSCPlayback();
+          setLoadingPlayer(false);
         }
       });
     }
@@ -427,6 +430,7 @@ export const App = () => {
                 <JumpGame 
                   gameOverCallback={gameOver}
                   menuCallback={() => setMenuOpen(true)}
+                  spriteIndex={spriteIndex}
                 />
             ) : (
               <GameOverMenu

@@ -12,8 +12,9 @@ import footerLogoURL from '@/assets/GamingLabelFooter.png';
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
   menuCallback: () => void;
+  spriteIndex: number;
 }
-export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
+export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGameProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const leftRef = useRef<HTMLButtonElement>(null);
   const rightRef = useRef<HTMLButtonElement>(null);
@@ -140,7 +141,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
       this.y = height - 1;
 
       this.animationTimer = 0;
-      this.spriteIndex = 0;
+      this.spriteIndex = spriteIndex;
 
       //Function to draw it
       this.draw = function() {
@@ -685,7 +686,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback }: JumpGameProps) => {
 
       this.init = () => {
         dir = "left;"
-        player.spriteIndex = Math.floor(Math.random() * 3);
+        // player.spriteIndex = Math.floor(Math.random() * 3);
         requestAnimationFrame(this.animLoop);
       }
 
