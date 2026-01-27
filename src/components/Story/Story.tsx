@@ -2,7 +2,9 @@ import { storyContainer, storyText, chevron, continueContainer, continueText, ch
 import { IconChevronLeft } from "@/ui/icons/IconChevronLeft";
 import { IconChevronRight } from "@/ui/icons/IconChevronRight";
 import { useRef, useEffect,useState } from 'react'
-import sprites from '@/assets/sprites/ELE character sprites.png';
+import chrisSprite from '@/assets/sprites/chris.png';
+import jakeSprite from '@/assets/sprites/jake.png';
+import aidanSprite from '@/assets/sprites/aidan.png';
 import { IconChevronDown } from "@/ui/icons/IconChevronDown";
 import { doc } from "prettier";
 
@@ -49,15 +51,15 @@ export const Story = ({ loadingPlayer, onContinue }: StoryProps) => {
       <div id='chevron' className={chevron.left}><IconChevronDown size="32" /></div>
       <div className={characterSelect}>
         <div className={buttonDiv}>
-          <button className={selectButton} onClick={handleChris}><img className={sprite.chris} src={sprites} /></button>
+          <button className={selectButton} onClick={handleChris}><img className={sprite.chris} src={chrisSprite} /></button>
           Chris
         </div>
         <div className={buttonDiv}>
-          <button className={selectButton} onClick={handleJake}><img className={sprite.jake} src={sprites} /></button>
+          <button className={selectButton} onClick={handleJake}><img className={sprite.jake} src={jakeSprite} /></button>
           Jake
         </div>
         <div className={buttonDiv}>
-          <button className={selectButton} onClick={handleAidan}><img className={sprite.aidan} src={sprites} /></button>
+          <button className={selectButton} onClick={handleAidan}><img className={sprite.aidan} src={aidanSprite} /></button>
           Aidan
         </div>
       </div>

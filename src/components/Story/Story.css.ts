@@ -97,21 +97,18 @@ export const sprite = styleVariants({
     spriteScale,
     {
       width: 60,
-      objectViewBox: 'xywh(10px 1px 30px 41px)',
     }
   ],
   jake: [
     spriteScale,
     {
       width: 58,
-      objectViewBox: 'xywh(66px 1px 29px 41px)',
     }
   ],
   chris: [
     spriteScale,
     {
       width: 60,
-      objectViewBox: 'xywh(120px 1px 30px 41px)',
     }
   ]
 })
