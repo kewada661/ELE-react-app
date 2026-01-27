@@ -1,6 +1,6 @@
-import { hover, active, vars } from '@/styles/theme.css'
-import { base } from '@/components/Button/Button.css'
-import { style, keyframes } from '@vanilla-extract/css'
+import { hoverMore, activeMore, vars } from '@/styles/theme.css'
+import { button } from '@/components/Button/Button.css'
+import { style, keyframes, styleVariants } from '@vanilla-extract/css'
 
 export const storyContainer = style({
   width: '100vw',
@@ -36,16 +36,64 @@ export const pulse  = keyframes({
 })
 
 export const continueContainer = style({
-  marginTop: vars.margins.xxlarge,
+  marginTop: vars.margins.large,
   visibility: 'hidden',
   opacity: 0,
   transition: 'visibility 0.5s linear, opacity 0.5s linear',
-  cursor: 'pointer',
 })
 
+export const characterSelect = style({
+  width: '90vw',
+  maxWidth: '30svh',
+  marginTop: vars.margins.large,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+})
+
+export const characters = style({
+  width: 300,
+  maxWidth: '40svh',
+  display: 'flex',
+  justifyContent: 'space-between',
+})
+
+const spriteScale = style({
+  imageRendering: 'pixelated',
+})
+export const sprite = styleVariants({
+  left: [
+    spriteScale,
+    {
+      width: 60,
+      objectViewBox: 'xywh(10px 1px 30px 41px)',
+    }
+  ],
+  center: [
+    spriteScale,
+    {
+      width: 58,
+      objectViewBox: 'xywh(66px 1px 29px 41px)',
+    }
+  ],
+  right: [
+    spriteScale,
+    {
+      width: 60,
+      objectViewBox: 'xywh(120px 1px 30px 41px)',
+    }
+  ]
+})
+
+export const selectButton = style([
+  hoverMore,
+  activeMore,
+])
+
 export const continueText = style([
-  base,
+  button.gold,
   {
+    textAlign: 'center',
     animation: `${pulse} 1.5s linear infinite`,
   }
 ])

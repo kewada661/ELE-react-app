@@ -1,4 +1,4 @@
-import { hover, active, vars } from '@/styles/theme.css';
+import { hoverMore, activeMore, vars } from '@/styles/theme.css';
 import { style } from '@vanilla-extract/css';
 
 export const header = style({
@@ -13,8 +13,8 @@ export const header = style({
 })
 
 export const headerButton = style([
-  hover,
-  active,
+  hoverMore,
+  activeMore,
   {
     display: 'flex',
     alignItems: 'center',

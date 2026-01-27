@@ -5,14 +5,16 @@ export const container = style({
   width: '100vw',
   maxWidth: '100svh',
   height: '100svh',
+  display: 'flex',
+  justifyContent: 'center',
   padding: vars.spacing.xxlarge,
   position: 'fixed',
   top: 0,
   zIndex: 2,
 })
 export const leaderboardContainer = style({
-  // width: '100%',
   height: '90%',
+  width: 580,
   zIndex: 2,
   marginTop: vars.spacing.large,
   background: vars.color.green,

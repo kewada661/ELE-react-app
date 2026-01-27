@@ -1,13 +1,17 @@
-import { storyContainer, storyText, continueContainer, continueText } from "@/components/Story/Story.css";
-import { useRef, useEffect } from 'react'
+import { storyContainer, storyText, continueContainer, continueText, characterSelect, selectButton, sprite } from "@/components/Story/Story.css";
+import { IconChevronLeft } from "@/ui/icons/IconChevronLeft";
+import { IconChevronRight } from "@/ui/icons/IconChevronRight";
+import { useRef, useEffect,useState } from 'react'
+import sprites from '@/assets/sprites/ELE character sprites.png';
 
 interface StoryProps {
   loadingPlayer: boolean;
-  onContinue: () => void;
+  onContinue: (index: number) => void;
 }
 
 export const Story = ({ loadingPlayer, onContinue }: StoryProps) => {
   const continueRef = useRef<HTMLParagraphElement>(null);
+  const [selection, setSelection] = useState(0);
 
   useEffect(() => {
     if (continueRef.current) {
@@ -19,11 +23,38 @@ export const Story = ({ loadingPlayer, onContinue }: StoryProps) => {
 
   },[loadingPlayer])
 
+  const classNames = [
+    sprite.left,
+    sprite.center,
+    sprite.right
+  ];
+
+  const handleLeft = () => {
+    if (selection <= 0) {
+      setSelection(2);
+    } else {
+      setSelection(prev => prev - 1);
+    }
+  }
+
+  const handleRight = () => {
+    if (selection >= 2) {
+      setSelection(0);
+    } else {
+      setSelection(prev => prev + 1);
+    }
+  }
+
   return (
     <div className={storyContainer}>
       <p className={storyText}>Chris, Jake, and Aidan are trying to reach their house in the sky. Help bring them home!</p>
-      <div className={continueContainer} ref={continueRef}>
-        <p className={continueText} onClick={onContinue}>Continue</p>
+      <div className={characterSelect}>
+        <button className={selectButton} onClick={handleLeft}><IconChevronLeft size="32"/></button>
+        <img className={classNames[selection]} src={sprites} />
+        <button className={selectButton} onClick={handleRight}><IconChevronRight size="32"/></button>
+      </div>
+      <div className={continueContainer} ref={continueRef}>        
+        <p className={continueText} onClick={() => onContinue(selection)}>Continue</p>
       </div>
     </div>
   )
