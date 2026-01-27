@@ -19,8 +19,40 @@ export const storyContainer = style({
 
 export const storyText = style({
   marginTop: `calc(${vars.margins.xlarge} * 1.5)`,
+  marginBottom: vars.margins.large,
   textAlign: 'center',
   maxWidth: '80vw',
+})
+
+const base = style({
+  display: 'flex',
+  alignItems: 'center',
+  width: '90vw',
+  maxWidth: '30svh',
+  paddingLeft: 14,
+  paddingRight: 14,
+})
+export const chevron = styleVariants({
+  left: [
+    {
+      justifyContent: 'left',
+    },
+    base
+  ],
+
+  center: [
+    {
+      justifyContent: 'center',
+    },
+    base
+  ],
+
+  right: [
+    {
+      justifyContent: 'right',
+    },
+    base
+  ],
 })
 
 export const pulse  = keyframes({
@@ -45,7 +77,6 @@ export const continueContainer = style({
 export const characterSelect = style({
   width: '90vw',
   maxWidth: '30svh',
-  marginTop: vars.margins.large,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -62,27 +93,33 @@ const spriteScale = style({
   imageRendering: 'pixelated',
 })
 export const sprite = styleVariants({
-  left: [
+  aidan: [
     spriteScale,
     {
       width: 60,
       objectViewBox: 'xywh(10px 1px 30px 41px)',
     }
   ],
-  center: [
+  jake: [
     spriteScale,
     {
       width: 58,
       objectViewBox: 'xywh(66px 1px 29px 41px)',
     }
   ],
-  right: [
+  chris: [
     spriteScale,
     {
       width: 60,
       objectViewBox: 'xywh(120px 1px 30px 41px)',
     }
   ]
+})
+
+export const buttonDiv = style({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
 })
 
 export const selectButton = style([
