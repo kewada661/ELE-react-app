@@ -1,5 +1,5 @@
-import { hover, active, vars } from '@/styles/theme.css'
-import { base, button } from '@/components/Button/Button.css'
+import { hoverMore, activeMore, vars } from '@/styles/theme.css'
+import { button } from '@/components/Button/Button.css'
 import { style, keyframes, styleVariants } from '@vanilla-extract/css'
 
 export const storyContainer = style({
@@ -84,6 +84,11 @@ export const sprite = styleVariants({
     }
   ]
 })
+
+export const selectButton = style([
+  hoverMore,
+  activeMore,
+])
 
 export const continueText = style([
   button.gold,
