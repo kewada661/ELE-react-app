@@ -11,17 +11,19 @@ export const loginFallback = style({
   height: '40svh',
   alignSelf: 'center',
   fontSize: vars.fontSize.small,
-  '> input': {
-    width: '100%',
-    maxWidth: '50vh',
-    padding: vars.spacing.xsmall,
-    borderRadius: vars.spacing.xxsmall,
-    border: 'none',
-    margin: `${vars.spacing.xxsmall} 0`,
-    display: 'flex',
-    justifySelf: 'center',
-  },
   zIndex: 1,
+})
+
+export const input = style({
+  width: '100%',
+  maxWidth: '50vh',
+  padding: vars.spacing.xsmall,
+  borderRadius: vars.spacing.xxsmall,
+  border: 'none',
+  margin: `${vars.spacing.xxsmall} 0`,
+  display: 'flex',
+  justifySelf: 'center',
+  fontSize: 20,
 })
 
 export const submitButton = style([
