@@ -14,6 +14,11 @@ export const loginFallback = style({
   zIndex: 1,
 })
 
+export const errorMessage = style({
+  marginTop: vars.spacing.xsmall,
+  opacity: 0,
+})
+
 export const input = style({
   width: '100%',
   maxWidth: '50vh',

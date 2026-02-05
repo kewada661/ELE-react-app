@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useState } from "react"
-import { input, loginFallback, submitButton } from "@/components/LoginFallback/LoginFallback.css";
+import { input, loginFallback, submitButton, errorMessage } from "@/components/LoginFallback/LoginFallback.css";
 
 interface LoginFallbackProps {
   loginCallback: () => void;
@@ -20,33 +20,48 @@ export const LoginFallback = ({ loginCallback }: LoginFallbackProps) => {
       })
     });
     if (!response.ok) {console.log(response)};
+    if (response.status === 401) {
+      throw new Error("Invalid Username");
+    }
     return response.json();
   }
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
+    try {
+      const result = await upsertUser(email, username);
+      sessionStorage.setItem("email", email);
+      loginCallback();
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message === "Invalid Username") {
+        console.log("Invalid Username");
+        document.getElementById("errorMessage")!.style.opacity = '1';
+      }
+    }
     const result = await upsertUser(email, username);
-    console.log(result.message);
     sessionStorage.setItem("email", email);
     loginCallback();
   }, [email, username])
   
   return (
-    <form onSubmit={handleSubmit} className={loginFallback}>
-      <input className={input}
-        required
-        type="email" 
-        value={email}
-        onChange={(e)=> setEmail(e.target.value)}
-        placeholder='Enter Email...'
-      ></input>
-      <input className={input}
-        required
-        value={username}
-        onChange={(e)=> setUsername(e.target.value)}
-        placeholder='Enter Username...'
-      ></input>
-      <button type='submit' className={submitButton}>Submit</button>
-    </form>
+    <>
+      <p className={errorMessage} id="errorMessage">That username is not available... please try another</p>
+      <form onSubmit={handleSubmit} className={loginFallback}>
+        <input className={input}
+          required
+          type="email" 
+          value={email}
+          onChange={(e)=> setEmail(e.target.value)}
+          placeholder='Enter Email...'
+        ></input>
+        <input className={input}
+          required
+          value={username}
+          onChange={(e)=> setUsername(e.target.value)}
+          placeholder='Enter Username...'
+        ></input>
+        <button type='submit' className={submitButton}>Submit</button>
+      </form>
+    </>
   )
 }
