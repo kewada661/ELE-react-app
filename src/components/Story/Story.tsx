@@ -48,6 +48,7 @@ export const Story = ({ loadingPlayer, onContinue }: StoryProps) => {
   return (
     <div className={storyContainer}>
       <p className={storyText}>Chris, Jake, and Aidan are trying to reach their house in the sky. Help bring them home!</p>
+      <p>Choose your character!</p>
       <div id='chevron' className={chevron.left}><IconChevronDown size="32" /></div>
       <div className={characterSelect}>
         <div className={buttonDiv}>
