@@ -27,6 +27,9 @@ export const App = () => {
   const playerRef = useRef(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
+  const hls = new Hls();
+
+  var SCTrackNumber = 0;
   // spotify auth helper functions
   const generateRandomString = (length: number) => {
     var text = '';
@@ -133,21 +136,6 @@ export const App = () => {
     }
   }
 
-  const transferPlayback = async (device_id: string) => {
-    const response = await fetch("https://api.spotify.com/v1/me/player", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${access_token}`,
-      },
-      body: JSON.stringify({
-        device_ids: [device_id],
-        play: true,
-      })
-    });
-    return response.json();
-  }
-
   const initializeWebPlayback = () => {
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
@@ -156,13 +144,19 @@ export const App = () => {
   }
 
   const initializeSCPlayback = () => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest"
-    document.body.appendChild(script);
-    const hls = new Hls();
-    hls.loadSource('api/soundcloud/stream');
+    hls.loadSource(`api/soundcloud/stream?track=${SCTrackNumber}`);
     hls.attachMedia(audioRef.current!);
     setLoadingPlayer(false);
+  }
+
+  const advanceSCPlayback = () => {
+    console.log("track ended");
+    incrementUserStreams();
+    hls.detachMedia();
+    SCTrackNumber += 1;
+    hls.loadSource(`api/soundcloud/stream?track=${SCTrackNumber}`);
+    hls.attachMedia(audioRef.current!);
+    audioRef.current?.play();
   }
 
   const startWebPlayback = async () => {
@@ -293,6 +287,7 @@ export const App = () => {
   const logout = async () => {
     await stopWebPlayback();
     if (audioRef.current) audioRef.current.pause();
+    SCTrackNumber = 0;
     sessionStorage.clear();
     setGameInProgress(true);
     setLoadingPlayer(true);
@@ -404,6 +399,14 @@ export const App = () => {
     }
   }, [])
 
+  useEffect(() => {
+      audioRef.current?.addEventListener("ended", advanceSCPlayback);
+
+    return () => {
+      audioRef.current?.removeEventListener("ended", advanceSCPlayback);
+    }
+  }, [])
+
   return (
     <>
       <main id='main' className={mainContainer}>
@@ -417,7 +420,7 @@ export const App = () => {
           menuCallback={() => setMenuOpen(prev => !prev)} 
           leaderboardOpen={leaderboardOpen}
         />
-        <audio id="audio" ref={audioRef} loop/>
+        <audio id="audio" ref={audioRef} />
         {/* <iframe id="sc-widget" src="" */}
         {(loggedIn) ? (
           (story) ? (

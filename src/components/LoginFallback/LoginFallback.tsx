@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useState } from "react"
-import { loginFallback, submitButton } from "@/components/LoginFallback/LoginFallback.css";
+import { input, loginFallback, submitButton } from "@/components/LoginFallback/LoginFallback.css";
 
 interface LoginFallbackProps {
   loginCallback: () => void;
@@ -33,13 +33,15 @@ export const LoginFallback = ({ loginCallback }: LoginFallbackProps) => {
   
   return (
     <form onSubmit={handleSubmit} className={loginFallback}>
-      <input required
+      <input className={input}
+        required
         type="email" 
         value={email}
         onChange={(e)=> setEmail(e.target.value)}
         placeholder='Enter Email...'
       ></input>
-      <input required
+      <input className={input}
+        required
         value={username}
         onChange={(e)=> setUsername(e.target.value)}
         placeholder='Enter Username...'

@@ -14,6 +14,5 @@ export const login = style({
 })
 
 export const spotifyLogo = style({
-  maxWidth: 125,
-  padding: "0 0 0 .5em"
+  maxWidth: '45%',
 })
