@@ -1,4 +1,4 @@
-import { style, styleVariants, fontFace } from "@vanilla-extract/css"
+import { style, styleVariants, fontFace, keyframes } from "@vanilla-extract/css"
 import { hover, active, vars } from "@/styles/theme.css"
 import { base, circularButton as circularButtonBase } from "@/components/Button/Button.css"
 import fluoxetineURL from '@/assets/font/fluoxetine/Fluox___.ttf'
@@ -161,6 +161,7 @@ export const shareButtonContainer = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  position: 'relative',
 })
 
 export const circularButton = style([
@@ -169,3 +170,28 @@ export const circularButton = style([
     background: vars.color.green,
   }
 ])
+
+export const pulse  = keyframes({
+  '0%': {
+    opacity: 0
+  },
+  '25%': {
+    opacity: 1
+  },
+  '75%': {
+    opacity: 1
+  },
+  '100%': {
+    opacity: 0
+  }
+})
+
+export const copiedMessage = style({
+  position: 'absolute',
+  top: -30,
+  opacity: 0,
+})
+
+export const copiedAnimation = style({
+  animation: `${pulse} .75s linear`,
+})
