@@ -3,6 +3,7 @@ import { Header } from '@/components/Header';
 import { Story } from '@/components/Story';
 import { JumpGame } from '@/components/JumpGame';
 import { background, mainContainer, houseContainer, house, logo, subtitle, footerLogo} from '@/App.css';
+import { Lock } from '@/components/Lock';
 import { Login } from '@/components/Login';
 import { LoginFallback } from '@/components/LoginFallback'
 import { Menu } from '@/components/Menu';
@@ -17,6 +18,7 @@ export const App = () => {
   const [gameInProgress, setGameInProgress] = useState(true);
   const [score, setScore] = useState(0);
   const [error, setError] = useState<Error>();
+  const [locked, setLocked] = useState(true);
   const [altLogin, setAltLogin] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -447,6 +449,12 @@ export const App = () => {
               />
             )
           )
+        ) : ((locked) ? (
+          <>
+            <Lock
+              unlock={() => setLocked(false)} 
+            />
+          </>
         ) : (
           <>
             <p className={logo}>edgehill</p>
@@ -466,7 +474,7 @@ export const App = () => {
             )}
             <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
           </>
-        )}
+        ))}
         {(leaderboardOpen) ? (<Leaderboard leaderboardClose={() => setLeaderboardOpen(false)}/>) : (<></>)}
         <Menu 
           isOpen={menuOpen} 

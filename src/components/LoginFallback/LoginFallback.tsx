@@ -32,8 +32,8 @@ export const LoginFallback = ({ loginCallback }: LoginFallbackProps) => {
       const result = await upsertUser(email, username);
       sessionStorage.setItem("email", email);
       loginCallback();
-    } catch (e: unknown) {
-      if (e instanceof Error && e.message === "Invalid Username") {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === "Invalid Username") {
         console.log("Invalid Username");
         document.getElementById("errorMessage")!.style.opacity = '1';
       }
