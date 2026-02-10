@@ -12,6 +12,8 @@ import {
   circularButton,
   copiedMessage,
   copiedAnimation,
+  shareImage,
+  canvas,
  } from '@/components/GameOverMenu/GameOverMenu.css';
 import { IconUpload } from '@/ui/icons/IconUpload';
 import { IconRefreshCw } from '@/ui/icons/IconRefreshCw';
@@ -21,9 +23,10 @@ import { IconLink } from '@/ui/icons/IconLink';
 import { IconTwitter } from '@/ui/icons/IconTwitter';
 import { footerLogo } from '@/App.css';
 import { useEffect, useRef, useState } from 'react';
+import bgImageURL from '@/assets/9x16-edgehill 1.png'
 import houseImage from '@/assets/house-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
-import shareImageURL from '@/assets/shareImage.jpeg';
+import shareImageURL from '@/assets/shareImage.jpg';
 
 interface GameOverMenuProps {
   score: number;
@@ -45,7 +48,13 @@ export const GameOverMenu = ({
   playlistCallback 
 }: GameOverMenuProps) => {
   const [shareButtons, setShareButtons] = useState(false);
+  const [instagramURL, setInstagramURL] = useState(shareImageURL);
   const copiedMessageRef = useRef<HTMLParagraphElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const houseRef = useRef<HTMLImageElement>(null);
+  const aRef = useRef<HTMLAnchorElement>(null);
+  let ctx: CanvasRenderingContext2D | null;
 
   const submitScore = async () => {
     await submitScoreCallback(score);
@@ -67,7 +76,9 @@ export const GameOverMenu = ({
   }
 
   const handleInstagram = () => {
+    if (ctx) {
 
+    }
   }
 
   const handleTwitter = () => {
@@ -80,10 +91,30 @@ export const GameOverMenu = ({
 
   useEffect(() => {
     copiedMessageRef.current?.addEventListener("animationend", handleAnimationEnd);
+    if (
+      canvasRef.current &&
+      imageRef.current &&
+      houseRef.current
+    ) {
+      ctx = canvasRef.current.getContext('2d');
+      ctx!.drawImage(imageRef.current, 0, 0, 900, 1600, 0, 0, 900, 1600);
+      ctx!.textAlign = 'center';
+      ctx!.textBaseline = 'middle';
+      ctx!.fillStyle = "#ffffff";
+      ctx!.font = "200px \"Jersey 10\"";
+      ctx!.fillText(score.toString(), 450, 798);
+      canvasRef.current.toBlob((blob) => {
+        if (blob === null) return;
+        setInstagramURL(window.URL.createObjectURL(blob));
+      }, 
+      "image/jpeg",
+      1
+    )}
     return () => {
     copiedMessageRef.current?.removeEventListener("animationend", handleAnimationEnd);
+    window.URL.revokeObjectURL(instagramURL);
     }
-  })
+  }, [imageRef.current])
 
   return (
     <div id="gameOverMenu" className={menu.main}>
@@ -92,7 +123,7 @@ export const GameOverMenu = ({
         <h1>YOUR SCORE</h1>
         <div className={scoreContainer}>
           <div className={houseFilter} />
-          <img className={house} src={houseImage} alt="" />
+          <img className={house} ref={houseRef} src={houseImage} alt="" />
           <h3 id="go_score">{score}</h3>
         </div>
       </div>
@@ -105,7 +136,7 @@ export const GameOverMenu = ({
             <IconRefreshCw />  Play Again
           </button>
           <div className={shareLeaderboard}>
-            <button className={button.share} onClick={() => setShareButtons(true)} >
+            <button className={button.share} onClick={() => setShareButtons(true)}>
               Share Score
             </button>
             <button className={button.share} onClick={leaderboardCallback}id="leaderboard">
@@ -132,7 +163,7 @@ export const GameOverMenu = ({
               <p>Facebook</p>
             </div>
             <div className={shareButtonContainer} onClick={handleInstagram}>
-              <a id="instagram" className={circularButton} href={shareImageURL} download="edgehill-listening-experience.jpeg">
+              <a id="instagram" className={circularButton} ref={aRef} href={instagramURL} download="edgehill-listening-experience.jpeg">
                 <IconInstagram size={"32"}/>
               </a>
               <p>Instagram</p>
@@ -148,6 +179,8 @@ export const GameOverMenu = ({
         </div>
       )}
       <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
+      <img className={shareImage} ref={imageRef} src={shareImageURL} />
+      <canvas className={canvas} ref={canvasRef} width="900" height="1600"/>
     </div>
   )
 }

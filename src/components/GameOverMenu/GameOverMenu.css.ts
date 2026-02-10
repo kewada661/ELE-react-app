@@ -195,3 +195,12 @@ export const copiedMessage = style({
 export const copiedAnimation = style({
   animation: `${pulse} .75s linear`,
 })
+
+export const shareImage = style({
+  display: 'none',
+  imageRendering: 'pixelated',
+})
+
+export const canvas = style({
+  display: 'none',
+})
