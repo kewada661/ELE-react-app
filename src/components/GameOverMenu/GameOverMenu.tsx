@@ -95,8 +95,9 @@ export const GameOverMenu = ({
       canvasRef.current &&
       imageRef.current
     ) {
+      const image = imageRef.current;
       ctx = canvasRef.current.getContext('2d');
-      ctx!.drawImage(imageRef.current, 0, 0, 900, 1600, 0, 0, 900, 1600);
+      ctx!.drawImage(image, 0, 0, 900, 1600, 0, 0, 900, 1600);
       ctx!.textAlign = 'center';
       ctx!.textBaseline = 'middle';
       ctx!.fillStyle = "#ffffff";
