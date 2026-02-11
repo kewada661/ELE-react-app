@@ -93,8 +93,7 @@ export const GameOverMenu = ({
     copiedMessageRef.current?.addEventListener("animationend", handleAnimationEnd);
     if (
       canvasRef.current &&
-      imageRef.current &&
-      houseRef.current
+      imageRef.current
     ) {
       ctx = canvasRef.current.getContext('2d');
       ctx!.drawImage(imageRef.current, 0, 0, 900, 1600, 0, 0, 900, 1600);
