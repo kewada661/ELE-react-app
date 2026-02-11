@@ -54,7 +54,8 @@ export const GameOverMenu = ({
   const imageRef = useRef<HTMLImageElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
   const aRef = useRef<HTMLAnchorElement>(null);
-  let ctx: CanvasRenderingContext2D | null;
+  let ctx: any;
+  var image: HTMLImageElement;
 
   const submitScore = async () => {
     await submitScoreCallback(score);
@@ -88,33 +89,35 @@ export const GameOverMenu = ({
   const handleAnimationEnd = () => {
     copiedMessageRef.current?.classList.remove(copiedAnimation);
   }
+  
+  const draw = () => {
+      window.URL.revokeObjectURL(instagramURL);
+      ctx = canvasRef.current!.getContext("2d");
+      image = imageRef.current!;
+      ctx.drawImage(image, 0, 0, 900, 1600, 0, 0, 900, 1600);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "200px \"Jersey 10\"";
+      ctx.fillText(score.toString(), 450, 798);
+      canvasRef.current?.toBlob(
+        (blob) => {
+          if (blob === null) return;
+          setInstagramURL(window.URL.createObjectURL(blob));
+        }, 
+        "image/jpeg",
+        1
+      )
+      console.log(canvasRef.current);
+  }
 
   useEffect(() => {
     copiedMessageRef.current?.addEventListener("animationend", handleAnimationEnd);
-    if (
-      canvasRef.current &&
-      imageRef.current
-    ) {
-      const image = imageRef.current;
-      ctx = canvasRef.current.getContext('2d');
-      ctx!.drawImage(image, 0, 0, 900, 1600, 0, 0, 900, 1600);
-      ctx!.textAlign = 'center';
-      ctx!.textBaseline = 'middle';
-      ctx!.fillStyle = "#ffffff";
-      ctx!.font = "200px \"Jersey 10\"";
-      ctx!.fillText(score.toString(), 450, 798);
-      canvasRef.current.toBlob((blob) => {
-        if (blob === null) return;
-        setInstagramURL(window.URL.createObjectURL(blob));
-      }, 
-      "image/jpeg",
-      1
-    )}
     return () => {
     copiedMessageRef.current?.removeEventListener("animationend", handleAnimationEnd);
     window.URL.revokeObjectURL(instagramURL);
     }
-  }, [imageRef.current])
+  }, [])
 
   return (
     <div id="gameOverMenu" className={menu.main}>
@@ -136,7 +139,12 @@ export const GameOverMenu = ({
             <IconRefreshCw />  Play Again
           </button>
           <div className={shareLeaderboard}>
-            <button className={button.share} onClick={() => setShareButtons(true)}>
+            <button className={button.share} onClick={
+              () => {
+                draw();
+                setShareButtons(true);
+              }
+            }>
               Share Score
             </button>
             <button className={button.share} onClick={leaderboardCallback}id="leaderboard">
@@ -162,7 +170,7 @@ export const GameOverMenu = ({
               </button>
               <p>Facebook</p>
             </div>
-            <div className={shareButtonContainer} onClick={handleInstagram}>
+            <div className={shareButtonContainer}>
               <a id="instagram" className={circularButton} ref={aRef} href={instagramURL} download="edgehill-listening-experience.jpeg">
                 <IconInstagram size={"32"}/>
               </a>
