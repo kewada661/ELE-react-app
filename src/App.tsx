@@ -266,6 +266,7 @@ export const App = () => {
 
 
   const login = () => {
+    SC.Widget(widgetRef.current).play();
     setLoggedIn(true);
     setLoadingPlayer(false);
     // initializeSCPlayback();
@@ -366,7 +367,6 @@ export const App = () => {
         console.log("READY");
       });
       SC.Widget(widgetRef.current).bind(SC.Widget.Events.FINISH, () => {
-        
         incrementUserStreams();
       });
   }, [loggedIn]);
