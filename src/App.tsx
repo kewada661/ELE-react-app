@@ -70,6 +70,12 @@ export const App = () => {
     location.href = `/api/auth/login?code_challenge=${loginParams[0]}&code_verifier=${loginParams[1]}&state=${loginParams[2]}`;
   }, []);
 
+  const requestAltLogin = () => {
+    SC.Widget(widgetRef.current).play();
+    console.log()
+    setAltLogin(true);
+  }
+
   const requestToken = async (code: any, state: any) => {
     try {
       const response = await fetch(`/api/auth/token?code=${code}&state=${state}`);
@@ -356,15 +362,13 @@ export const App = () => {
   }, [])
 
   useEffect(() => {
-    if (loggedIn) {
       SC.Widget(widgetRef.current).bind(SC.Widget.Events.READY, () => {
         console.log("READY");
-        SC.Widget(widgetRef.current).pause();
       });
       SC.Widget(widgetRef.current).bind(SC.Widget.Events.FINISH, () => {
+        
         incrementUserStreams();
       });
-    }
   }, [loggedIn]);
 
   useEffect(() => {
@@ -465,15 +469,6 @@ export const App = () => {
                 />
               )
             )}
-            <iframe 
-              ref={widgetRef}
-              allow="autoplay"
-              width="0" 
-              height="0" 
-              scrolling="no" 
-              frameBorder="no" 
-              src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2186986802&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-            ></iframe>
           </>
         ) : (
           <>
@@ -489,7 +484,7 @@ export const App = () => {
             ) : (
               <Login 
                 onLogin={requestLogin} 
-                fallBack={() => setAltLogin(true)}
+                fallBack={requestAltLogin}
               />
             )}
             <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
@@ -505,7 +500,15 @@ export const App = () => {
           logoutCallback={logout}
         />
       </main>
-
+      <iframe 
+        ref={widgetRef}
+        allow="autoplay"
+        width="0" 
+        height="0" 
+        scrolling="no" 
+        frameBorder="no" 
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2186986802&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
+      ></iframe>
       {/* <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;">
         <a href="https://soundcloud.com/edgehill-band" title="Edgehill" target="_blank" style="color: #cccccc; text-decoration: none;">
           Edgehill
