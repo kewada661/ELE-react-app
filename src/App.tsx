@@ -30,6 +30,7 @@ export const App = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
   const widgetRef = useRef<HTMLIFrameElement>(null);
+  const widget = useRef<any>(null);
   const hls = new Hls();
 
   var SCTrackNumber = 0;
@@ -71,7 +72,7 @@ export const App = () => {
   }, []);
 
   const requestAltLogin = () => {
-    SC.Widget(widgetRef.current).play();
+    widget.current?.play();
     console.log()
     setAltLogin(true);
   }
@@ -266,9 +267,9 @@ export const App = () => {
 
 
   const login = () => {
-    SC.Widget(widgetRef.current).play();
+    widget.current?.play();
     setLoggedIn(true);
-    setLoadingPlayer(false);
+    // setLoadingPlayer(false);
     // initializeSCPlayback();
   }
 
@@ -285,10 +286,10 @@ export const App = () => {
       console.log("volume change");
     }
     if (muted) {
-      SC.Widget(widgetRef.current).play();
+      widget.current?.play();
     }
     else {
-      SC.Widget(widgetRef.current).pause();
+      widget.current?.pause();
     } 
   }
 
@@ -296,7 +297,7 @@ export const App = () => {
     await stopWebPlayback();
     if (audioRef.current) audioRef.current.pause();
     const iframeElement = document.querySelector('iframe');
-    SC.Widget(widgetRef.current).pause();
+    widget.current?.pause();
     SCTrackNumber = 0;
     sessionStorage.clear();
     setGameInProgress(true);
@@ -319,7 +320,7 @@ export const App = () => {
       console.log('starting audio pb');
     } 
     else {
-      SC.Widget(widgetRef.current).play();
+      widget.current?.play();
     }
   }
 
@@ -363,12 +364,18 @@ export const App = () => {
   }, [])
 
   useEffect(() => {
-      SC.Widget(widgetRef.current).bind(SC.Widget.Events.READY, () => {
+    if (widgetRef.current) {
+      widget.current = SC.Widget(widgetRef.current);
+    }
+    if (widget.current) {
+      widget.current.bind(SC.Widget.Events.READY, () => {
         console.log("READY");
+        setLoadingPlayer(false);
       });
-      SC.Widget(widgetRef.current).bind(SC.Widget.Events.FINISH, () => {
+      widget.current.bind(SC.Widget.Events.FINISH, () => {
         incrementUserStreams();
       });
+    }
   }, [loggedIn]);
 
   useEffect(() => {
@@ -477,15 +484,19 @@ export const App = () => {
             <div className={houseContainer}>
               <img className={house} ref={houseRef} src={houseImage} alt="" />
             </div>
-            {(altLogin) ? (
-              <LoginFallback 
-                loginCallback={login} 
-              />
+            {(loadingPlayer) ? (
+              <></>
             ) : (
-              <Login 
-                onLogin={requestLogin} 
-                fallBack={requestAltLogin}
-              />
+              (altLogin) ? (
+                <LoginFallback 
+                  loginCallback={login} 
+                />
+              ) : (
+                <Login 
+                  onLogin={requestLogin} 
+                  fallBack={requestAltLogin}
+                />
+              )
             )}
             <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
           </>
