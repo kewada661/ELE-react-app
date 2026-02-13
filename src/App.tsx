@@ -32,7 +32,7 @@ export const App = () => {
   const hls = new Hls();
 
   var SCTrackNumber = 0;
-  var widget: any;
+  var widget: any = null;
   // spotify auth helper functions
   const generateRandomString = (length: number) => {
     var text = '';
@@ -276,11 +276,17 @@ export const App = () => {
       playerRef.current.setVolume(muted ? 0.5 : 0.0);
       console.log("volume change");
     }
+    const iframeElement = document.querySelector('iframe');
+    widget = SC.Widget(iframeElement);
+    widget.setVolume(muted ? 100 : 0);
   }
 
   const logout = async () => {
     await stopWebPlayback();
     if (audioRef.current) audioRef.current.pause();
+    const iframeElement = document.querySelector('iframe');
+    widget = SC.Widget(iframeElement);
+    widget.pause();
     SCTrackNumber = 0;
     sessionStorage.clear();
     setGameInProgress(true);
