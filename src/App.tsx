@@ -119,23 +119,14 @@ export const App = () => {
   }
 
   const savePlaylist = async () => {
-    if (altLogin) {
-      open('https://open.spotify.com/playlist/37i9dQZF1DZ06evO08vsxh?si=334e45e76dbc4d94&nd=1&dlsi=21e7486297eb4c50');
-    } else {
-      const email = sessionStorage.getItem("email")
-      const response = await fetch(`/api/spotify/playlist?email=${email}`);
-      // const response = await fetch("https://api.spotify.com/v1/playlists/37i9dQZF1DZ06evO08vsxh/followers", {
-      //   method: "PUT",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     "Authorization": `Bearer ${access_token}`,
-      //   },
-      //   body: JSON.stringify({
-      //     public: false,
-      //   })
-      // });
-      if (response) console.log(response);      
-    }
+    open('https://open.spotify.com/album/1fogKIAKBsiW6RBXP6Esyl');
+    // if (altLogin) {
+    //   open('https://open.spotify.com/album/1fogKIAKBsiW6RBXP6Esyl?si=334e45e76dbc4d94&nd=1&dlsi=21e7486297eb4c50');
+    // } else {
+      // const email = sessionStorage.getItem("email")
+      // const response = await fetch(`/api/spotify/playlist?email=${email}`);
+      // if (response) console.log(response);      
+    // }
   }
 
   const initializeWebPlayback = () => {
