@@ -1,4 +1,6 @@
 import { style } from '@vanilla-extract/css';
+import { button } from '../Button/Button.css';
+import { vars } from '@/styles/theme.css';
 
 export const login = style({
   display: 'flex',
@@ -17,3 +19,10 @@ export const login = style({
 export const spotifyLogo = style({
   maxWidth: '45%',
 })
+
+export const playButton = style([
+  button.spotify,
+  {
+    background: vars.color.green
+  }
+])
