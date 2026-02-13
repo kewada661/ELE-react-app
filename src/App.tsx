@@ -120,7 +120,7 @@ export const App = () => {
   }
 
   const savePlaylist = async () => {
-    open('https://open.spotify.com/album/1fogKIAKBsiW6RBXP6Esyl');
+    open('https://open.spotify.com/album/6zvEun7yEcafFkJRC9jB2O');
     // if (altLogin) {
     //   open('https://open.spotify.com/album/1fogKIAKBsiW6RBXP6Esyl?si=334e45e76dbc4d94&nd=1&dlsi=21e7486297eb4c50');
     // } else {
