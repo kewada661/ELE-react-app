@@ -32,6 +32,7 @@ export const App = () => {
   const hls = new Hls();
 
   var SCTrackNumber = 0;
+  var widget: any;
   // spotify auth helper functions
   const generateRandomString = (length: number) => {
     var text = '';
@@ -300,6 +301,11 @@ export const App = () => {
     } else if (audioRef.current) {
       audioRef.current.play();
       console.log('starting audio pb');
+    } else {
+      const iframeElement = document.querySelector('iframe');
+      widget = SC.Widget(iframeElement);
+      console.log("widget established");      
+      widget.play();
     }
   }
 
@@ -413,7 +419,7 @@ export const App = () => {
           menuCallback={() => setMenuOpen(prev => !prev)} 
           leaderboardOpen={leaderboardOpen}
         />
-        <audio id="audio" ref={audioRef} />
+        {/* <audio id="audio" ref={audioRef} /> */}
         {/* <iframe id="sc-widget" src="" */}
         {(loggedIn) ? (
           (story) ? (
@@ -470,6 +476,14 @@ export const App = () => {
           logoutCallback={logout}
         />
       </main>
+      <iframe width="0%" height="0" scrolling="no" frameBorder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2186986802&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+      {/* <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;">
+        <a href="https://soundcloud.com/edgehill-band" title="Edgehill" target="_blank" style="color: #cccccc; text-decoration: none;">
+          Edgehill
+        </a> · <a href="https://soundcloud.com/edgehill-band/sets/ode-to-the-greyhouse-1" title="Ode to the Greyhouse" target="_blank" style="color: #cccccc; text-decoration: none;">
+          Ode to the Greyhouse
+        </a>
+      </div> */}
     </>
   );
 };
