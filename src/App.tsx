@@ -29,10 +29,10 @@ export const App = () => {
   const playerRef = useRef(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
+  const widgetRef = useRef<HTMLIFrameElement>(null);
   const hls = new Hls();
 
   var SCTrackNumber = 0;
-  var widget: any = null;
   // spotify auth helper functions
   const generateRandomString = (length: number) => {
     var text = '';
@@ -261,7 +261,8 @@ export const App = () => {
 
   const loginCallback = () => {
     setLoggedIn(true);
-    initializeSCPlayback();
+    setLoadingPlayer(false);
+    // initializeSCPlayback();
   }
 
   const toggleLeaderboard = () => {
@@ -276,17 +277,19 @@ export const App = () => {
       playerRef.current.setVolume(muted ? 0.5 : 0.0);
       console.log("volume change");
     }
-    const iframeElement = document.querySelector('iframe');
-    widget = SC.Widget(iframeElement);
-    widget.setVolume(muted ? 100 : 0);
+    if (muted) {
+      SC.Widget(widgetRef.current).play();
+    }
+    else {
+      SC.Widget(widgetRef.current).pause();
+    } 
   }
 
   const logout = async () => {
     await stopWebPlayback();
     if (audioRef.current) audioRef.current.pause();
     const iframeElement = document.querySelector('iframe');
-    widget = SC.Widget(iframeElement);
-    widget.pause();
+    SC.Widget(widgetRef.current).pause();
     SCTrackNumber = 0;
     sessionStorage.clear();
     setGameInProgress(true);
@@ -307,11 +310,9 @@ export const App = () => {
     } else if (audioRef.current) {
       audioRef.current.play();
       console.log('starting audio pb');
-    } else {
-      const iframeElement = document.querySelector('iframe');
-      widget = SC.Widget(iframeElement);
-      console.log("widget established");      
-      widget.play();
+    } 
+    else {
+      SC.Widget(widgetRef.current).play();
     }
   }
 
@@ -326,6 +327,7 @@ export const App = () => {
   useEffect(() => {
     // const email = sessionStorage.getItem('email');
     // const product = sessionStorage.getItem('product');
+    console.log("widget established");
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
@@ -428,30 +430,42 @@ export const App = () => {
         {/* <audio id="audio" ref={audioRef} /> */}
         {/* <iframe id="sc-widget" src="" */}
         {(loggedIn) ? (
-          (story) ? (
-            <Story
-              loadingPlayer={loadingPlayer}
-              onContinue={handleStart}
-            />
-          ) : (
-            (gameInProgress) ? (
-                <JumpGame 
-                  gameOverCallback={gameOver}
-                  menuCallback={() => setMenuOpen(true)}
-                  spriteIndex={spriteIndex}
-                />
-            ) : (
-              <GameOverMenu
-                score={score}
-                loggedIn={loggedIn}
-                submitScoreCallback={updateLeaderboard}
-                newGameCallback={() => setGameInProgress(true)}
-                //TODO: shareScoreCallback={}
-                leaderboardCallback={toggleLeaderboard}
-                playlistCallback={savePlaylist}
+          <>
+            {(story) ? (
+              <Story
+                loadingPlayer={loadingPlayer}
+                onContinue={handleStart}
+                widgetRef={widgetRef}
               />
-            )
-          )
+            ) : (
+              (gameInProgress) ? (
+                  <JumpGame 
+                    gameOverCallback={gameOver}
+                    menuCallback={() => setMenuOpen(true)}
+                    spriteIndex={spriteIndex}
+                  />
+              ) : (
+                <GameOverMenu
+                  score={score}
+                  loggedIn={loggedIn}
+                  submitScoreCallback={updateLeaderboard}
+                  newGameCallback={() => setGameInProgress(true)}
+                  //TODO: shareScoreCallback={}
+                  leaderboardCallback={toggleLeaderboard}
+                  playlistCallback={savePlaylist}
+                />
+              )
+            )}
+            <iframe 
+              ref={widgetRef}
+              allow="autoplay"
+              width="0" 
+              height="0" 
+              scrolling="no" 
+              frameBorder="no" 
+              src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2186986802&color=%23ff5500&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
+            ></iframe>
+          </>
         ) : (
           <>
             <p className={logo}>edgehill</p>
@@ -482,7 +496,7 @@ export const App = () => {
           logoutCallback={logout}
         />
       </main>
-      <iframe width="0%" height="0" scrolling="no" frameBorder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2186986802&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+
       {/* <div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;">
         <a href="https://soundcloud.com/edgehill-band" title="Edgehill" target="_blank" style="color: #cccccc; text-decoration: none;">
           Edgehill

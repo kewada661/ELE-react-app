@@ -1,4 +1,4 @@
-import { storyContainer, storyText, chevron, continueContainer, continueText, characterSelect, selectButton, buttonDiv, sprite } from "@/components/Story/Story.css";
+import { storyContainer, storyText, chevron, continueContainer, continueText, characterSelect, selectButton, buttonDiv, sprite, } from "@/components/Story/Story.css";
 import { IconChevronLeft } from "@/ui/icons/IconChevronLeft";
 import { IconChevronRight } from "@/ui/icons/IconChevronRight";
 import { useRef, useEffect,useState } from 'react'
@@ -11,11 +11,18 @@ import { doc } from "prettier";
 interface StoryProps {
   loadingPlayer: boolean;
   onContinue: (index: number) => void;
+  widgetRef: React.RefObject<HTMLIFrameElement>;
 }
 
-export const Story = ({ loadingPlayer, onContinue }: StoryProps) => {
+export const Story = ({ loadingPlayer, onContinue, widgetRef }: StoryProps) => {
   const continueRef = useRef<HTMLParagraphElement>(null);
   const [selection, setSelection] = useState(2);
+
+  var widget: any;
+  useEffect(() => {
+    console.log(widgetRef.current !== null);
+    widget = SC.Widget(widgetRef.current);
+  });
 
   useEffect(() => {
     if (continueRef.current) {
@@ -26,6 +33,11 @@ export const Story = ({ loadingPlayer, onContinue }: StoryProps) => {
     }
 
   },[loadingPlayer])
+
+  const handleContinue = () => {
+    widget.play();
+    onContinue(selection);
+  }
 
   const handleChris = () => {
     setSelection(2);
@@ -64,8 +76,8 @@ export const Story = ({ loadingPlayer, onContinue }: StoryProps) => {
           Aidan
         </div>
       </div>
-      <div className={continueContainer} ref={continueRef}>        
-        <p className={continueText} onClick={() => onContinue(selection)}>Continue</p>
+      <div id="continue-button" className={continueContainer} ref={continueRef} onClick={handleContinue}>        
+        <p className={continueText}>Continue</p>
       </div>
     </div>
   )
