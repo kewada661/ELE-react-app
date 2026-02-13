@@ -16,7 +16,7 @@ export const Login = ({ onLogin, fallBack }: LoginProps) => {
         {/* <button className={button.spotify} onClick={onLogin}>
           Connect with <img className={spotifyLogo} src={spotifyImage}></img>
         </button> */}
-        <button className={button.spotify} onClick={fallBack}>
+        <button className={button.green} onClick={fallBack}>
           PLAY
         </button>
         {/* <button className={button.primary} onClick={fallBack}>

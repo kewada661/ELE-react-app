@@ -7,6 +7,7 @@ export const login = style({
   width: '100vw',
   maxWidth: '100vh',
   height: '40svh',
+  justifyContent: 'center',
   // position: 'relative',
   // top: '30%',
   alignSelf: 'center',
