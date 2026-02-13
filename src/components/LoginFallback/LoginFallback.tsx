@@ -38,9 +38,6 @@ export const LoginFallback = ({ loginCallback }: LoginFallbackProps) => {
         document.getElementById("errorMessage")!.style.opacity = '1';
       }
     }
-    const result = await upsertUser(email, username);
-    sessionStorage.setItem("email", email);
-    loginCallback();
   }, [email, username])
   
   return (

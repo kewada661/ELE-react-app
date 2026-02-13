@@ -259,7 +259,7 @@ export const App = () => {
   }
 
 
-  const loginCallback = () => {
+  const login = () => {
     setLoggedIn(true);
     setLoadingPlayer(false);
     // initializeSCPlayback();
@@ -327,7 +327,6 @@ export const App = () => {
   useEffect(() => {
     // const email = sessionStorage.getItem('email');
     // const product = sessionStorage.getItem('product');
-    console.log("widget established");
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
@@ -344,7 +343,6 @@ export const App = () => {
         }
       });
     }
-
   }, [])
 
   useEffect(() => {
@@ -356,6 +354,18 @@ export const App = () => {
       removeEventListener("pointermove", onMouseMove)
     }
   }, [])
+
+  useEffect(() => {
+    if (loggedIn) {
+      SC.Widget(widgetRef.current).bind(SC.Widget.Events.READY, () => {
+        console.log("READY");
+        SC.Widget(widgetRef.current).pause();
+      });
+      SC.Widget(widgetRef.current).bind(SC.Widget.Events.FINISH, () => {
+        incrementUserStreams();
+      });
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
     window.onSpotifyWebPlaybackSDKReady = async () => {
@@ -435,7 +445,6 @@ export const App = () => {
               <Story
                 loadingPlayer={loadingPlayer}
                 onContinue={handleStart}
-                widgetRef={widgetRef}
               />
             ) : (
               (gameInProgress) ? (
@@ -475,7 +484,7 @@ export const App = () => {
             </div>
             {(altLogin) ? (
               <LoginFallback 
-                loginCallback={loginCallback} 
+                loginCallback={login} 
               />
             ) : (
               <Login 

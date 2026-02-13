@@ -11,18 +11,11 @@ import { doc } from "prettier";
 interface StoryProps {
   loadingPlayer: boolean;
   onContinue: (index: number) => void;
-  widgetRef: React.RefObject<HTMLIFrameElement>;
 }
 
-export const Story = ({ loadingPlayer, onContinue, widgetRef }: StoryProps) => {
+export const Story = ({ loadingPlayer, onContinue, }: StoryProps) => {
   const continueRef = useRef<HTMLParagraphElement>(null);
   const [selection, setSelection] = useState(2);
-
-  var widget: any;
-  useEffect(() => {
-    console.log(widgetRef.current !== null);
-    widget = SC.Widget(widgetRef.current);
-  });
 
   useEffect(() => {
     if (continueRef.current) {
@@ -35,7 +28,7 @@ export const Story = ({ loadingPlayer, onContinue, widgetRef }: StoryProps) => {
   },[loadingPlayer])
 
   const handleContinue = () => {
-    widget.play();
+    // widget.play();
     onContinue(selection);
   }
 
