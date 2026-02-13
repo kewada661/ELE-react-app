@@ -185,6 +185,11 @@ export const App = () => {
     playerRef.current = null;
   }
 
+  const handleNewGame = () => {
+    incrementUserPlays();
+    setGameInProgress(true);
+  }
+
   const updateLeaderboard = useCallback( async (score: number) => {
     const email = sessionStorage.getItem("email");
     await fetch('/api/db/leaderboard', {
@@ -241,6 +246,20 @@ export const App = () => {
       body: JSON.stringify({
         'email': email,
         'streams': 1,
+      })
+    });
+  }, [])
+
+  const incrementUserPlays = useCallback( async () => {
+    const email = sessionStorage.getItem("email");
+    await fetch(`/api/db/users/plays`, {
+      method: "PUT",
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        'email': email,
+        'plays': 1,
       })
     });
   }, [])
@@ -310,6 +329,7 @@ export const App = () => {
   }
 
   const handleStart = (index: number) => {
+    incrementUserPlays();
     setStory(false);
     setSpriteIndex(index);
     if (playerRef.current) {
@@ -469,7 +489,7 @@ export const App = () => {
                   score={score}
                   loggedIn={loggedIn}
                   submitScoreCallback={updateLeaderboard}
-                  newGameCallback={() => setGameInProgress(true)}
+                  newGameCallback={handleNewGame}
                   //TODO: shareScoreCallback={}
                   leaderboardCallback={toggleLeaderboard}
                   playlistCallback={savePlaylist}
