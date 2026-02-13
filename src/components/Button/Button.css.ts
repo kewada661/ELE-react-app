@@ -45,7 +45,7 @@ export const button = styleVariants({
       height: '7svh',
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: vars.fontSize.small,
+      fontSize: vars.fontSize.large,
     }
   ],
   gold: [

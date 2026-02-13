@@ -23,7 +23,8 @@ export const Menu = ({ isOpen, loggedIn, leaderboardCallback, playlistCallback, 
         {(loggedIn) ? (
           <button className={option} onClick={logoutCallback}>Log Out</button>
         ) : (
-          <button className={option} onClick={loginCallback}>Connect Spotify</button>
+          // <button className={option} onClick={loginCallback}>Connect Spotify</button>
+          <></>
         )}
       </div>
     </div>

@@ -449,12 +449,6 @@ export const App = () => {
               />
             )
           )
-        ) : ((locked) ? (
-          <>
-            <Lock
-              unlock={() => setLocked(false)} 
-            />
-          </>
         ) : (
           <>
             <p className={logo}>edgehill</p>
@@ -474,7 +468,7 @@ export const App = () => {
             )}
             <img onClick={() => open('https://bigloudrock.com')} className={footerLogo} src={footerLogoURL} />
           </>
-        ))}
+        )}
         {(leaderboardOpen) ? (<Leaderboard leaderboardClose={() => setLeaderboardOpen(false)}/>) : (<></>)}
         <Menu 
           isOpen={menuOpen} 
