@@ -87,3 +87,14 @@ export const sprite = style({
   imageRendering: 'pixelated',
   display: "none",
 })
+
+export const windowErrorMessage = style({
+  // display: "none",
+  zIndex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  fontSize: vars.fontSize.medium,
+  textAlign: 'center',
+  marginTop: vars.margins.xxlarge,
+})

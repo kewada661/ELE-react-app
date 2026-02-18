@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { container, canvas, scoreBoard, controls, controlButton, sprite, footerLogo } from '@/components/JumpGame/JumpGameStyle.css';
+import { container, canvas, scoreBoard, controls, controlButton, sprite, windowErrorMessage } from '@/components/JumpGame/JumpGameStyle.css';
 import { IconChevronLeft } from '@/ui/icons/IconChevronLeft';
 import { IconChevronRight } from '@/ui/icons/IconChevronRight';
 import spriteImage from '@/assets/sprite.png'
@@ -8,6 +8,7 @@ import platformURL from '@/assets/sprites/platformsprites1.png';
 import houseURL from '@/assets/house-sprite.png';
 import groundURL from '@/assets/ground-sprite.png';
 import footerLogoURL from '@/assets/GamingLabelFooter.png';
+import { playButton } from '../Login/Login.css';
 
 interface JumpGameProps {
   gameOverCallback: (score: number) => void;
@@ -23,11 +24,16 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
   const platformRef = useRef<HTMLImageElement>(null);
   const houseRef = useRef<HTMLImageElement>(null);
   const groundRef = useRef<HTMLImageElement>(null);
+  const gameRef = useRef<Game>(null);
   const screenPortion = 0.8;
   const [width, setWidth] = useState(document.getElementById('main')!.offsetWidth);
-  const [height, setHeight] = useState(Math.floor((document.getElementById('main')!.offsetHeight)));
+  const [height, setHeight] = useState((document.getElementById('main')!.offsetHeight));
+
+  const [windowError, setWindowError] = useState(document.getElementById('main')!.offsetWidth < 300);
   let ctx: any;
 
+  console.log("width:", width);
+  console.log("height:", height);
   //Variables for game
   var platforms: Platform[] = [],
     image: HTMLImageElement,
@@ -37,7 +43,11 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
     groundSprite: HTMLImageElement, 
     left: HTMLButtonElement,
     right: HTMLButtonElement,
-    player: Player, 
+    base: Base,
+    player: Player,
+    house: House,
+    platform_broken_substitute: Platform_broken_substitute,
+    spring: Spring,
     game: Game,
     deltaTime = 0,
     platformCount = 10,
@@ -93,8 +103,6 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       };
     }
   };
-
-  var base = new Base();
 
   //Player class
   class Player {
@@ -189,8 +197,6 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
     }
   };
 
-  player = new Player();
-
   //House class
   class House {
     width: number;
@@ -220,8 +226,6 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       }
     }
   }
-
-  var house = new House();
 
   //Platform class
 
@@ -310,10 +314,6 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
     }
   }
 
-  for (var i = 0; i < platformCount; i++) {
-    platforms.push(new Platform());
-  }
-
   //Broken platform object
   class Platform_broken_substitute {
     height: number;
@@ -350,10 +350,8 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
     }
   };
 
-  var platform_broken_substitute = new Platform_broken_substitute();
-
   //Spring Class
-  class spring {
+  class Spring {
     x: number;
     y: number;
     width: number;
@@ -389,8 +387,6 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       };
     }
   };
-
-  var Spring = new spring();
 
   function keyDown(e: KeyboardEvent) {
     var key = e.keyCode;
@@ -540,7 +536,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       }
       
       this.springCalc = () => {
-        var s = Spring;
+        var s = spring;
         var p = platforms[0];
 
         if (p.type == platformType.NORMAL || p.type == platformType.MOVING) {
@@ -609,7 +605,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
         });
 
         //Springs
-        var s = Spring;
+        var s = spring;
         if (player.vy > 0 && (s.state === 0) && 
           (player.x + 15 < s.x + s.width) && 
             (player.x + player.width - 15 > s.x) && 
@@ -687,7 +683,12 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       this.init = () => {
         dir = "left;"
         // player.spriteIndex = Math.floor(Math.random() * 3);
-        requestAnimationFrame(this.animLoop);
+        if (document.getElementById('main')!.offsetWidth >= 300) {
+          setWindowError(false);
+          requestAnimationFrame(this.animLoop);
+        } else {
+          setWindowError(true);
+        }
       }
 
       this.pause = () => {
@@ -700,12 +701,11 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       }
     }
   }
-
-  game = new Game();
-
+  
   const handleMenu = () => {
     console.log("click!");
-    if (paused) {
+    if (paused && !windowError) {
+      console.log(game);
       game.resume();
       paused = false;
     } else {
@@ -722,24 +722,43 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
     } 
   }
 
+  const handlePlay = async () => {
+    if (windowError && document.getElementById('main')!.offsetWidth >= 300) {
+      setWidth(document.getElementById('main')!.offsetWidth);
+      setWindowError(false);
+    }
+  }
+
   useEffect(() => {
     const updateCtx = () => {
-      if (canvasRef.current) {
-        ctx = canvasRef.current.getContext('2d');
-        const newWidth = Math.min(innerWidth, innerHeight);
-        const newHeight = Math.floor(innerHeight * screenPortion);
-        setWidth(newWidth);
-        setHeight(newHeight);
-        game.width = newWidth;
-        game.height = newHeight;
-        // base.width = newWidth;
-        // base.y = newHeight;
-      }
+      // if (canvasRef.current) {
+      //   ctx = canvasRef.current.getContext('2d');
+      //   const newWidth = Math.min(innerWidth, innerHeight);
+      //   const newHeight = Math.floor(innerHeight * screenPortion);
+      //   setWidth(newWidth);
+      //   setHeight(newHeight);
+      //   game.width = newWidth;
+      //   game.height = newHeight;
+      //   // base.width = newWidth;
+      //   // base.y = newHeight;
+      // }
     }
-    addEventListener('resize', updateCtx)
+    // addEventListener('resize', handleResize)
+    base = new Base();
+    player = new Player();
+    house = new House();
+    for (var i = 0; i < platformCount; i++) {
+      platforms.push(new Platform());
+    }
+    platform_broken_substitute = new Platform_broken_substitute();
+    spring = new Spring()
+    game = new Game();
+    if (canvasRef.current) {
+      console.log("context created");
+      ctx = canvasRef.current.getContext('2d');
+    }
     const menu = document.getElementById("menu");
     if (
-      !canvasRef.current || 
       !spriteRef.current ||
       !characterRef.current ||
       !platformRef.current ||
@@ -752,7 +771,6 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       console.log('reference error');
       return;
     }
-    ctx = canvasRef.current.getContext('2d'); 
     image = spriteRef.current;
     characterSprites = characterRef.current;
     platformSprites= platformRef.current;
@@ -763,7 +781,7 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
 
     //Adding pause functionality
     menu.addEventListener("click", handleMenu);
-    document.addEventListener("visibilitychange", handleVisibilityChange)
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     //Adding keyboard controls
     document.addEventListener("keydown", keyDown);
     document.addEventListener("keyup", keyUp);
@@ -781,7 +799,9 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
     right.addEventListener("mouseup", onRightEnd);
     
     // document.addEventListener("visibilitychange", onVisibilityChange);
+
     game.init();
+
     return () => {
       cancelAnimationFrame(animationFrameId);
       // document.removeEventListener("visibilitychange", onVisibilityChange);
@@ -797,18 +817,29 @@ export const JumpGame = ({ gameOverCallback, menuCallback, spriteIndex }: JumpGa
       right.removeEventListener("mouseup", onRightEnd);
       menu.removeEventListener("click", handleMenu);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      removeEventListener('resize', updateCtx);
+      // removeEventListener('resize', handleResize)
     }
-  }, []);
+  }, [windowError]);
 
   return (
     <div className={container}>
       <div className={scoreBoard} id="scoreBoard">
         <p id="score">0</p>
       </div>
-      <canvas id="canvas" className={canvas} ref={canvasRef} width={width} height={height}>
-        Aww, your browser doesn't support HTML5!
-      </canvas>
+      {(windowError) ? (
+        <div className={windowErrorMessage}>
+          The window is too small! Please resize to continue playing.
+          <button className={playButton} onClick={handlePlay}>
+            PLAY
+          </button>
+        </div>
+      ) : (
+        <>
+          <canvas id="canvas" className={canvas} ref={canvasRef} width={width} height={height}>
+            Aww, your browser doesn't support HTML5!
+          </canvas>
+        </>
+      )}
 
       <div className={controls}>
         <button ref={leftRef} className={controlButton}>
